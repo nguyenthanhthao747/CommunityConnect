@@ -37,6 +37,11 @@ def index(request):
         # 'stops': stops
     })
 
+def seek_support_search(request):
+    dict_data = {}
+
+    return render(request, 'vicview/templates/seek-support-search.html', {})
+
 def search_integrated(request):
     dict_data = {}
 

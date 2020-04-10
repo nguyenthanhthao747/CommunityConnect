@@ -90,11 +90,11 @@ span {
 
 .btn {
   border: 1px solid #fff;
-  border-radius: 50px;
+  /* border-radius: 50px; */
   color: #fff;
   font-size: 11px;
   font-weight: 600;
-  padding: 15px 40px;
+  padding: 10px 15px;
   text-transform: uppercase;
   -moz-transition: all 0.5s ease-in-out 0s;
   -ms-transition: all 0.5s ease-in-out 0s;
@@ -362,6 +362,28 @@ label{
     background-attachment: fixed;
   }
 }
+.bg-none{
+  background-color: transparent;
+}
+
+.hc-form-container .form-control{
+    height: calc(2.25rem + 2px);
+}
+.hc-form-container .bg-primary{
+  background-color: rgb(162, 200, 241)!important;
+}
+.hc-form-container .bg-primary.nav-link:hover, .hc-form-container .bg-primary.nav-link:focus,
+.hc-form-container .bg-primary.nav-link:active {
+  background-color: rgb(162, 200, 241)!important;
+}
+
+.hc-form-container .bg-success{
+  background-color: #65d27e !important;
+}
+.hc-form-container .bg-success.nav-link:hover, .hc-form-container .bg-success.nav-link:focus,
+.hc-form-container .bg-success.nav-link:active {
+  background-color: #65d27e !important;
+}
 
 #hero .hero-container {
   position: absolute;
@@ -373,7 +395,6 @@ label{
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  text-align: center;
   background: rgba(88, 94, 99, 0.65);
 }
 
@@ -386,7 +407,7 @@ label{
   font-family: "Roboto", sans-serif;
   color: #ffffff;
   text-shadow: 1px 2px #000;
-  margin-top: 19.3%;
+  margin-top: 10%;
 }
 
 .clr-darkgray{
@@ -762,7 +783,7 @@ min-width: 200px;
 }
 .jui-search-widget #jui-autocomplete{
   padding: 10px 18px 10px 25px;
-  border-radius: 50px;
+  /* border-radius: 50px; */
   outline: none;
   height: auto;
   font-size: 16px;
@@ -914,7 +935,7 @@ span.select2-dropdown.bigdrop.select2-dropdown--below{
   letter-spacing: 1px;
   display: inline-block;
   padding: 11px 36px;
-  border-radius: 50px;
+  /* border-radius: 50px; */
   transition: 0.5s;
   margin-bottom: 30px;
   border: 2px solid #71c55d;
@@ -1149,9 +1170,9 @@ span.select2-dropdown.bigdrop.select2-dropdown--below{
 .nav-menu ul li {
   transition: 0.3s;
 }
-.form-control{
+/* .form-control{
 border-radius: 50px;
-}
+} */
 .nav-menu ul li a {
   padding: 5px 10px;
   color: #333;
@@ -1935,7 +1956,7 @@ body.mobile-nav-active #mobile-nav-toggle i {
 
 #newsletter ul li {
   background: #71c55d;
-  border-radius: 50px;
+  /* border-radius: 50px; */
   float: left;
   height: 35px;
   line-height: 35px;

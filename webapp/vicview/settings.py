@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9&t&#6ri(eayj*r!be@a81)s1%zt0+e@w9$&)-pba5lzt=8_s('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 SECURE_SSL_REDIRECT = False
 
 #ADMINS FOR RECEIVING EMAIL
@@ -109,15 +109,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-} 
+}
 """
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hackcovid',
-        'USER': 'hackcovid',
-        'PASSWORD': 'hackcovid',
+        'USER': 'root',
+        'PASSWORD': 'new_password',
         'HOST': AWS_DB_HOST_ADDRESS,
         'PORT': '3306',
     }

@@ -28,6 +28,8 @@ urlpatterns = [
     # static pages will be from main app
     path('', views.index, name='index'),
     path('about-us', views.about, name='about'),
+    path('seek-support/search', views.seek_support_search, name='seek_support_search'),
+
     path('search', views.search_integrated, name='search'),
 
     path('get-geolocation', views.geolocation, name='geolocation'),
