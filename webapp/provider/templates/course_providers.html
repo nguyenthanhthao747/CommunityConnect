@@ -1,0 +1,532 @@
+{% extends "provider/templates/layout.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+
+<section id="features" class=" text-center bg-img4">
+  {% if has_data %}
+  <div class="padd-section bg-tint has_data pb-3">
+  {% else %}
+  <div class="padd-section bg-tint has_nodata">
+  {% endif %}
+    <div class="container">
+      <div class="section-title text-center mb-3">
+        <!-- <h3 class="text-white">Search Results for Course</h3> -->
+        <h4 class="text-white h4">{{ course_details.course_title }}</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section id="features" class="padd-section text-center pb-1">
+
+  <div class="container">
+    <div class="section-title text-center mb-3">
+      <h3>Search Results for Course</h3>
+      <p>{{ course_details.course_title }}</p>
+    </div>
+  </div>
+
+</section> -->
+
+<div class="container-fluid bg-gray pt-3">
+
+  {% if course_details %}
+  <div class="sub-header-summary bg-white p-3 mb-3">
+    <div class="row">
+      <div class="col-12">
+          Showing institutes offering "{{ course_details.course_title }}"
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="sub-header-summary bg-white">
+    <div class="row">
+      <div class="col-12">
+        <div class="pcourse border dontpoint-me" data-course-id="{{ course_details.id }}">
+          <div class="row no-gutters border-bottom p-1">
+            <div class="col-12 col-md-9">
+              <h4>{{ course_details.course_title|upper }}</h4>
+            </div>
+            <div class="col-12 col-md-3 text-right">
+              {% if course_details.government_subsidised == 1 %}
+                <!-- <a class="badge badge-success text-white"></a> -->
+                <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-dollar"></i></button>
+              {% endif %}
+              {% if course_details.apprenticeship == 1 %}
+                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" title="Apprenticeship"><i class="fa fa-user"></i></button>
+                <!-- <a class="badge badge-primary text-white">Apprenticeship</a> -->
+              {% endif %}
+              {% if course_details.traineeship == 1 %}
+                <button type="button" class="btn btn-info btn-circle" data-toggle="tooltip" title="Traineeship"><i class="fa fa-play"></i></button>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row no-gutters p-1">
+            <div class="col-12 col-md-9">
+              <div class="row no-gutters p-1">
+                <div class="col">
+                    <h4><a class="text-success" href="/courses/providers/{{ course_details.id }}">Offered in {{ course_details.provider_count }} locations.</a></h4>
+                </div>
+              </div>
+
+              <div class="row no-gutters p-1">
+                <div class="col-12 col-md-6">
+                  <b>Course Code</b> <br />
+                  {{ course_details.course_code|upper }}
+                </div>
+                <div class="col-12 col-md-6">
+                  <b>Qualification Level</b> <br />
+                  {{ course_details.qualification_level }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row no-gutters p-2">
+            <div class="col-12">
+              <b>Entry Requirements</b> <br />
+              {{ course_details.entry_requirements }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-6 p-3">
+      <div class="card mb-3" id="map-widget">
+        <div class="card-body p-0">
+          <div id="map_canvas" style="width: 100%; height: 320px;"></div>
+        </div>
+      </div>
+
+      <div id="institute-badge">
+
+      </div>
+
+    </div>
+
+    <div class="col-12 col-lg-6 py-3 pl-lg-0">
+      <div class="card">
+        <div class="card-body p-0 providers_list">
+          <table class="table table-bordered table-sm table-selectable table-hover mb-0" id="institutes-datatable" width="100%" cellspacing="0">
+            <tbody>
+            {% for provider in providers %}
+            <tr id="{{ forloop.counter0 }}" data-latitude="{{ provider.latitude }}"
+            data-longitude="{{ provider.longitude }}" data-name="{{ provider.name|title }}" class="point-me">
+              <td>
+                  <div class="row">
+                    <div class="col-12 col-lg-9">
+                      <h5 class="name" style="font-size: 14px;">{{ provider.name|title }}</h5>
+
+                      <div style="font-size: 12px;">
+                        <b>ASQA Code</b> &nbsp;&nbsp;&nbsp;{{ provider.asqa_code }} <br />
+                        <b>Campus</b> &nbsp;&nbsp;&nbsp;{{ provider.site_name }}
+
+                        <!-- InfoWindow for Google Map -->
+                        <span class="address-hidden-popup d-none">
+                          <div class="row no-gutters">
+                            <div class="col-12">
+                              <b>Address</b> <br />
+                              {{ provider.address_line_1 }},<br />
+                              {% if provider.address_line_2 != "0" %}
+                                {{ provider.address_line_2 }},<br />
+                              {% endif %}
+                              {{ provider.suburb|title }} {{ provider.postcode }}
+                            </div>
+                            <div class="col-12 text-right">
+                              {% if provider.url != "" %}
+                              <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button> -->
+                              <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle" data-toggle="tooltip" title="Visit Website">
+                                <i class="fa fa-globe"></i>
+                              </a>
+                              {% endif %}
+                              {% if provider.email != "" %}
+                              <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+                                Contact via E-mail
+                              </a> -->
+                              <a href="mailto:{{ provider.email }}" target="_blank" class="btn btn-danger btn-circle" data-toggle="tooltip" title="Contact via E-mail">
+                                <i class="fa fa-envelope"></i>
+                              </a>
+                              {% endif %}
+
+                              <a href='http://maps.google.com/maps?daddr="{{ provider.address_line_1 }}, {% if provider.address_line_2 != "0" %}{{ provider.address_line_2 }}, {% endif %} {{ provider.suburb|title }} {{ provider.postcode }}"'
+                              target="_blank" class="btn btn-success btn-circle" data-toggle="tooltip" title="Get Directions">
+                                <i class="fa fa-location-arrow"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </span>
+
+                        <!-- Card View to display under map -->
+                        <span class="address-hidden-badge d-none">
+                          <div class="card bg-light mb-3">
+                            <div class="card-body p-4" >
+                              <div class="row justify-content-center">
+                                <div class="col-12 col-lg-5 px-3 mb-3 text-center">
+                                  <i class="fa fa-3x fa-university mb-3 clr-darkgray"></i>
+                                  <div class="mt-2">
+                                    {% if provider.government_subsidised == 1 %}
+                                      <!-- <a class="badge badge-success text-white">Government Subsidised</a> -->
+                                    <button type="button" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-tags"></i></button>
+                                    {% endif %}
+                                    {% if provider.is_regional == 1 %}
+                                    <button type="button" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button>
+                                      <!-- <a class="badge badge-success text-white">Regional Institute</a> -->
+                                    {% endif %}
+
+                                    <!-- <a href='/providers/details/{{ provider.id }}' class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">Read More</a> -->
+                                    {% if provider.url != "" %}
+                                    <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button> -->
+                                    <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle btn-md" data-toggle="tooltip" title="Visit Website">
+                                      <i class="fa fa-globe"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if provider.email != "" %}
+                                    <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+                                      Contact via E-mail
+                                    </a> -->
+                                    <a href="mailto:{{ provider.email }}" target="_blank" class="btn btn-danger btn-circle btn-md" data-toggle="tooltip" title="Contact via E-mail">
+                                      <i class="fa fa-envelope"></i>
+                                    </a>
+                                    {% endif %}
+
+                                    <a href='http://maps.google.com/maps?daddr="{{ provider.address_line_1 }}, {% if provider.address_line_2 != "0" %}{{ provider.address_line_2 }}, {% endif %} {{ provider.suburb|title }} {{ provider.postcode }}"'
+                                    target="_blank" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Get Directions">
+                                      <i class="fa fa-location-arrow"></i>
+                                    </a>
+                                  </div>
+                                    <p>
+                                      <b>ASQA Code</b> &nbsp;&nbsp;&nbsp; {{ provider.asqa_code }}
+                                    <br />
+                                    <b>Campus</b>  &nbsp;&nbsp;&nbsp;{{ provider.site_name }}
+                                    </p>
+                                </div>
+
+
+                                <div class="col-12 col-lg-6 px-3 mb-3 mt-3">
+                                  <h3 class="name text-bold" style="font-size: 16px;">{{ provider.name|title }}</h3>
+                                    <p style="line-height: initial;">
+                                      <small>{{ provider.address_line_1 }},
+                                      {% if provider.address_line_2 != "0" %}
+                                        {{ provider.address_line_2 }},
+                                      {% endif %}
+                                      {{ provider.suburb|title }} {{ provider.postcode }} </small>
+                                      <br />
+                                      <small>
+                                        <a href="mailto:{{ provider.email }}">
+                                          {{ provider.email }}
+                                        </a>
+                                      </small>
+                                      <br />
+                                      <small>
+                                        <a href="{{ provider.url }}" target="_blank" >
+                                          {{ provider.url }}
+                                        </a>
+                                      </small>
+                                    </p>
+
+                                    <a href="/providers/suburbs/{{ provider.id }}/" class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">
+                                      <i class="fa fa-map"></i> &nbsp; Explore Nearby Suburbs
+                                    </a>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-12 col-lg-3 text-right pr-4">
+                      <a href="/providers/suburbs/{{ provider.id }}/" class="btn btn-info btn-sm text-white mt-3" style="padding: 7px 17px;font-size: 10px;">
+                        <i class="fa fa-map"></i> Explore
+                      </a>
+
+                    </div>
+
+                    <div class="col-12 col-lg-9">
+                      <span class="address">
+                        <b>Address</b> &nbsp;&nbsp;&nbsp;
+                        {{ provider.address_line_1 }},
+                        {% if provider.address_line_2 != "0" %}
+                          {{ provider.address_line_2 }},
+                        {% endif %}
+                        {{ provider.suburb|title }} {{ provider.postcode }}
+                      </span>
+                    </div>
+                    <div class="col-12 mt-1 mb-2">
+
+                      {% if provider.government_subsidised == 1 %}
+                        <!-- <a class="badge badge-success text-white">Government Subsidised</a> -->
+                      <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-tags"></i></button>
+                      {% endif %}
+                      {% if provider.is_regional == 1 %}
+                      <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button>
+                        <!-- <a class="badge badge-success text-white">Regional Institute</a> -->
+                      {% endif %}
+
+                      <!-- <a href='/providers/details/{{ provider.id }}' class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">Read More</a> -->
+                      {% if provider.url != "" %}
+                      <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-thumbs-up"></i></button> -->
+                      <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle" data-toggle="tooltip" title="Visit Website">
+                        <i class="fa fa-globe"></i>
+                      </a>
+                      {% endif %}
+                      {% if provider.email != "" %}
+                      <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+                        Contact via E-mail
+                      </a> -->
+                      <a href="mailto:{{ provider.email }}" target="_blank" class="btn btn-danger btn-circle" data-toggle="tooltip" title="Contact via E-mail">
+                        <i class="fa fa-envelope"></i>
+                      </a>
+                      {% endif %}
+                    </div>
+
+                  </div>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer p-1">
+          {% if not providers %}
+            <h3>No records found.</h3>
+          {% else %}
+          <nav aria-label="Page navigation example">
+            <ul class="pagination m-0">
+              {% if providers.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ providers.previous_page_number }}">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+              {% endif %}
+              <li class="ml-3 page-item">
+                Page {{ providers.number }} of {{ providers.paginator.num_pages }}.
+              </li>
+
+              {% if providers.has_next %}
+                <li class="page-item ml-3"><a class="page-link" href="?page={{ providers.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ providers.paginator.num_pages }}">last</a></li>
+              {% endif %}
+
+            </ul>
+          </nav>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-providers").addClass("menu-active");
+  });
+</script>
+
+
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyB0oASnqZZG13qNQ5Dbb31rliGBkWxSmjQ"></script>
+
+<script type="text/javascript">
+  var latLng = new google.maps.LatLng(-37.4713,144.7852);
+
+  var markers;
+  var map_vicview;
+  var infowindow = new google.maps.InfoWindow();
+  var map_object;
+
+  function initialize() {
+      markers = new Array();
+      var mapOptions = {
+        center: latLng,
+        zoom: 6,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
+      map_object = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+      $("#institutes-datatable tbody tr").each(function(index) {
+          var the_tr = $(this);
+          console.log(the_tr);
+          console.log($(this).attr("data-longitude"), $(this).attr("data-latitude"), $(this).attr("data-name"));
+
+          latLng = new google.maps.LatLng($(this).attr("data-latitude"),$(this).attr("data-longitude"));
+
+          var marker = new google.maps.Marker({
+              position: latLng,
+              title: $(this).attr("data-name"),
+              visible: true,
+              animation: google.maps.Animation.DROP
+          });
+
+          marker.setMap(map_object);
+          markers.push(marker);
+
+          marker.addListener('click', function() {
+            var latLng = marker.getPosition(); // returns LatLng object
+            map_object.setCenter(latLng);
+
+            var infoContent = "<h5>" + marker.title + "</h5>";
+            var address_row = $(the_tr).find(".address-hidden-popup")[0];
+            infoContent += $(address_row).html();
+            infowindow.setContent(infoContent);
+            infowindow.open(map_object, marker);
+
+            $('[data-toggle="tooltip"]').tooltip();
+          });
+
+      });
+
+      zoom_and_center_to_map();
+  }
+
+    $(document).ready(function () {
+      initialize();
+
+      function formatResult(result) {
+          if (!result.id) return result.text;
+
+      		var myElement = $(result.element);
+
+          var markup = '<div class="custom-select-item">' +
+                            '<h4 class="m-0">' + result.text + '</h4>';
+
+          if(result.asqa_code){
+            markup += '<small><b>ASQA Code:</b>' + result.asqa_code + '</small> <br />' ;
+          }
+
+          if(result.address){
+            markup += '<small><b>Address: </b>' + result.address + '</small>';
+          }
+
+          markup +='</div>';
+
+          return markup;
+        }
+
+        function formatSelection(result) {
+          return result.full_name || result.text;
+        }
+
+
+      $("#institutes-datatable tbody tr").click(function(){
+            marker = markers[this.id];
+
+            $([document.documentElement, document.body]).animate({
+              scrollTop: $("#btn-search-institutes").offset().top
+            }, 1000);
+
+            var latLng = marker.getPosition(); // returns LatLng object
+            map_object.setCenter(latLng);
+
+            var infoContent = "<h5>" + marker.title + "</h5>";
+            var address_row = $(this).find(".address-hidden-popup")[0];
+            // console.log($(address_row).html());
+            var address_row_badge = $(this).find(".address-hidden-badge")[0];
+            $("#institute-badge").html($(address_row_badge).html());
+
+            infoContent += $(address_row).html();
+            infowindow.setContent(infoContent);
+            infowindow.open(map_object, marker);
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+      });
+
+      $('#search-institutes').select2({
+        placeholder: {
+          id: '-1', // the value of the option
+          text: 'Start typing for institutes'
+        },
+        escapeMarkup: function(m) {
+				      return m;
+		    },
+        templateResult: formatResult,
+        // templateSelection: formatSelection,
+        allowClear: true,
+        ajax: {
+          type: 'POST',
+          dataType: "json",
+          url: function (params) {
+            return "/providers/fetch_details/";
+          },
+          data: function (params) {
+            var show_regional = 0;
+            if($("#show-regional").is(':checked')) {
+                show_regional = 1;
+            }
+
+            var queryParameters = {
+              "csrfmiddlewaretoken": '{{ csrf_token }}',
+              'search': params.term,
+              'show_regional': show_regional
+            }
+
+            return queryParameters;
+          },
+        },
+        tags: true,
+        createTag: function (params) {
+          return {
+            id: params.term,
+            text: params.term,
+            newOption: true
+          }
+        }
+      });
+
+        $('#search-institutes').on('select2:select', function (e) {
+          submit_form();
+        });
+        $('#search-institutes').on('select2:unselecting', function (e) {
+          submit_form();
+        });
+
+        $( "#btn-search-institutes" ).click(function() {
+          submit_form();
+        });
+
+        $("#show-regional").change(function() {
+          submit_form();
+        });
+
+        function submit_form(){
+          console.log("submit_form");
+          var data = $('#search-institutes').select2('data');
+          var search_query = "";
+          if(data.length > 0){
+            console.log(data);
+            search_query = data[0].text;
+          }
+
+          var search_show_regional = "";
+          if($("#show-regional").is(':checked')) {
+              search_show_regional = "&show-regional=1";
+          } else {
+              search_show_regional = "&show-regional=0";
+          }
+
+          var encoded = "/providers/?provider_filter=" + encodeURIComponent(search_query) + search_show_regional;
+          console.log(encoded);
+          location.href = encoded ;
+
+        }
+    });
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,205 @@
+{% extends "occupation/templates/layout.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+<section id="features" class=" text-center bg-img6">
+  {% if has_data %}
+  <div class="padd-section bg-tint has_data">
+  {% else %}
+  <div class="padd-section bg-tint has_nodata">
+  {% endif %}
+    <div class="container">
+
+      <div class="row justify-content-center" >
+        <div class="col-12 col-lg-10">
+          <div class="section-title text-center mb-3">
+            <h1 class="h1-banner animated zoomInDown">SEARCH PROFESSIONS</h1>
+            <h2 class="h2-banner">GET TO KNOW ABOUT DIFFERENT PROFESSIONS AND RELATED COURSES</h2>
+          </div>
+
+          <div class="row justify-content-center mb-3">
+            <div class="col-10 col-lg-8">
+              <!-- <input type="text" class="form-control" id="search-courses" name="search-courses" value="{{ course_filter }}" placeholder="Start typing for courses" /> -->
+              <select class="js-data-example-ajax form-control" id="search-occupation" name="search-occupation">
+                {% if occupation_filter %}
+                  <option value="{{occupation_filter}}" selected>{{occupation_filter}}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+
+          <div class="row justify-content-center mb-3">
+            <div class="col-12 col-lg-5">
+              <div class="form-check">
+                {% if high_demand == 1 %}
+                    <input class="form-check-input" type="checkbox" value="" id="high_demand" checked="checked"/>
+                {% else %}
+                    <input class="form-check-input" type="checkbox" value="" id="high_demand"/>
+                {% endif %}
+                <label class="form-check-label text-shadow text-white" for="high_demand">
+                  Show only High Demand Jobs
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center mb-3">
+            <div class="col-12 col-md-4">
+              <a id="btn-search-occupation" class="btn btn-success text-white">Search Professions</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% if not start_point %}
+<section id="search-results" class="padd-section">
+    <div class="container">
+        <table class="table table-bordered table-sm table-selectable table-hover" id="stops-datatable" width="100%" cellspacing="0">
+
+          {% for occupation in occupations %}
+          <tr>
+            <td>
+                <div class="row point-me" data-occupation-id="{{ occupation.id }}" onclick='location.href="/occupations/courses/{{ occupation.id }}"'>
+                  <div class="col-9">
+                    <h4 style="font-size: 20px;">{{ occupation.title|title }}</h4>
+                    <div>
+                      {% if occupation.high_demand == 1 %}
+                        <a class="badge badge-danger text-white">High Demand</a>
+                      {% endif %}
+                    </div>
+                    <b>ANZSCO Code</b> &nbsp;&nbsp;&nbsp;{{ occupation.anzsco_id|upper }} <br />
+                    <b>Job Description</b> <br />
+                    {{ occupation.description }} <br />
+                    <!-- <b>Education</b> &nbsp;&nbsp;&nbsp;{{ occupation.education }} <br /> -->
+                  </div>
+                  <div class="col-3 text-right align-items-end row justify-content-end pb-2">
+                    <!-- <a class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here for information about this course">Read More</a> -->
+                    <a href="/occupations/courses/{{ occupation.id }}" class="btn btn-success btn-sm text-white ml-3" style="padding: 7px 15px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here to see Courses to become {{ occupation.title|title }}">Show Courses</a>
+                  </div>
+                </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+
+        {% if not occupations %}
+          <h3>No records found.</h3>
+        {% else %}
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            {% if occupations.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ occupations.previous_page_number }}">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            {% endif %}
+            <li class="page-item">
+              Page {{ occupations.number }} of {{ occupations.paginator.num_pages }}.
+            </li>
+
+            {% if occupations.has_next %}
+              <li class="page-item ml-3"><a class="page-link" href="?page={{ occupations.next_page_number }}">Next</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ occupations.paginator.num_pages }}">last</a></li>
+            {% endif %}
+
+          </ul>
+        </nav>
+        {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-occupations").addClass("menu-active");
+  });
+</script>
+
+<script>
+    $(document).ready(function () {
+      $('#search-occupation').select2({
+        placeholder: {
+          id: '-1', // the value of the option
+          text: 'Start typing for suggestions'
+        },
+        allowClear: true,
+        ajax: {
+          type: 'POST',
+          dataType: "json",
+          url: function (params) {
+            return "/occupations/fetch_details/";
+          },
+          data: function (params) {
+            var queryParameters = {
+              "csrfmiddlewaretoken": '{{ csrf_token }}',
+              'search': params.term,
+            }
+
+            return queryParameters;
+          },
+        },
+        tags: true,
+        createTag: function (params) {
+          return {
+            id: params.term,
+            text: params.term,
+            newOption: true
+          }
+        }
+      });
+
+        $('#search-occupation').on('select2:select', function (e) {
+          submit_form();
+        });
+        $('#search-occupation').on('select2:unselecting', function (e) {
+          submit_form();
+        });
+
+
+        $( "#btn-search-occupation" ).click(function() {
+          submit_form();
+        });
+
+        $("#high_demand").change(function() {
+          submit_form();
+        });
+
+        function submit_form(){
+          var data = $('#search-occupation').select2('data');
+          var search_query = "";
+          if(data.length > 0){
+            console.log(data);
+            search_query = data[0].text;
+          }
+
+          var high_demand = "";
+          if($("#high_demand").is(':checked')) {
+              high_demand = "&high_demand=1";
+          } else {
+              high_demand = "&high_demand=0";
+          }
+
+          var encoded = "/courses/finder/?q=" + encodeURIComponent(search_query) + high_demand;
+          // console.log(encoded);
+
+          if(search_query == "" & high_demand){
+            $('#search-occupation').focus();
+          } else {
+            location.href = encoded ;
+          }
+
+        }
+    });
+</script>
+
+
+{% endblock %}

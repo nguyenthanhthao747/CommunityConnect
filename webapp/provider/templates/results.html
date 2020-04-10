@@ -1,0 +1,97 @@
+{% extends "vicview/templates/layout.html" %}
+
+{% load static %}
+
+{% block header_content %}
+<style>
+  #map {
+    height: 400px;  /* The height is 400 pixels */
+    width: 100%;  /* The width is the width of the web page */
+   }
+</style>
+{% endblock %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+
+<section id="features" class="padd-section text-center">
+
+  <div class="container">
+    <div class="section-title text-center">
+      <h3>Institutions Search Results</h3>
+      <h4>35 results matched your search</h4>
+    </div>
+
+
+    <div class="row">
+      <div class="col-7">
+            <div id="map"></div>
+      </div>
+
+      <div class="col-5">
+      <table class="table table-bordered ">
+        <tr>
+          <td class="text-left">
+            <h5 class="mt-0 mb-1">Monash Rural Health</h5>
+            Bendigo<br />
+            abc@monash.edu<br />
+            www.monash.edu<br />
+            <a href="#" class="badge badge-primary">Directions</a>
+            <a href="#" class="badge badge-success">E-mail</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">
+            <h5 class="mt-0 mb-1">List-based media object</h5>
+                Monash Rural Health<br />
+                Bendigo<br />
+                abc@monash.edu<br />
+                www.monash.edu<br />
+                <a href="#" class="badge badge-primary">Directions</a>
+                <a href="#" class="badge badge-success">E-mail</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">
+            <h5 class="mt-0 mb-1">List-based media object</h5>
+                Monash Rural Health<br />
+                Bendigo<br />
+                abc@monash.edu<br />
+                www.monash.edu<br />
+                <a href="#" class="badge badge-primary">Directions</a>
+                <a href="#" class="badge badge-success">E-mail</a>
+          </td>
+        </tr>
+      </table>
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block footer_content %}
+<script>
+// Initialize and add the map
+function initMap() {
+// The location of Uluru
+var uluru = {lat: -25.344, lng: 131.036};
+// The map, centered at Uluru
+var map = new google.maps.Map(
+  document.getElementById('map'), {zoom: 4, center: uluru});
+// The marker, positioned at Uluru
+var marker = new google.maps.Marker({position: uluru, map: map});
+}
+</script>
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0oASnqZZG13qNQ5Dbb31rliGBkWxSmjQ&callback=initMap">
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+<header id="header" class="header header-hide">
+  <div class="container">
+
+    <div id="logo" class="pull-left">
+      <h1><a href="/" class="scrollto"><span class="clr-green">V</span>ic<span class="clr-green">V</span>iew</a></h1>
+    </div>
+
+    <nav id="nav-menu-container">
+      <ul class="nav-menu">
+        <li class="menu-home"><a class="rolled" href="/">Home</a></li>
+        <li class="menu-courses"><a class="rolled" href="/courses">Find Courses</a></li>
+        <li class="menu-sububs"><a class="rolled" href="/suburbs">Explore Suburbs</a></li>
+
+        <!-- <li class="menu-has-children point-me menu-search"><a href="/search" class="rolled">Search</a>
+          <ul>
+            <li class="menu-courses"><a href="/courses">Courses</a></li>
+            <li class="menu-occupations"><a href="/occupations">Professions</a></li>
+            <li class="menu-providers"><a href="/providers">Institutes</a></li>
+          </ul>
+        </li> -->
+        <li class="menu-about"><a class="rolled" href="/about-us">About Us</a></li>
+        {% if user.is_authenticated %}
+          <li class="d-none"><a href="{% url 'logout' %}?next=/">Logout</a></li>
+        {% endif %}
+        <li class="menu-has-children point-me menu-search d-none"><a href="/search" class="rolled">
+          <i class="fa fa-search"></i>
+        </a>
+      </ul>
+    </nav><!-- #nav-menu-container -->
+  </div>
+</header><!-- #header -->

@@ -1,0 +1,112 @@
+{% extends "vicview/templates/layout.html" %}
+
+{% load static %}
+
+{% block header_content %}
+<script type="text/javascript">
+
+/*
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-11834194-7', 'auto');
+  ga('require', 'ec');
+  ga('send', 'pageview');
+
+  document.addEventListener('DOMContentLoaded', function() {
+     ga('send','event','status','loaded');
+  }); */
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+try {
+    ga('create', 'UA-11834194-7', 'auto');
+    ga('require', 'ec');
+    ga('send', 'pageview');
+}catch(e){
+  console.log(e);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  ga('send','event','status','loaded');
+});
+
+</script>
+{% endblock %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+
+
+<section class="about-us-container">
+    <div class="jumbotron text-center about-us-banner">
+        <div class="container">
+          <h1 class="jumbotron-heading">ABOUT US</h1>
+          <p class="lead text-muted"></p>
+        </div>
+    </div>
+</section>
+
+<section class="padd-section page-content">
+  <div class="container">
+    <h3 class="text-center mb-2">Our Team</h3>
+    <p>
+      We are team Lean Machine (ME8). Our team comprises of four members from different courses. We bring expertise from the areas of Information Technology, Information Systems, Data Science and Networks and Security. We are driven by a desire to make a positive impact through our product, while enhancing our own skills in the process. All of us are passionate about technology, and exploring new ways to leverage it to enrich people's lives.
+    </p>
+    <br />
+
+    <h3 class="text-center mb-2">
+      Our Mission
+    </h3>
+    <p>
+    Regional Institutions offer a wide variety of courses in different disciplines, however, due to their remote location, there is an assumption that these institutes do not offer proper amenities for students, and living conditions in those areas would be sub-standard as compared to those available in metropolitan regions. In reality, some suburbs in regional Victoria have excellent facilities for students, which go unused every year.
+    VicView was developed We want to help more students know about regional Institutions, and the courses they offer. We also want to assist them in finding ideal suburbs that they can call home. This will spread awareness among year 12 students in metropolitan areas, of the many options available to them in the future, and will subsequently lead to the upliftment of regional areas.
+    </p>
+    <br />
+
+    <h3 class="text-center mb-2">
+    What does VicView do?
+    </h3>
+    <p>
+      <ul class="list-unstyled">
+        <li><i class="fa fa-angle-right"></i>
+          Users can Look up Professions and find important details like Average wage, Weekly work hours, Future trends, etc.
+        </li>
+        <li><i class="fa fa-angle-right"></i>
+          Users can find all the Institutions offering a specific course, and details about the Institute.
+        </li>
+        <li><i class="fa fa-angle-right"></i>
+          Users can find ideal suburbs around the Institute and even compare various aspects about them.
+        </li>
+      </ul>
+    </p>
+
+    <p class="text-center">Watch our Product Video to get a quick glimpse of our application</p>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/i1Oyo07CFHA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+  </div>
+</section>
+
+
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-about").addClass("menu-active");
+  });
+</script>
+
+{% endblock %}

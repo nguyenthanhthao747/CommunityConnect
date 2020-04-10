@@ -1,0 +1,408 @@
+{% extends "vicview/templates/layout.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+<section id="features" class=" text-center bg-img3">
+  <div class="padd-section bg-tint has_data pb-3">
+
+    <div class="container">
+      <div class="pt-3 px-3 bg-overlay search-shrinked">
+        <div class="row justify-content-center" >
+          <div class="col-12 col-lg-10">
+            <div class="section-title text-center mb-1">
+              <h2 class="h2-banner animated zoomInDown">COURSES FINDER</h2>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row justify-content-center">
+              <div class="col-12 col-lg-5 jui-search-widget mb-3">
+                <input type="text" class="form-control" id="jui-autocomplete" placeholder="Enter Course Name"
+                 value="{{ course_filter }}" />
+                <!-- <select class="js-data-example-ajax form-control" id="search-courses" name="search-courses">
+                  {% if course_filter %}
+                    <option value="{{course_filter}}" selected>{{course_filter}}</option>
+                  {% endif %}
+                </select> -->
+              </div>
+
+
+              <div class="col-12 col-lg-5 px-3 pl-4 mb-3">
+                <div class="form-group mb-0">
+                    <select class="force-center" id="category_filter">
+                      <option value="">Select Course Category</option>
+                      <option value="certificates"><b>All Certificate Courses</b></option>
+                      <option value="Certificate I">Certificate I</option>
+                      <option value="Certificate II">Certificate II</option>
+                      <option value="Certificate III">Certificate III</option>
+                      <option value="Certificate IV">Certificate IV</option>
+
+                      <option value="diploma">All Diplomas</option>
+                      <option value="Advanced Diploma">Advanced Diploma</option>
+                      <option value="Diploma">Diploma</option>
+
+                      <option class="text-bold" value="graduate">All Graduate Courses</option>
+                      <option value="Graduate Certificate">Graduate Certificate</option>
+                      <option value="Graduate Diploma">Graduate Diploma</option>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-3 px-3 pl-4 d-none">
+                <div class="form-group mb-0">
+                    <select class="force-center" id="category_filter_stream">
+                      <option value="16">Adminstration</option>
+                      <option value="1">Agricluture</option>
+                      <option value="14">Animal and Horticulture Studies</option>
+                      <option value="11">Automotive Engineering</option>
+                      <option value="5">Business Studies</option>
+                      <option value="12">Construction</option>
+                      <option value="4">Creative Arts</option>
+                      <option value="18">Driving</option>
+                      <option value="7">Education</option>
+                      <option value="13">Electronics and Telecommunication Engineering</option>
+                      <option value="6">Engineering</option>
+                      <option value="3">Food, Hospitality and Personal Services</option>
+                      <option value="8">Health</option>
+                      <option value="9">Information Technology</option>
+                      <option value="2">Management Studies</option>
+                      <option value="19">Other</option>
+                      <option value="17">Retail</option>
+                      <option value="10">Society and Culture</option>
+                      <option value="15">Sports</option>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-2 text-center px-3 mb-3">
+                  <a id="btn-search-courses" class="btn text-white btn-success btn-block">Search</a>
+              </div>
+              <div id="error-get-started" class="col-12 mt-3 mb-3 d-none">
+                <span style="max-width: 400px;" class="alert alert-danger" role="alert">
+                  Please enter keyword to search or select category!
+                </span>
+              </div>
+            </div>
+
+            <div class="row justify-content-center d-none">
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-6">
+                    {% if subsidized == 1 %}
+                      <label class="switch">
+                        <input type="checkbox" id="gov-subsidized" checked/>
+                        <span class="slider government_subsidised round"></span>
+                      </label>
+                    {% else %}
+                      <label class="switch">
+                        <input type="checkbox" id="gov-subsidized" />
+                        <span class="slider government_subsidised round"></span>
+                      </label>
+                    {% endif %}
+                  </div>
+                  <div class="col-6 pt-1">
+                    <label class="form-check-label text-body point-me" for="gov-subsidized" onclick="$('#gov-subsidized').trigger('change');">
+                      Subsidized
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-3 text-right">
+                    <label class="check-container">
+                      {% if apprenticeship == 1 %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="apprenticeship" checked="checked"/>
+                      {% else %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="apprenticeship"/>
+                      {% endif %}
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="col-9 pt-1">
+                    <label class="form-check-label text-body point-me" for="apprenticeship" >
+                      Apprenticeship
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-3 text-right">
+                    <label class="check-container">
+                      {% if traineeship == 1 %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="traineeship" checked="checked"/>
+                      {% else %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="traineeship"/>
+                      {% endif %}
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="col-9 pt-1">
+                    <label class="form-check-label text-body point-me" for="traineeship" >
+                      Traineeship
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row justify-content-center mb-3">
+              <div class="col-12 col-md-4 col-lg-3">
+                <a id="btn-search-courses" class="btn btn-outline-success text-white">Search Courses</a>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="search-results" class="padd-section bg-gray pt-3">
+  <div class="container page-container">
+{% if not start_point %}
+
+  {% if course_filter %}
+  <div class="sub-header-summary bg-white p-3 mb-3">
+    <div class="row">
+      <div class="col-12 text-break">
+        {% if not courses %}
+          No courses found for your search "{{ course_filter }}"
+          {% if category_filter %}
+            and category "{{ category_filter }}"
+          {% endif  %}
+        {% else %}
+          {% ifequal courses|length 1 %}
+              Course
+          {% else %}
+              Courses
+          {% endifequal %}
+          found for your search "{{ course_filter }}"
+          {% if category_filter %}
+            and category "{{ category_filter }}"
+          {% endif  %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+{% if courses %}
+  <div class="sub-header-summary bg-white p-3 mb-3">
+    <div class="row">
+      <div class="col-12">
+        Government Subsidized courses are marked with &nbsp;&nbsp;
+        <a class="btn btn-circle btn-success text-white" title="Government Subsidized" data-toggle="tooltip">
+          <i class="fa fa-dollar"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+    <div class="pcourses">
+      {% for xcourse in courses %}
+        <div class="pcourse bg-white border mb-3" data-course-id="{{ xcourse.id }}" onclick='location.href="/courses/providers/{{ xcourse.id }}"'>
+          <div class="row no-gutters border-left-green border-bottom p-1">
+            <div class="col-12 col-md-9">
+              <h4>{{ xcourse.course_title|upper }}</h4>
+            </div>
+            <div class="col-12 col-md-3 text-right">
+              {% if xcourse.government_subsidised == 1 %}
+                <!-- <a class="badge badge-success text-white"></a> -->
+                <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-dollar"></i></button>
+              {% endif %}
+              {% if xcourse.apprenticeship == 1 %}
+                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" title="Apprenticeship"><i class="fa fa-user"></i></button>
+                <!-- <a class="badge badge-primary text-white">Apprenticeship</a> -->
+              {% endif %}
+              {% if xcourse.traineeship == 1 %}
+                <button type="button" class="btn btn-info btn-circle" data-toggle="tooltip" title="Traineeship"><i class="fa fa-play"></i></button>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row no-gutters p-1">
+            <div class="col-12 col-md-9">
+              <div class="row no-gutters p-1">
+                <div class="col">
+                    <h4><a class="text-success" href="/courses/providers/{{ xcourse.id }}">Offered in {{ xcourse.provider_count }} locations.</a></h4>
+                </div>
+              </div>
+
+              <div class="row no-gutters p-1">
+                <div class="col-12 col-md-6">
+                  <b>Course Code</b> <br />
+                  {{ xcourse.course_code|upper }}
+                </div>
+                <div class="col-12 col-md-6">
+                  <b>Qualification Level</b> <br />
+                  {{ xcourse.qualification_level }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-3 text-right">
+              <a href="/courses/providers/{{ xcourse.id }}" class="btn btn-danger btn-sm text-white text-capitalize"
+              style="padding: 6px 12px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here to see Institutes on Map">Show Institutes</a>
+            </div>
+          </div>
+          <div class="row no-gutters p-2">
+            <div class="col-12">
+              <b>Entry Requirements</b> <br />
+              {{ xcourse.entry_requirements }}
+            </div>
+          </div>
+
+        </div>
+      {% endfor %}
+      </div>
+
+      <div class="sub-footer-summary bg-white p-3 my-3">
+        <div class="row">
+          <div class="col">
+            <nav aria-label="Page navigation">
+              <ul class="pagination mb-0">
+              {% if courses.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="{{ current_filter }}page=1" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">begin</span>
+                </a>
+              </li>
+              {% endif %}
+
+              {% for n in courses.paginator.page_range %}
+                {% if courses.number == n %}
+                  <li class="page-item active">
+                    <span class="page-link">{{ n }}<span class="sr-only">(current)</span></span>
+                  </li>
+                {% elif n > courses.number|add:'-6' and n < courses.number|add:'6' %}
+                  <li class="page-item"><a class="page-link" href="{{ current_filter }}page={{ n }}">{{ n }}</a></li>
+                {% endif %}
+              {% endfor %}
+
+              {% if courses.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="{{ current_filter }}page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">end</span>
+                  </a>
+                </li>
+                {% endif %}   </ul> </nav>
+          </div>
+
+          <div class="col text-right mt-2">
+            Page {{ courses.number }} of {{ courses.paginator.num_pages }}
+          </div>
+
+        </div>
+      </div>
+{% endif %}
+
+
+{% else %}
+
+<div class="row">
+  <div class="col-12 col-lg-4">
+    <div class="card point-me" onclick='location.href="/courses/?cf=certificates"'>
+      <img src="{% static "images/courses/casual-college-connection-1438081.jpg" %}" class="card-img-top" style="max-height: 210px; height: 210px;" />
+      <div class="card-body">
+        <h5 class="card-title"><a href="/courses/?cf=certificates">Certificate I to IV</a></h5>
+        <p class="card-text" style="min-height: 310px;">These courses provide introductory skills and training and also provide a pathway to further study.<br />
+        They usually take between six months to a year of full-time study to complete, although some programs are just a few weeks. They teach industry-specific knowledge and help students develop skills in communication, literacy and numeracy, and teamwork. Some programs are part of a training package or are an extension of a related program.</p>
+
+        <p>AQF Level(s): 1-4</p>
+        <a href="/courses/?cf=certificates">Search for Certificates</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-4">
+    <div class="card point-me" onclick='location.href="/courses/?cf=diploma"'>
+      <img src="{% static "images/courses/beautiful-beauty-carefree-1458318.jpg" %}" class="card-img-top" style="max-height: 210px; height: 210px;">
+      <div class="card-body">
+        <h5 class="card-title"><a href="/courses/?cf=diploma">Diploma and Advanced Diploma</a></h5>
+        <p class="card-text" style="min-height: 310px;">Students will find the opportunity to gain invaluable knowledge about the specific industry which could result in them landing a job, or could provide a pathway to further study. An advanced diploma provides students with various practical skills for advanced skilled or paraprofessional work in areas such as accounting, building design and engineering. A diploma normally requires one to two years of full-time study to complete.</p>
+        <p>AQF Level(s): 5</p>
+        <a href="/courses/?cf=diploma">Search for Diplomas</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-4">
+    <div class="card point-me" onclick='location.href="/courses/?cf=graduate"'>
+      <img src="{% static "images/courses/blur-books-close-up-159866.jpg" %}" class="card-img-top" style="max-height: 210px; height: 210px;">
+      <div class="card-body">
+        <h5 class="card-title"><a href="/courses/?cf=graduate">Graduate Vocational Certificate</a></h5>
+        <p class="card-text" style="min-height: 310px;">Graduate Certificates provide the much needed flexibility to respond to specific industry needs without the long pipeline effects of standard Bachelor or Masters programs.<br />
+          These are short duration, highly specialised courses. They contain fewer units and cover narrow fields of study.</p>
+        <p>AQF Level(s): 8</p>
+        <a href="/courses/?cf=graduate">Search for Diplomas</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+
+  </div>
+</section>
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script type="text/javascript">
+  function adjust_select2_width(){
+    var existing_width = $(".select2-dropdown").css("width");
+    existing_width = existing_width.replace("px");
+
+    $(".select2-dropdown").css("left", "20px");
+    console.log(parseInt(existing_width) - 50 + "px");
+    window.setTimeout(function() {
+      $(".select2-dropdown").css("width", parseInt(existing_width) - 50);
+    }, 100);
+  }
+
+  $(document).ready(function () {
+    $(".menu-courses").addClass("menu-active");
+
+
+    $("#category_filter").val("{{ category_filter }}");
+
+    $('#category_filter').select2({
+      placeholder: {
+        id: '-1', // the value of the option
+        text: 'Select Course Category'
+      },
+      allowClear: true,
+    });
+
+    var opened_once = false;
+    $('#category_filter').on('select2:open', function (e) {
+      if(!opened_once){
+        opened_once = true;
+      }
+      adjust_select2_width();
+    });
+
+    $('#category_filter').on('change', function (e) {
+      submit_form();
+    });
+    $('#btn-search-courses').on('click', function (e) {
+      submit_form();
+    });
+
+    $(document).on('keyup', 'input.select2-search__field', function(e) {
+      adjust_select2_width();
+    });
+  });
+</script>
+
+<script>
+  var csrfmiddlewaretoken = '{{ csrf_token }}';
+</script>
+<script src="{% static "js/course/main-jui.js" %}?v=1.0"></script>
+
+
+{% endblock %}

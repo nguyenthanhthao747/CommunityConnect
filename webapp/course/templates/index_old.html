@@ -1,0 +1,345 @@
+{% extends "vicview/templates/layout.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+<section id="features" class=" text-center bg-img3">
+  {% if has_data %}
+  <div class="padd-section bg-tint has_data pb-3">
+  {% else %}
+  <div class="padd-section bg-tint has_nodata">
+  {% endif %}
+    <div class="container">
+      {% if has_data %}
+      <div class="p-3 bg-overlay search-shrinked">
+        <div class="row justify-content-center" >
+          <div class="col-12 col-lg-10">
+            <div class="row justify-content-center mb-3">
+              <div class="col-10 col-lg-10">
+                <!-- <input type="text" class="form-control" id="search-courses" name="search-courses" value="{{ course_filter }}" placeholder="Start typing for courses" /> -->
+                <select class="js-data-example-ajax form-control" id="search-courses" name="search-courses">
+                  {% if course_filter %}
+                    <option value="{{course_filter}}" selected>{{course_filter}}</option>
+                  {% endif %}
+                </select>
+              </div>
+
+
+              <div class="col-12 col-lg-5 px-3 pl-4 d-none">
+                <div class="form-group mb-0">
+                    <select class="force-center" id="category_filter">
+                      {% include "vicview/templates/list_suburbs.html" %}
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-2 text-center px-3">
+                  <a id="btn-search-courses" class="btn text-white btn-success btn-block">Search</a>
+              </div>
+            </div>
+
+            <div class="row justify-content-center d-none">
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-6">
+                    {% if subsidized == 1 %}
+                      <label class="switch">
+                        <input type="checkbox" id="gov-subsidized" checked/>
+                        <span class="slider government_subsidised round"></span>
+                      </label>
+                    {% else %}
+                      <label class="switch">
+                        <input type="checkbox" id="gov-subsidized" />
+                        <span class="slider government_subsidised round"></span>
+                      </label>
+                    {% endif %}
+                  </div>
+                  <div class="col-6 pt-1">
+                    <label class="form-check-label text-body point-me" for="gov-subsidized" onclick="$('#gov-subsidized').trigger('change');">
+                      Subsidized
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-3 text-right">
+                    <label class="check-container">
+                      {% if apprenticeship == 1 %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="apprenticeship" checked="checked"/>
+                      {% else %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="apprenticeship"/>
+                      {% endif %}
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="col-9 pt-1">
+                    <label class="form-check-label text-body point-me" for="apprenticeship" >
+                      Apprenticeship
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-3 text-right">
+                    <label class="check-container">
+                      {% if traineeship == 1 %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="traineeship" checked="checked"/>
+                      {% else %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="traineeship"/>
+                      {% endif %}
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="col-9 pt-1">
+                    <label class="form-check-label text-body point-me" for="traineeship" >
+                      Traineeship
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row justify-content-center mb-3">
+              <div class="col-12 col-md-4 col-lg-3">
+                <a id="btn-search-courses" class="btn btn-outline-success text-white">Search Courses</a>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      {% else %}
+        <div class="row justify-content-center" >
+          <div class="col-12 col-lg-10">
+            <div class="section-title text-center mb-3">
+              <h1 class="h1-banner animated zoomInDown">SEARCH COURSES</h1>
+              <h2 class="h2-banner">START EXPLORING VOCATIONAL EDUCATION AND TRAINING COURSES IN VICTORIA</h2>
+            </div>
+
+            <div class="row justify-content-center mb-1">
+              <div class="col-10 col-lg-8">
+                <!-- <input type="text" class="form-control" id="search-courses" name="search-courses" value="{{ course_filter }}" placeholder="Start typing for courses" /> -->
+                <select class="js-data-example-ajax form-control" id="search-courses" name="search-courses">
+                  {% if course_filter %}
+                    <option value="{{course_filter}}" selected>{{course_filter}}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <a id="help-get-started" class="text-white small">Eg: Diploma of Agriculture, etc.</a>
+            </div>
+
+            <div class="row justify-content-center mb-3 d-none">
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-6">
+                    {% if subsidized == 1 %}
+                      <label class="switch">
+                        <input type="checkbox" id="gov-subsidized" checked/>
+                        <span class="slider government_subsidised round"></span>
+                      </label>
+                    {% else %}
+                      <label class="switch">
+                        <input type="checkbox" id="gov-subsidized" />
+                        <span class="slider government_subsidised round"></span>
+                      </label>
+                    {% endif %}
+                  </div>
+                  <div class="col-6 pt-1">
+                    <label class="form-check-label text-white text-shadow point-me" for="gov-subsidized" onclick="$('#gov-subsidized').trigger('change');">
+                      Subsidized
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-3 text-right">
+                    <label class="check-container">
+                      {% if apprenticeship == 1 %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="apprenticeship" checked="checked"/>
+                      {% else %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="apprenticeship"/>
+                      {% endif %}
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="col-9 pt-1">
+                    <label class="form-check-label text-white text-shadow point-me" for="apprenticeship" >
+                      Apprenticeship
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="row no-gutters">
+                  <div class="col-3 text-right">
+                    <label class="check-container">
+                      {% if traineeship == 1 %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="traineeship" checked="checked"/>
+                      {% else %}
+                          <input name="apprenticeship_traineeship" class="form-check-input" type="radio" value="" id="traineeship"/>
+                      {% endif %}
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="col-9 pt-1">
+                    <label class="form-check-label text-white text-shadow point-me" for="traineeship" >
+                      Traineeship
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center mb-3">
+              <div class="col-12 col-md-4 col-lg-3">
+                <a id="btn-search-courses" class="btn btn-outline-success text-white">Search Courses</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if not start_point %}
+<section id="search-results" class="padd-section bg-gray pt-3">
+    <div class="container page-container">
+      {% if course_filter %}
+      <div class="sub-header-summary bg-white p-3 mb-3">
+        <div class="row">
+          <div class="col-12">
+            {% ifequal courses|length 1 %}
+                Search results for "{{ course_filter }}": {{ courses|length }} course found
+            {% else %}
+                Search results for "{{ course_filter }}": {{ courses|length }} courses found
+            {% endifequal %}
+
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="sub-header-summary bg-white p-3 mb-3">
+        <div class="row">
+          <div class="col-12">
+            Government Subsidized courses are marked with &nbsp;&nbsp;
+            <a class="btn btn-circle btn-success text-white" title="Government Subsidized" data-toggle="tooltip">
+              <i class="fa fa-dollar"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+        <div class="pcourses">
+          {% for xcourse in courses %}
+            <div class="pcourse bg-white border mb-3" data-course-id="{{ xcourse.id }}" onclick='location.href="/courses/providers/{{ xcourse.id }}"'>
+              <div class="row no-gutters border-left-green border-bottom p-1">
+                <div class="col-12 col-md-9">
+                  <h4>{{ xcourse.course_title|upper }}</h4>
+                </div>
+                <div class="col-12 col-md-3 text-right">
+                  {% if xcourse.government_subsidised == 1 %}
+                    <!-- <a class="badge badge-success text-white"></a> -->
+                    <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-dollar"></i></button>
+                  {% endif %}
+                  {% if xcourse.apprenticeship == 1 %}
+                    <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" title="Apprenticeship"><i class="fa fa-user"></i></button>
+                    <!-- <a class="badge badge-primary text-white">Apprenticeship</a> -->
+                  {% endif %}
+                  {% if xcourse.traineeship == 1 %}
+                    <button type="button" class="btn btn-info btn-circle" data-toggle="tooltip" title="Traineeship"><i class="fa fa-play"></i></button>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="row no-gutters p-1">
+                <div class="col-12 col-md-9">
+                  <div class="row no-gutters p-1">
+                    <div class="col">
+                        <h4><a class="text-success" href="/courses/providers/{{ xcourse.id }}">Offered in {{ xcourse.provider_count }} locations.</a></h4>
+                    </div>
+                  </div>
+
+                  <div class="row no-gutters p-1">
+                    <div class="col-12 col-md-6">
+                      <b>Course Code</b> <br />
+                      {{ xcourse.course_code|upper }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <b>Qualification Level</b> <br />
+                      {{ xcourse.qualification_level }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-3 text-right">
+                  <a href="/courses/providers/{{ xcourse.id }}" class="btn btn-danger btn-sm text-white text-capitalize" style="padding: 6px 12px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here to see Institutes on Map">Show Institutes</a>
+                </div>
+              </div>
+              <div class="row no-gutters p-2">
+                <div class="col-12">
+                  <b>Entry Requirements</b> <br />
+                  {{ xcourse.entry_requirements }}
+                </div>
+              </div>
+
+            </div>
+          {% endfor %}
+          </div>
+
+          <div class="sub-footer-summary bg-white p-3 my-3">
+            <div class="row">
+              <div class="col-12">
+                {% if not courses %}
+                  <h3>No records found.</h3>
+                {% else %}
+
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination mb-0">
+                    {% if courses.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{ courses.previous_page_number }}">Previous</a></li>
+                      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                    {% endif %}
+                    <li class="page-item">
+                      Page {{ courses.number }} of {{ courses.paginator.num_pages }}.
+                    </li>
+
+                    {% if courses.has_next %}
+                      <li class="page-item ml-3"><a class="page-link" href="?page={{ courses.next_page_number }}">Next</a></li>
+                      <li class="page-item"><a class="page-link" href="?page={{ courses.paginator.num_pages }}">last</a></li>
+                    {% endif %}
+
+                  </ul>
+                </nav>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-courses").addClass("menu-active");
+  });
+</script>
+
+<script>
+  var csrfmiddlewaretoken = '{{ csrf_token }}';
+</script>
+<script src="{% static "js/course/main.js" %}?v=1.0"></script>
+
+
+{% endblock %}

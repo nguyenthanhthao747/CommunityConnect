@@ -1,0 +1,62 @@
+<script>
+
+Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#292b2c';
+
+$(function() {
+
+  var options = {
+         legend: {
+            display: false
+         },
+         // tooltips: {
+         //    enabled: false
+         // }
+     tooltips: {
+        callbacks: {
+          label: function(tooltipItem, data) {
+          	var dataset = data.datasets[tooltipItem.datasetIndex];
+            var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+              return previousValue + currentValue;
+            });
+            var currentValue = dataset.data[tooltipItem.index];
+            var percentage = Math.floor(((currentValue/total) * 100)+0.5);
+            return percentage + "%";
+          }
+        }
+      },
+      /*
+      plugins: {
+          datalabels: {
+              formatter: (value, ctx) => {
+                let datasets = ctx.chart.data.datasets;
+
+                 if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                   let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                   let percentage = Math.round((value / sum) * 100) + '%';
+                   return percentage;
+                 } else {
+                   return percentage;
+                 }
+              },
+              color: '#fff',
+          }
+      } */
+  };
+
+  var ctx = document.getElementById("chart_pie_crime");
+  var myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Metropolitan', 'Regional'],
+      datasets: [{
+        data: [2512900, 907820],
+        backgroundColor: ['#555', '#09670e'],
+      }],
+    },
+    options: options
+  });
+
+});
+
+</script>

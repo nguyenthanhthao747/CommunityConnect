@@ -1,0 +1,456 @@
+{% extends "suburb/templates/layout.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+
+<style media="screen">
+.ui-autocomplete {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 15px;
+}
+#suburbs-datatable_wrapper .row{
+  width: 100%;
+  padding: 10px 7px;
+}
+#suburbs-datatable_length .form-control{
+  border-radius: 6px;
+}
+#suburbs-datatable_paginate .pagination{
+  float: right;
+}
+
+#suburbs-datatable_paginate .pagination .page-item.active .page-link{
+  background-color: #09670e !important;
+  color: white !important;
+}
+div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.dataTables_filter label{
+  display: inline-block;
+}
+</style>
+
+<section id="features" class=" text-center bg-img8">
+  <div class="padd-section bg-tint has_data pb-3">
+    <div class="container-fluid">
+      <div class="p-3 bg-overlay search-shrinked">
+        <div class="container">
+          <div class="row justify-content-center no-gutters">
+            <div class="col-12">
+              <div class="section-title text-center mb-3">
+                <h2 class="h2-banner animated zoomInDown text-dark" style="text-shadow: none;">START EXPLORING VICTORIAN SUBURBS</h2>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-10 px-3 jui-search-widget">
+              <input class="form-control" type="text" name="search_query" value="{{suburb_filter}}"
+              id="jui-autocomplete" placeholder="Search institutes by Suburb"/>
+ 
+            </div>
+
+            <div class="col-12 col-lg-2 text-center px-3 mt-sm-3 mt-lg-0">
+              <a id="btn-search-institutes" class="btn btn-success text-white">Search</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container-fluid bg-gray">
+  <div class="xcontainer">
+    <div class="row">
+      {% if start_point %}
+      <div class="col-12">
+        <div class="sub-header-summary bg-white p-3 mt-3 mb-1">
+          <div class="row">
+            <div class="col-12">
+              <div class="progress">
+                <div id="progress-bar" class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-7 p-3">
+        <div class="card mb-3" id="map-widget">
+          <div class="card-body p-0">
+            <div id="map_canvas" style="width: 100%; height: calc(100vh - 245px);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-5 p-3">
+        <div class="card">
+          <div class="card-body p-0 suburbs_list" style="max-height: 1200px;overflow: auto;">
+            <table class="table table-bordered table-hover table-striped mb-0 d-none" id="suburbs-datatable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Suburb</th>
+                  <th>Region</th>
+                  <th class="no-sort"></th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="col-12 col-lg-5 p-3">
+        <div class="card mb-3" id="map-widget">
+          <div class="card-body p-0">
+            <div id="map_canvas" style="width: 100%; height: calc(100vh - 245px);"></div>
+          </div>
+        </div>
+
+        <div id="institute-badge">
+
+        </div>
+
+      </div>
+
+      <div class="col-12 col-lg-7 py-3 pl-lg-0">
+        <div class="card">
+          <div class="card-body p-0 providers_list" style="max-height: 1200px;overflow: auto;">
+            <table class="table table-bordered table-hover table-striped mb-0" id="institutes-datatable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Institute</th>
+                  <th>Address</th>
+                  <th class="no-sort"></th>
+                </tr>
+              </thead>
+              <tbody>
+              {% include "suburb/templates/institute_row.html" with providers=providers %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card-footer p-1 d-none">
+            {% if not providers %}
+              <h3>No records found.</h3>
+            {% else %}
+            <nav aria-label="Page navigation example">
+              <ul class="pagination m-0">
+                {% if providers.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{ providers.previous_page_number }}">Previous</a></li>
+                  <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                {% endif %}
+                <li class="ml-3 page-item">
+                  Page {{ providers.number }} of {{ providers.paginator.num_pages }}.
+                </li>
+
+                {% if providers.has_next %}
+                  <li class="page-item ml-3"><a class="page-link" href="?page={{ providers.next_page_number }}">Next</a></li>
+                  <li class="page-item"><a class="page-link" href="?page={{ providers.paginator.num_pages }}">last</a></li>
+                {% endif %}
+
+              </ul>
+            </nav>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-sububs").addClass("menu-active");
+  });
+</script>
+
+
+<script src="{% static "js/suburb/cluster.js" %}?v=1.2"></script>
+
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyB0oASnqZZG13qNQ5Dbb31rliGBkWxSmjQ"></script>
+<script type="text/javascript">
+  var latLng = new google.maps.LatLng(-37.4713,144.7852);
+
+  var markers, polys;
+  var map_vicview;
+  var infowindow = new google.maps.InfoWindow();
+  var map_object;
+  var markerCluster;
+
+  function parsePolygonPaths(svalue) {
+      var result = [];
+      var r = /\(([^)]+)\)/g;
+      svalue = svalue.slice(9, -1);
+      while (matches = r.exec(svalue)) {
+         var vals = matches[1].split(',');
+         var coords = vals.map(function(val){
+            var ll = val.trim().split(' ');
+            return new google.maps.LatLng(ll[1], ll[0]);
+         });
+         result.push(coords);
+      }
+      return result;
+  }
+  function initialize() {
+      markers = new Array();
+      var mapOptions = {
+        center: latLng,
+        zoom: 7,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
+      map_object = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+  }
+
+  function deleteMarkers() {
+      console.log("deleteMarkers");
+          //Loop through all the markers and remove
+      for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+      }
+      markers = [];
+
+      if (typeof markerCluster !== 'undefined'){
+        markerCluster.clearMarkers();
+      }
+
+  }
+
+  function reinit_map_using_table(){
+    deleteMarkers();
+
+    console.log("reinit_map_using_table");
+
+    $("#institutes-datatable tbody tr").each(function(index) {
+        var the_tr = $(this);
+        // console.log(the_tr);
+        // console.log($(this).attr("data-longitude"), $(this).attr("data-latitude"), $(this).attr("data-name"));
+
+        latLng = new google.maps.LatLng($(this).attr("data-latitude"),$(this).attr("data-longitude"));
+
+        var marker = new google.maps.Marker({
+            position: latLng,
+            title: $(this).attr("data-name"),
+            visible: true,
+            animation: google.maps.Animation.DROP
+        });
+
+        marker.setMap(map_object);
+        markers.push(marker);
+
+        marker.addListener('click', function() {
+          var latLng = marker.getPosition(); // returns LatLng object
+          map_object.setCenter(latLng);
+
+          var infoContent = "<h5>" + marker.title + "</h5>";
+          var address_row = $(the_tr).find(".address-hidden-popup")[0];
+          infoContent += $(address_row).html();
+          infowindow.setContent(infoContent);
+          infowindow.open(map_object, marker);
+
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+
+    });
+
+    zoom_and_center_to_map();
+
+    // Add a marker clusterer to manage the markers.
+    markerCluster = new MarkerClusterer(map_object, markers,
+           {imagePath: '//vicview.gq/static/images/cluster/m'});
+  }
+
+  $(document).ready(function () {
+
+    initialize();
+
+    $("#institutes-datatable tbody tr").click(function(){
+          marker = markers[this.id];
+
+          $([document.documentElement, document.body]).animate({
+            scrollTop: $("#btn-search-institutes").offset().top
+          }, 1000);
+
+          var latLng = marker.getPosition(); // returns LatLng object
+          map_object.setCenter(latLng);
+
+          var infoContent = "<h5>" + marker.title + "</h5>";
+          var address_row = $(this).find(".address-hidden-popup")[0];
+          // console.log($(address_row).html());
+          // $("#institute-badge").html($(address_row).html());
+          infoContent += $(address_row).html();
+          infowindow.setContent(infoContent);
+          infowindow.open(map_object, marker);
+
+          var address_row_badge = $(this).find(".address-hidden-badge")[0];
+          $("#institute-badge").html($(address_row_badge).html());
+
+    });
+
+  });
+</script>
+
+<script>
+  var csrfmiddlewaretoken =  '{{ csrf_token }}';
+</script>
+<!-- DataTables -->
+<script src="{% static "vendor/datatables/js/jquery.dataTables.min.js" %}"></script>
+<script src="{% static "vendor/datatables/js/dataTables.bootstrap4.min.js" %}"></script>
+
+<script src="{% static "js/suburb/main.js" %}?v=1.1"></script>
+
+<script type="text/javascript">
+
+  var page_to_fetch = 1;
+  var bounds = new google.maps.LatLngBounds();
+  var result = "";
+  var first_load = true;
+
+  function polygon_clicked(polygon){
+    console.log(polygon);
+    show_poly_info(polygon);
+  }
+
+  function show_poly_info(polygon){
+    last_clicked = polygon.poly_index;
+
+    var contentString = '<b>' + polygon.title + '</b>';
+    // console.log(contentString);
+
+    // Replace the info window's content and position.
+    infowindow.setContent(contentString);
+    var poly_center = polygonCenter(polygon);
+    infowindow.open(map_object);
+    infowindow.setPosition(poly_center);
+
+    var temp_options = {};
+    temp_options["strokeColor"] = '#ff0000';
+    temp_options["fillColor"] = '#ff0000';
+    temp_options["fillOpacity"] = 0.60;
+
+    polygon.setOptions(temp_options);
+
+    // console.log(polygonCenter(polygon));
+    map_object.setCenter(poly_center);
+  }
+
+  function load_suburbs(){
+    console.log("load_suburbs");
+//boundary_ajax
+
+    var request = $.ajax({
+      url: "/suburbs/boundary_ajax/?page=" + page_to_fetch,
+      method: "POST",
+      data: {
+        csrfmiddlewaretoken: csrfmiddlewaretoken
+      },
+      dataType: "json"
+    });
+
+    request.done(function( msg ) {
+
+      console.log(msg.sububs[0]);
+
+      for (var i = 0; i < msg.sububs.length; i++) {
+        var suburbx = msg.sububs[i]
+        result = parsePolygonPaths(suburbx.geo_boundary);
+        // Construct the polygon.
+        result.forEach(function(coords){
+              coords.forEach(function(loc){
+                  bounds.extend(loc);
+              });
+              var suburb_options = {
+                  paths: coords,
+                  // strokeColor: '{{ suburb.strokeColor }}',
+                  strokeColor: '#555',
+                  strokeOpacity: 0.8,
+                  strokeWeight: 2,
+                  fillColor: '#09670e',
+                  fillOpacity: 0.30,
+                  title: suburbx.suburb
+              };
+
+              var poly = new google.maps.Polygon(suburb_options);
+
+              poly.setMap(map_object);
+
+              google.maps.event.addListener(poly, "click", function(){
+                polygon_clicked(this);
+              });
+              google.maps.event.addListener(poly, "mouseover",function(){
+                this.setOptions({fillOpacity: 0.6});
+              });
+
+              google.maps.event.addListener(poly, "mouseout",function(){
+                this.setOptions({fillOpacity: 0.45});
+              });
+              google.maps.event.addListenerOnce(map_object, 'bounds_changed', function() {
+                map_object.setZoom(map_object.getZoom() -1);
+              });
+
+              // add rows to the table
+              var name = suburbx.name;
+              var region_name = suburbx.region_name;
+              var markup = "<tr><td>" + name + "</td><td>" + region_name + "</td><td><a href='/suburbs/institutes/?q=" + name + "' class='btn btn-danger btn-sm text-white text-capitalize' style='padding: 6px 12px;font-size: 10px;' data-toggle='tooltip' data-placement='top' title='Click here to see Institutes on Map' >Show Institutes</a> </td></tr>";
+              $("table tbody").append(markup);
+        });
+      }
+
+      if(msg.sububs.length > 0){
+        page_to_fetch++;
+
+        // update the loading bar
+        var the_progress = page_to_fetch * 10;
+        if(the_progress > 100){
+          the_progress == 100;
+        }
+        $("#progress-bar").attr("aria-valuenow", the_progress);
+        $("#progress-bar").css("width", the_progress + "%");
+
+        load_suburbs();
+      } else{
+        // hide the loading bar
+        $(".sub-header-summary").html("<b>Successfully loaded Regional Victorian Suburbs with Institutes!</b>");
+
+        $("#suburbs-datatable").DataTable({
+          "columnDefs": [ {
+                 "targets": 'no-sort',
+                 "orderable": false,
+           } ]
+        });
+      }
+
+      $("#suburbs-datatable").removeClass("d-none");
+    });
+
+    request.fail(function( jqXHR, textStatus ) {
+      console.log( "Request failed: " + textStatus );
+    });
+
+  }
+
+  $(document).ready(function () {
+    {% if start_point %}
+      load_suburbs();
+    {% else %}
+      $(".sub-header-summary").html("<b>Showing institutes for '{{ suburb_filter }}'</b>");
+      reinit_map_using_table();
+      create_datatable();
+    {% endif %}
+  });
+</script>
+
+{% endblock %}

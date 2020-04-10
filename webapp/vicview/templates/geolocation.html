@@ -1,0 +1,273 @@
+{% extends "vicview/templates/layout.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar-nomenu.html" %}
+
+<style>
+  #map {
+    height: 300px;
+    width: 100%;
+  }
+  #description {
+   font-family: Roboto;
+   font-size: 15px;
+   font-weight: 300;
+ }
+
+ #infowindow-content .title {
+   font-weight: bold;
+ }
+
+ #infowindow-content {
+   display: none;
+ }
+
+ #map #infowindow-content {
+   display: inline;
+ }
+
+ .pac-card {
+   margin: 10px 10px 0 0;
+   border-radius: 2px 0 0 2px;
+   box-sizing: border-box;
+   -moz-box-sizing: border-box;
+   outline: none;
+   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+   background-color: #fff;
+   font-family: Roboto;
+ }
+
+ #pac-container {
+   padding-bottom: 12px;
+   margin-right: 12px;
+ }
+
+ .pac-controls {
+   display: inline-block;
+   padding: 5px 11px;
+ }
+
+ .pac-controls label {
+   font-family: Roboto;
+   font-size: 13px;
+   font-weight: 300;
+ }
+
+ #pac-input {
+   /* background-color: #fff;
+   font-family: Roboto;
+   font-size: 15px;
+   font-weight: 300;
+   margin-left: 12px;
+   padding: 0 11px 0 13px;
+   text-overflow: ellipsis;
+   width: 400px; */
+ }
+
+ #pac-input:focus {
+   /* border-color: #4d90fe; */
+ }
+
+ #title {
+   color: #fff;
+   background-color: #4d90fe;
+   font-size: 25px;
+   font-weight: 500;
+   padding: 6px 12px;
+ }
+ #target {
+   width: 345px;
+ }
+</style>
+
+
+<section class="about-us-container">
+    <div class="jumbotron text-center about-us-banner pb-2" style="min-height: auto;">
+        <div class="container">
+          <h1 class="jumbotron-heading">Get Coordinates</h1>
+        </div>
+    </div>
+</section>
+
+<section class="padd-section page-content pt-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-8">
+        <div class="row">
+          <div class="col-12 mb-3">
+            <input id="pac-input" class="controls form-control" type="text" placeholder="Search Box">
+          </div>
+        </div>
+
+        <div id="map"></div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="click-results" style="display: none;">
+          <small>Coordinates on Click</small> <br />
+          <div id="latclicked"></div>
+          <div id="longclicked"></div>
+        </div>
+
+        <div class="d-none">
+          <small>Coordinates on cursor move</small> <br />
+          <div id="latmoved"></div>
+          <div id="longmoved"></div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    $("#mobile-nav-toggle").hide();
+  });
+
+  function initAutocomplete() {
+
+    var latitude = -37.814;
+    var longitude = 144.96332;
+
+    var myLatLng = {lat: latitude, lng: longitude};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: myLatLng,
+          zoom: 13,
+          mapTypeId: 'roadmap'
+        });
+
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            var new_marker = new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            });
+
+            new_marker.addListener('click', function(event) {
+              document.getElementById('latclicked').innerHTML = event.latLng.lat();
+              document.getElementById('longclicked').innerHTML =  event.latLng.lng();
+
+              $(".click-results").slideDown("slow");
+            });
+            markers.push(new_marker);
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+
+
+        // Update lat/long value of div when anywhere in the map is clicked
+        google.maps.event.addListener(map,'click',function(event) {
+            document.getElementById('latclicked').innerHTML = event.latLng.lat();
+            document.getElementById('longclicked').innerHTML =  event.latLng.lng();
+
+            $(".click-results").slideDown("slow");
+        });
+
+        // Update lat/long value of div when you move the mouse over the map
+        google.maps.event.addListener(map,'mousemove',function(event) {
+            document.getElementById('latmoved').innerHTML = event.latLng.lat();
+            document.getElementById('longmoved').innerHTML = event.latLng.lng();
+        });
+
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          //title: 'Hello World'
+
+          // setting latitude & longitude as title of the marker
+          // title is shown when you hover over the marker
+          title: latitude + ', ' + longitude
+        });
+
+        // Update lat/long value of div when the marker is clicked
+        marker.addListener('click', function(event) {
+          document.getElementById('latclicked').innerHTML = event.latLng.lat();
+          document.getElementById('longclicked').innerHTML =  event.latLng.lng();
+        });
+
+        // Create new marker on double click event on the map
+        // google.maps.event.addListener(map,'dblclick',function(event) {
+        //     var marker = new google.maps.Marker({
+        //       position: event.latLng,
+        //       map: map,
+        //       title: event.latLng.lat()+', '+event.latLng.lng()
+        //     });
+        //
+        //     // Update lat/long value of div when the marker is clicked
+        //     marker.addListener('click', function() {
+        //       document.getElementById('latclicked').innerHTML = event.latLng.lat();
+        //       document.getElementById('longclicked').innerHTML =  event.latLng.lng();
+        //     });
+        // });
+      }
+</script>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyB0oASnqZZG13qNQ5Dbb31rliGBkWxSmjQ&&libraries=places&callback=initAutocomplete"></script>
+
+{% endblock %}
+
+    </body>
+</html>

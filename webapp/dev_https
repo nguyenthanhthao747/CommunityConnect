@@ -1,0 +1,13 @@
+pid=
+
+#sslVersion = TLSv1.3
+foreground = yes
+output = stunnel.log
+
+[https]
+accept=0.0.0.0:443
+connect=0.0.0.0:80
+TIMEOUTclose=1
+CAfile = /root/sslcerts/ca_bundle.crt
+cert=/root/sslcerts/certificate.crt
+key=/root/sslcerts/private.key

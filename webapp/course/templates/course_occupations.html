@@ -1,0 +1,106 @@
+{% extends "vicview/templates/layout.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+
+<section id="features" class="padd-section text-center pb-1">
+
+  <div class="container">
+    <div class="section-title text-center mb-3">
+      <h3>Search Results for Occupation</h3>
+      <p>{{ occupation_details.title }}</p>
+    </div>
+  </div>
+
+</section>
+{% if not start_point %}
+<section id="search-results" class="padd-section">
+    <div class="container">
+        <table class="table table-bordered table-sm table-hover table-selectable" id="stops-datatable" width="100%" cellspacing="0">
+          <tbody>
+          {% for course in courses %}
+            <tr>
+              <td>
+                  <div class="row point-me" data-course-id="{{ course.id }}" onclick='location.href="/courses/providers/{{ course.id }}"'>
+                    <div class="col-12 col-md-9">
+                      <h4 style="font-size: 20px;">{{ course.course_title|upper }}</h4>
+                      <b>Course Code</b> &nbsp;&nbsp;&nbsp;{{ course.course_code|upper }} <br />
+                      <b>Qualification Level</b> &nbsp;&nbsp;&nbsp;{{ course.qualification_level }} <br />
+                    </div>
+                    <div class="col-12 col-md-3 text-right pr-4">
+                      {% if course.government_subsidised == 1 %}
+                        <!-- <a class="badge badge-success text-white"></a> -->
+                        <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-tags"></i></button>
+                      {% endif %}
+                      {% if course.apprenticeship == 1 %}
+                        <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" title="Apprenticeship"><i class="fa fa-user"></i></button>
+                        <!-- <a class="badge badge-primary text-white">Apprenticeship</a> -->
+                      {% endif %}
+                      {% if course.traineeship == 1 %}
+                        <!-- <a class="badge badge-info text-white">Traineeship</a> -->
+                        <button type="button" class="btn btn-info btn-circle" data-toggle="tooltip" title="Traineeship"><i class="fa fa-play"></i></button>
+                      {% endif %}
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <b>Entry Requirements</b> <br />
+                      {{ course.entry_requirements }} <br />
+                    </div>
+                    <div class="col-12 col-md-4 text-right pr-4">
+                      <!-- <a class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here for information about this course">Read More</a> -->
+                      <a href="/courses/providers/{{ course.id }}" class="btn btn-danger btn-sm text-white ml-3" style="padding: 7px 15px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here to see Institutes on Map"><i class="fa fa-lg fa-university"></i></a>
+                    </div>
+                  </div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+          {% if not courses %}
+            <h3>No records found.</h3>
+          {% else %}
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                {% if courses.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{ courses.previous_page_number }}">Previous</a></li>
+                  <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                {% endif %}
+                <li class="page-item">
+                  Page {{ courses.number }} of {{ courses.paginator.num_pages }}.
+                </li>
+
+                {% if courses.has_next %}
+                  <li class="page-item ml-3"><a class="page-link" href="?page={{ courses.next_page_number }}">Next</a></li>
+                  <li class="page-item"><a class="page-link" href="?page={{ courses.paginator.num_pages }}">last</a></li>
+                {% endif %}
+
+              </ul>
+            </nav>
+          {% endif %}
+
+
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-courses").addClass("menu-active");
+  });
+</script>
+
+<script>
+  var csrfmiddlewaretoken = '{{ csrf_token }}';
+</script>
+<script src="{% static "js/course/main.js" %}?v=1.0"></script>
+
+
+{% endblock %}

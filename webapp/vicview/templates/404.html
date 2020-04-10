@@ -1,0 +1,43 @@
+{% extends "occupation/templates/layout.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+<section id="features" class="bg-img6">
+  <div class="padd-section bg-tint has_data pb-5">
+    <div class="container">
+      <div class="p-3">
+          <h3 class="text-center text-white text-shadow">{{ str_page_title }}</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="search-results" class="padd-section bg-gray pt-3">
+    <div class="container page-container">
+
+      <div class="sub-header-summary bg-white p-3 mb-3">
+        <div class="row">
+          <div class="col-12 p-5">
+            <h4>
+              {{ str_page_message }}
+            </h4>
+          </div>
+        </div>
+      </div>
+  </div>
+</section>
+
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+
+
+
+{% endblock %}

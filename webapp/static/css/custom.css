@@ -1,0 +1,75 @@
+
+
+.map_detailed { height: 550px; }
+
+.map_top{
+  height: 400px;
+}
+.uni-mini-height{
+  min-height: 509px;
+}
+
+.color-tram{
+  color: #78be1f;
+}
+.bg-tram{
+  background-color: #78be1f;
+}
+
+.color-bus{
+  color: #ff8201;
+}
+.bg-bus{
+  background-color: #ff8201;
+}
+
+.color-train{
+  color: #0073d0;
+}
+.bg-train{
+  background-color: #0073d0;
+}
+
+
+#scan_range .slider-track-high, #scan_range .slider-track-high {
+	background: #ff8201;
+}
+
+#scan_range .slider-track-low, #scan_range .slider-track-low {
+	background: #ff8201;
+}
+
+#scan_range .slider-selection {
+	background: #0073d0;
+}
+.table-selectable tbody tr {
+  cursor: pointer;
+}
+
+
+.btn-linkedin {
+  color: #fff;
+  background-color: #007bb6;
+  border-color: rgba(0,0,0,0.2);
+}
+
+.btn-social {
+position: relative;
+padding-left: 44px;
+text-align: left;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.btn-social>:first-child {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  line-height: 34px;
+  font-size: 1.6em;
+  text-align: center;
+  border-right: 1px solid rgba(0,0,0,0.2);
+}

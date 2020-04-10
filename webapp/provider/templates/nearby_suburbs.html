@@ -1,0 +1,872 @@
+{% extends "provider/templates/layout.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+
+<section id="features" class=" text-center bg-img4">
+  <div class="padd-section bg-tint pb-0">
+    <div class="container">
+      <div class="row justify-content-center" >
+        <div class="col-12">
+          <div class="section-title text-center mb-3">
+            <h1 class="h1-banner">SUBURBS NEARBY</h1>
+            <h2 class="h2-banner animated zoomInDown">{{ provider_info.name }}, {{ provider_info.site_name }}</h2>
+            <!-- <p class="text-white"><b>ASQA Code</b> &nbsp;&nbsp;&nbsp;{{ provider_info.asqa_code }}
+            </p> -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="container-fluid bg-gray">
+  <div class="row">
+
+{% if not providers %}
+    <div class="col-12 pt-3">
+      <div class="sub-header-summary bg-white p-3">
+          <h4>No records found.</h4>
+      </div>
+    </div>
+{% else %}
+
+<div class="col-12 pt-3">
+  <div class="sub-header-summary bg-white p-3">
+      <h4>Showning nearby {{ nearest_suburbs|length }} suburbs as per our recommendations.</h4>
+  </div>
+</div>
+
+{% endif %}
+
+    <div class="col-12 col-lg-6 p-3">
+      <div class="card mb-3" id="map-widget">
+        <div class="card-body p-0">
+          <div id="map_canvas" style="width: 100%; height: 320px;"></div>
+        </div>
+      </div>
+
+      <div id="institute-badge">
+        <span class="address-hidden-popup d-none">
+          <div class="row no-gutters">
+            <div class="col-12">
+              <b>Address</b> <br />
+              {{ provider_info.address_line_1 }},<br />
+              {% if provider_info.address_line_2 != "0" %}
+                {{ provider_info.address_line_2 }},<br />
+              {% endif %}
+              {{ provider_info.suburb|title }} {{ provider_info.postcode }}
+            </div>
+            <div class="col-12 text-right">
+              {% if provider_info.url != "" %}
+              <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-thumbs-up"></i></button> -->
+              <a href="{{ provider_info.url }}" target="_blank" class="btn btn-info btn-circle" data-toggle="tooltip" title="Visit Website">
+                <i class="fa fa-globe"></i>
+              </a>
+              {% endif %}
+              {% if provider_info.email != "" %}
+              <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+                Contact via E-mail
+              </a> -->
+              <a href="mailto:{{ provider_info.email }}" target="_blank" class="btn btn-danger btn-circle" data-toggle="tooltip" title="Contact via E-mail">
+                <i class="fa fa-envelope"></i>
+              </a>
+              {% endif %}
+
+              <a href='http://maps.google.com/maps?daddr="{{ provider_info.address_line_1 }}, {% if provider_info.address_line_2 != "0" %}{{ provider_info.address_line_2 }}, {% endif %} {{ provider_info.suburb|title }} {{ provider_info.postcode }}"'
+              target="_blank" class="btn btn-success btn-circle" data-toggle="tooltip" title="Get Directions">
+                <i class="fa fa-location-arrow"></i>
+              </a>
+            </div>
+          </div>
+        </span>
+
+
+        <span class="address-hidden-badge">
+          <div class="card bg-light mb-3">
+            <div class="card-body p-4" >
+              <div class="row justify-content-center">
+                <div class="col-12 col-lg-5 px-3 mb-3 text-center">
+                  <i class="fa fa-3x fa-university mb-3"></i>
+                  <div class="mt-2">
+                    {% if provider_info.government_subsidised == 1 %}
+                      <!-- <a class="badge badge-success text-white">Government Subsidised</a> -->
+                    <button type="button" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-tags"></i></button>
+                    {% endif %}
+                    {% if provider_info.is_regional == 1 %}
+                    <button type="button" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button>
+                      <!-- <a class="badge badge-success text-white">Regional Institute</a> -->
+                    {% endif %}
+
+                    <!-- <a href='/providers/details/{{ provider.id }}' class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">Read More</a> -->
+                    {% if provider_info.url != "" %}
+                    <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button> -->
+                    <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle btn-md" data-toggle="tooltip" title="Visit Website">
+                      <i class="fa fa-globe"></i>
+                    </a>
+                    {% endif %}
+                    {% if provider_info.email != "" %}
+                    <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+                      Contact via E-mail
+                    </a> -->
+                    <a href="mailto:{{ provider_info.email }}" target="_blank" class="btn btn-danger btn-circle btn-md" data-toggle="tooltip" title="Contact via E-mail">
+                      <i class="fa fa-envelope"></i>
+                    </a>
+                    {% endif %}
+
+                    <a href='http://maps.google.com/maps?daddr="{{ provider_info.address_line_1 }}, {% if provider_info.address_line_2 != "0" %}{{ provider_info.address_line_2 }}, {% endif %} {{ provider_info.suburb|title }} {{ provider_info.postcode }}"'
+                    target="_blank" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Get Directions">
+                      <i class="fa fa-location-arrow"></i>
+                    </a>
+                  </div>
+                    <p>
+                      <b>ASQA Code</b> &nbsp;&nbsp;&nbsp; {{ provider_info.asqa_code }}
+                    <br />
+                    <b>Campus</b>  &nbsp;&nbsp;&nbsp;{{ provider_info.site_name }}
+                    </p>
+                </div>
+
+
+                <div class="col-12 col-lg-6 px-3 mb-3 mt-3">
+                  <h3 class="name text-bold" style="font-size: 16px;">{{ provider_info.name|title }}</h3>
+                    <p style="line-height: initial;">
+                      <small>{{ provider_info.address_line_1 }},
+                      {% if provider_info.address_line_2 != "0" %}
+                        {{ provider_info.address_line_2 }},
+                      {% endif %}
+                      {{ provider_info.suburb|title }} {{ provider_info.postcode }} </small>
+                      <br />
+                      <small>
+                        <a href="mailto:{{ provider_info.email }}">
+                          {{ provider_info.email }}
+                        </a>
+                      </small>
+                      <br />
+                      <small>
+                        <a href="{{ provider_info.url }}" target="_blank" >
+                          {{ provider_info.url }}
+                        </a>
+                      </small>
+                    </p>
+
+                    <!-- <a href="/providers/suburbs/{{ provider_info.id }}/" class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">
+                      <i class="fa fa-map"></i> &nbsp; Explore Nearby Suburbs
+                    </a> -->
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </span>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6 py-3 pl-lg-0">
+
+      <div class="row">
+        <div class="col-6 pt-2 mb-2">
+          Select any 2 suburbs to compare
+        </div>
+
+        <div class="col-6 text-right mb-2">
+          <a id="btn_handle_compare" class="btn btn-success btn-sm text-white"
+          style="padding: 7px 15px;font-size: 10px;display: none;">Compare</a>
+        </div>
+      </div>
+
+      <div id="error-container" style="display: none;">
+        <div class="alert alert-danger" role="alert">
+          Maximum of two suburbs are allowed to compare!
+        </div>
+      </div>
+
+      <div class="accordion" id="accordion-suburbs">
+{% for suburb in nearest_suburbs %}
+        <div class="card border-0 nearbysuburb" id="nearbysuburb{{ forloop.counter0 }}" data-latitude="{{ suburb.latitude }}"
+        data-longitude="{{ suburb.longitude }}">
+          <div class="card-header p-0 point-me" id="heading{{ forloop.counter0 }}" style="background-color: {{ suburb.fillColor }};">
+            <div class="row no-gutters">
+              <div class="col-auto p-2 pl-3">
+                <label class="checkb-container">
+                  <input class="compare_suburbs" name="compare_suburbs" type="checkbox" value="{{ suburb.suburb_id }}"/>
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+              <div class="col-auto" style="flex: 1;">
+                {% if forloop.counter0 == 0 %}
+                <h5 class="name collapsed p-3" data-toggle="collapse" style="font-size: 14px;color: {{ suburb.fontColor }};" data-target="#collapse{{ forloop.counter0 }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter0 }}">
+                  {{ suburb.name|title }}
+                </h5>
+                {% else %}
+                <h5 class="name collapsed p-3" data-toggle="collapse" style="font-size: 14px;color: {{ suburb.fontColor }};" data-target="#collapse{{ forloop.counter0 }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter0 }}">
+
+                  {{ suburb.name|title }}
+                </h5>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          {% if forloop.counter0 == 0 %}
+          <div id="collapse{{ forloop.counter0 }}" class="collapse" aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion-suburbs">
+          {% else %}
+          <div id="collapse{{ forloop.counter0 }}" class="collapse" aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion-suburbs">
+          {% endif %}
+            <div class="card-body p-0">
+              <div class="col-12 p-0">
+                <div class="card border-0 bg-light">
+                  <div class="card-body">
+                    <div class="row justify-content-center">
+                      <div class="col-12 col-md-5 px-3 text-center mb-2">
+                        <i class="fa fa-3x fa-map mt-2 mb-1"></i>
+                        <h4 class="name text-bold" style="font-size: 16px;">{{ suburb.name|title }}</h4>
+
+                        <p class="info mb-0">
+                          <b data-toggle="tooltip" title="Local Government Area">LGA</b>
+                           &nbsp;&nbsp;&nbsp;{{ suburb.lga }} <br />
+                          <b>Region</b> &nbsp;&nbsp;&nbsp;{{ suburb.region_name }}
+                        </p>
+                      </div>
+
+
+                      <div class="col-12 col-md-7 mb-2">
+                        <table class="table table-sm table-borderless">
+                          <tbody>
+                            <tr>
+                              <td><strong>Saftey Rating</strong></td>
+                              <td>
+                                {% for xrate in suburb.crime_stars %}
+                                  {% if xrate == 1%}
+                                  <span class="fa fa-star checked"></span>
+                                  {% else %}
+                                  <span class="fa fa-star"></span>
+                                  {% endif %}
+                                {% endfor %}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td><strong>Crime Rate</strong></td>
+                              <td>
+                                {{ suburb.crate}}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td><strong>PTV Stops</strong></td>
+                              <td>
+                                {{ suburb.stops_count}}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td><strong>Area</strong></td>
+                              <td>
+                                {{ suburb.area_sq_km}} sq km
+                              </td>
+                            </tr>
+                            <tr>
+                              <td><strong>Connectivity</strong></td>
+                              <td>
+                                {{ suburb.connectivity_index}}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td><strong>Distance from Melbourne CBD</strong></td>
+                              <td>
+                                {{ suburb.distance_from_cbd }} Km
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {% if suburb.min_rent %}
+                        <div class="col-12">
+                          <small>Housing</small> <br />
+                          <h5 class="text-dark">{{ suburb.min_rent.property_category }} @ ${{ suburb.min_rent.rent_value|intcomma }}</h5>
+                          <br />
+                        </div>
+                      {% endif %}
+
+                      {% if suburb.schools %}
+                      <div class="col-12 pschools">
+                        <div class="view-schools-wrapper">
+                          <div class="btn-toggle-schools">Click here to show schools <i class='fa fa-angle-down'></i></div>
+                        </div>
+                        <div class="view-schools-table pb-0">
+                          <table class="table table-bordered">
+                            <tbody>
+                              {% for xrow in suburb.schools %}
+                              <tr>
+                                <td>
+                                  <div class="row">
+                                    <div class="col-9">
+                                      <b>{{ xrow.school_name }}</b> <br />
+                                      <small>{{ xrow.school_type }} School</small> <br />
+                                    </div>
+                                    <div class="col-3 text-right">
+                                      <a href='http://maps.google.com/maps?daddr="{{ xrow.address }}, {% if xrow.address_town != "0" %}{{ xrow.address_town }}, {% endif %} {{ xrow.school_name|title }} {{ xrow.postal_postcode }}"'
+                                      target="_blank" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Get Directions">
+                                        <i class="fa fa-location-arrow"></i>
+                                      </a>
+                                    </div>
+                                  </div>
+
+                                </td>
+
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      {% endif %}
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 pb-0 pt-3 pl-3 pr-3">
+                <ul class="nav nav-tabs" role="tablist">
+                  {% if suburb.rents %}
+                  <li class="nav-item">
+                    <a class="nav-link active" id="rents-tab{{ forloop.counter0 }}" data-toggle="tab"
+                    href="#rents{{ forloop.counter0 }}" role="tab" aria-controls="rents{{ forloop.counter0 }}" aria-selected="true">Rent Stats</a>
+                  </li>
+                  {% endif %}
+                  {% if suburb.schools %}
+                  <li class="nav-item d-none">
+                    <a class="nav-link" id="schools-tab{{ forloop.counter0 }}" data-toggle="tab"
+                    href="#schools{{ forloop.counter0 }}" role="tab" aria-controls="schools{{ forloop.counter0 }}" aria-selected="false">Schools</a>
+                  </li>
+                  {% endif %}
+
+                  {% if suburb.hospitals %}
+                  <li class="nav-item">
+                    <a class="nav-link" id="hospitals-tab{{ forloop.counter0 }}" data-toggle="tab"
+                    href="#hospitals{{ forloop.counter0 }}" role="tab" aria-controls="hospitals{{ forloop.counter0 }}" aria-selected="false">Hospitals</a>
+                  </li>
+                  {% endif %}
+
+                  {% if suburb.stops %}
+                  <li class="nav-item d-none">
+                    <a class="nav-link" id="stops-tab{{ forloop.counter0 }}" data-toggle="tab"
+                    href="#stops{{ forloop.counter0 }}" role="tab" aria-controls="stops{{ forloop.counter0 }}" aria-selected="false">PTV Stops</a>
+                  </li>
+                  {% endif %}
+
+                </ul>
+                <div class="tab-content" id="myTabContent{{ forloop.counter0 }}">
+                  {% if suburb.rents %}
+                  <div class="tab-pane fade show active" id="rents{{ forloop.counter0 }}" role="tabpanel" aria-labelledby="rents-tab{{ forloop.counter0 }}">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <td>Property Type</td>
+                          <td>Average Rent</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for xrent in suburb.rents %}
+                        <tr>
+                          <td>{{ xrent.property_category }}</td>
+                          <td>
+                            ${{ xrent.rent_value }}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  {% endif %}
+
+{% if suburb.schools %}
+                  <div class="tab-pane fade" id="schools{{ forloop.counter0 }}" role="tabpanel" aria-labelledby="schools-tab{{ forloop.counter0 }}">
+                    <table class="table table-bordered">
+                      <tbody>
+                        {% for xrow in suburb.schools %}
+                        <tr>
+                          <td>
+                            <div class="row">
+                              <div class="col-9">
+                                <b>{{ xrow.school_name }}</b> <br />
+                                <small>{{ xrow.school_type }} School</small> <br />
+                              </div>
+                              <div class="col-3">
+                                <a href='http://maps.google.com/maps?daddr="{{ xrow.address }}, {% if xrow.address_town != "0" %}{{ xrow.address_town }}, {% endif %} {{ xrow.school_name|title }} {{ xrow.postal_postcode }}"'
+                                target="_blank" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Get Directions">
+                                  <i class="fa fa-location-arrow"></i>
+                                </a>
+                              </div>
+                            </div>
+
+                          </td>
+
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+{% endif %}
+{% if suburb.hospitals %}
+                  <div class="tab-pane fade" id="hospitals{{ forloop.counter0 }}" role="tabpanel" aria-labelledby="hospitals-tab{{ forloop.counter0 }}">
+                    <table class="table table-bordered">
+                      <tbody>
+                        {% for xrow in suburb.hospitals %}
+                        <tr>
+                          <td>
+                            <div class="row">
+                              <div class="col-9">
+                                <b>{{ xrow.name }}</b> <br />
+                                <small>{{ xrow.type }} Hospital</small> <br />
+                              </div>
+                              <div class="col-3">
+                                <a href='http://maps.google.com/maps?daddr="{{ xrow.name }}, {{ xrow.lga }}, {{ xrow.postcode }}"'
+                                target="_blank" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Get Directions">
+                                  <i class="fa fa-location-arrow"></i>
+                                </a>
+                              </div>
+                            </div>
+
+                          </td>
+
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+        {% endif %}
+        {% if suburb.stops %}
+                  <div class="tab-pane fade" id="stops{{ forloop.counter0 }}" role="tabpanel" aria-labelledby="stops-tab{{ forloop.counter0 }}">
+                    <table class="table table-bordered">
+                      <tbody>
+                        {% for xrow in suburb.stops %}
+                        <tr>
+                          <td>
+                            <div class="row">
+                              <div class="col-9">
+                                <b>{{ xrow.stop_name }}</b> <br />
+                                <small>{{ xrow.suburb }}</small> <br />
+                              </div>
+                              <div class="col-3">
+                                <a href='http://maps.google.com/maps?daddr="{{ xrow.stop_name }}, {{ xrow.suburb }}"'
+                                target="_blank" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Get Directions">
+                                  <i class="fa fa-location-arrow"></i>
+                                </a>
+                              </div>
+                            </div>
+
+                          </td>
+
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+            {% endif %}
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+{% endfor %}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-providers").addClass("menu-active");
+  });
+</script>
+
+
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyB0oASnqZZG13qNQ5Dbb31rliGBkWxSmjQ"></script>
+
+<script type="text/javascript">
+
+
+  var latLng = new google.maps.LatLng({{ provider_info.latitude}}, {{ provider_info.longitude}});
+
+  var markers, polys;
+  var map_vicview;
+  var infowindow = new google.maps.InfoWindow();
+  var map_object;
+
+  function parsePolygonPaths(svalue) {
+      var result = [];
+      var r = /\(([^)]+)\)/g;
+      svalue = svalue.slice(9, -1);
+      while (matches = r.exec(svalue)) {
+         var vals = matches[1].split(',');
+         var coords = vals.map(function(val){
+            var ll = val.trim().split(' ');
+            return new google.maps.LatLng(ll[1], ll[0]);
+         });
+         result.push(coords);
+      }
+      return result;
+  }
+
+  function initialize() {
+      markers = new Array();
+      polys = new Array();
+      var mapOptions = {
+        center: latLng,
+        zoom: 6,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
+      map_object = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+      latLng = new google.maps.LatLng({{ provider_info.latitude}}, {{ provider_info.longitude}});
+
+      var marker = new google.maps.Marker({
+          position: latLng,
+          title: "{{ provider_info.name }}",
+          visible: true,
+          animation: google.maps.Animation.DROP
+      });
+
+      marker.setMap(map_object);
+      markers.push(marker);
+
+      marker.addListener('click', function() {
+        var latLng = marker.getPosition(); // returns LatLng object
+        map_object.setCenter(latLng);
+
+        var infoContent = "<h5>" + marker.title + "</h5>";
+        var address_row = $("#institute-badge").find(".address-hidden-popup")[0];
+        infoContent += $(address_row).html();
+        infowindow.setContent(infoContent);
+        infowindow.open(map_object, marker);
+
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+
+        var bounds = new google.maps.LatLngBounds();
+        var result = "";
+{% for suburb in nearest_suburbs %}
+        result = parsePolygonPaths("{{ suburb.geo_boundary }}");
+        // Construct the polygon.
+        result.forEach(function(coords){
+              coords.forEach(function(loc){
+                  bounds.extend(loc);
+              });
+              var suburb_options = {
+                  paths: coords,
+                  // strokeColor: '{{ suburb.strokeColor }}',
+                  strokeColor: '#555',
+                  strokeOpacity: 0.8,
+                  strokeWeight: 2,
+                  fillColor: '{{ suburb.fillColor }}',
+                  fillOpacity: 0.5,
+                  title: "{{ suburb.name }}",
+                  population: {{ suburb.population }},
+                  poly_index: {{ forloop.counter0 }}
+              };
+
+              var poly = new google.maps.Polygon(suburb_options);
+
+              suburb_options["strokeColor"] = 'blue';
+              suburb_options["fillColor"] = 'blue';
+              suburb_options["fillOpacity"] = 0.5;
+              // var polyOver = new google.maps.Polygon(suburb_options);
+
+              poly.setMap(map_object);
+              polys.push(poly);
+
+              google.maps.event.addListener(poly, "click", function(){
+                // polygon_clicked(this);
+              });
+              // google.maps.event.addListener(polyOver, "click", function(){
+              //   polygon_clicked(this);
+              // });
+
+              google.maps.event.addListener(poly, "mouseover",function(){
+                this.setOptions({strokeColor: "red"});
+                  // console.log("mouseover", last_clicked);
+                  // if(last_clicked >= 0){
+                  //   clear_last_clicked();
+                  // }
+                  // this.setMap(null);
+                  // polyOver.setMap(map_object);
+              });
+
+              google.maps.event.addListener(poly, "mouseout",function(){
+                this.setOptions({strokeColor: "#555"});
+                // console.log("mouseout", last_clicked);
+                // if(last_clicked == -1){
+                //   this.setMap(null);
+                //   poly.setMap(map_object);
+                // }
+              });
+        });
+{% endfor %}
+    map_object.fitBounds(bounds);
+    map_object.panToBounds(bounds);
+
+    }
+
+    function polygon_clicked(polygon){
+      console.log(polygon, '#collapse' + polygon.poly_index);
+      saveCurrentState(polygon);
+      clear_last_clicked();
+      $('#collapse' + polygon.poly_index).collapse('show');
+
+      show_poly_info(polygon);
+    }
+
+    var last_clicked = -1;
+
+    function clear_last_clicked(){
+      if(last_clicked >= 0){
+        polys[last_clicked].setOptions(polys[last_clicked]["current_state"]);
+        last_clicked = -1;
+      }
+    }
+
+    function show_poly_info(polygon){
+      last_clicked = polygon.poly_index;
+
+      var contentString = '<b>' + polygon.title + '</b>';
+      // console.log(contentString);
+
+      // Replace the info window's content and position.
+      infowindow.setContent(contentString);
+      var poly_center = polygonCenter(polygon);
+      infowindow.open(map_object);
+      infowindow.setPosition(poly_center);
+
+      var temp_options = {};
+      temp_options["strokeColor"] = '#ff0000';
+      temp_options["fillColor"] = '#ff0000';
+      temp_options["fillOpacity"] = 0.60;
+
+      polygon.setOptions(temp_options);
+
+      // console.log(polygonCenter(polygon));
+      map_object.setCenter(poly_center);
+    }
+
+
+    function polygonCenter(poly) {
+        var latitudes = [];
+        var longitudes = [];
+        var vertices = poly.getPath();
+
+        // put all latitudes and longitudes in arrays
+        for (var i = 0; i < vertices.length; i++) {
+            longitudes.push(vertices.getAt(i).lng());
+            latitudes.push(vertices.getAt(i).lat());
+        }
+
+        // sort the arrays low to high
+        latitudes.sort();
+        longitudes.sort();
+
+        // get the min and max of each
+        var lowX = latitudes[0];
+        var highX = latitudes[latitudes.length - 1];
+        var lowy = longitudes[0];
+        var highy = longitudes[latitudes.length - 1];
+
+        // center of the polygon is the starting point plus the midpoint
+        var centerX = lowX + ((highX - lowX) / 2);
+        var centerY = lowy + ((highy - lowy) / 2);
+
+        return (new google.maps.LatLng(centerX, centerY));
+    }
+
+    function saveCurrentState(polygon){
+      var current_state = {};
+      current_state["strokeColor"] = polygon["strokeColor"];
+      current_state["fillColor"] = polygon["fillColor"];
+      current_state["fillOpacity"] = polygon["fillOpacity"];
+
+      polys[polygon.poly_index]["current_state"] = current_state;
+    }
+
+    $(document).ready(function () {
+
+      initialize();
+
+      $( ".nav-tabs" ).each(function( i ) {
+          $(this).find('a:first').tab('show');
+      });
+
+      $( ".btn-toggle-schools" ).click(function() {
+        if ($(this).hasClass('exposed')) {
+
+          $(this).html("Click here to show schools <i class='fa fa-angle-down'></i>");
+          $(this).removeClass('exposed');
+          $(this).parents(".view-schools-wrapper").siblings('.view-schools-table').slideUp('slow');
+
+        } else {
+
+          $(this).html("Click here to hide schools <i class='fa fa-angle-up'></i>");
+          $(this).addClass('exposed');
+          $(this).parents(".view-schools-wrapper").siblings('.view-schools-table').slideDown('slow');
+
+        }
+      });
+
+      var limit = 2;
+      $('input.compare_suburbs').on('change', function(evt) {
+        console.log("compare_suburbs");
+         if ($('input.compare_suburbs:checked').length > 2) {
+             $(this).prop('checked', false);
+             $("#error-container").slideDown('slow');
+         } else {
+           $("#error-container").slideUp('slow');
+         }
+
+         if($('input.compare_suburbs:checked').length == 2){
+           $("#btn_handle_compare").show();
+           $("#btn_handle_compare").addClass("animated tada");
+         } else {
+           $("#btn_handle_compare").hide();
+         }
+      });
+
+      $('#btn_handle_compare').on('click', function(evt) {
+        console.log("btn_handle_compare");
+        var searchIDs = $('input.compare_suburbs:checked').map(function(){
+          return $(this).val();
+        });
+        console.log(searchIDs.get().join("/"));
+
+        var the_compare_url = "/providers/compare-suburbs/{{ provider_info.id }}/" + searchIDs.get().join("/")+"/"
+        console.log(the_compare_url);
+
+        location.href = the_compare_url;
+      });
+
+      function formatResult(result) {
+          if (!result.id) return result.text;
+
+      		var myElement = $(result.element);
+
+          var markup = '<div class="custom-select-item">' + '<h4 class="m-0">' + result.text + '</h4>';
+
+          if(result.asqa_code){
+            markup += '<small><b>ASQA Code:</b>' + result.asqa_code + '</small> <br />' ;
+          }
+
+          if(result.address){
+            markup += '<small><b>Address: </b>' + result.address + '</small>';
+          }
+
+          markup +='</div>';
+
+          return markup;
+        }
+
+        function formatSelection(result) {
+          return result.full_name || result.text;
+        }
+
+
+
+      $("#institutes-datatable tbody tr").click(function(){
+            polygon = polys[this.id];
+
+            console.log(polygon);
+            saveCurrentState();
+            clear_last_clicked();
+
+            show_poly_info(polygon);
+      });
+
+      $('#search-institutes').select2({
+        placeholder: {
+          id: '-1', // the value of the option
+          text: 'Start typing for institutes'
+        },
+        escapeMarkup: function(m) {
+				      return m;
+		    },
+        templateResult: formatResult,
+        // templateSelection: formatSelection,
+        allowClear: true,
+        ajax: {
+          type: 'POST',
+          dataType: "json",
+          url: function (params) {
+            return "/providers/fetch_details/";
+          },
+          data: function (params) {
+            var queryParameters = {
+              "csrfmiddlewaretoken": '{{ csrf_token }}',
+              'search': params.term,
+            }
+
+            return queryParameters;
+          },
+        },
+        tags: true,
+        createTag: function (params) {
+          return {
+            id: params.term,
+            text: params.term,
+            newOption: true
+          }
+        }
+      });
+
+      $('#search-institutes').on('select2:select', function (e) {
+        submit_form();
+      });
+      $('#search-institutes').on('select2:unselecting', function (e) {
+        submit_form();
+      });
+
+        $( "#btn-search-institutes" ).click(function() {
+          submit_form();
+        });
+
+        $("#show-regional").change(function() {
+          submit_form();
+        });
+
+        function submit_form(){
+          console.log("submit_form");
+          var data = $('#search-institutes').select2('data');
+          var search_query = "";
+          if(data.length > 0){
+            console.log(data);
+            search_query = data[0].text;
+          }
+
+          var search_show_regional = "";
+          if($("#show-regional").is(':checked')) {
+              search_show_regional = "&show-regional=1";
+          } else {
+              search_show_regional = "&show-regional=0";
+          }
+
+          var encoded = "/providers/?provider_filter=" + encodeURIComponent(search_query) + search_show_regional;
+          console.log(encoded);
+          location.href = encoded ;
+
+        }
+    });
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends "vicview/templates/layout.html" %}
+{% load static %}
+
+{% block page_content %}
+{% include "vicview/templates/navbar.html" %}
+<section id="hero" class="wow fadeIn bg-img7">
+  <div class="hero-container">
+    <h2 class="text-white pt-5">START EXPLORING VOCATIONAL EDUCATION AND TRAINING COURSES IN VICTORIA</h2>
+
+    <div class="search-sub-container">
+      <div class="icon-bar">
+        <a id="defaultOpen" class="tablink active" onclick="openPage('tab_sp_courses', this, 'red')"><i class="fa fa-lg fa-graduation-cap text-white"></i></a>
+        <a class="tablink" onclick="openPage('tab_sp_provider', this, 'green')"><i class="fa fa-lg fa-university text-white"></i></a>
+        <a class="tablink" onclick="openPage('tab_sp_occupation', this, 'blue')"><i class="fa fa-lg fa-user-md text-white"></i></a>
+        <a class="tablink" onclick="openPage('About', this, 'orange')"><i class="fa fa-lg fa-map text-white"></i></a>
+      </div>
+
+      <div id="tab_sp_courses" class="tabcontent">
+        <div class="row justify-content-center" >
+          <div class="col-12 col-lg-10">
+            <div class="section-title text-center mb-3">
+              <h1 class="h1-banner animated zoomInDown">SEARCH COURSES</h1>
+              <h2 class="h2-banner text-white">START EXPLORING VOCATIONAL EDUCATION AND TRAINING COURSES IN VICTORIA</h2>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+              <div class="col-10 col-lg-8">
+                <!-- <input type="text" class="form-control" id="search-courses" name="search-courses" value="{{ course_filter }}" placeholder="Start typing for courses" /> -->
+                <select class="js-data-example-ajax form-control" id="search-courses" name="search-courses">
+                  {% if course_filter %}
+                    <option value="{{course_filter}}" selected>{{course_filter}}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="bs-custom-toggle">
+                  {% if subsidized == 1 %}
+                      <input type="checkbox" id="gov-subsidized" data-toggle="toggle" data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="mini" checked/>
+                  {% else %}
+                      <input type="checkbox" id="gov-subsidized" data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="mini"/>
+                  {% endif %}
+                  <label class="form-check-label text-shadow text-white point-me" for="gov-subsidized" onclick="$('#gov-subsidized').bootstrapToggle('toggle');$('#gov-subsidized').trigger('change');">
+                    Subsidized
+                  </label>
+
+                </div>
+              </div>
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="form-check">
+                  {% if apprenticeship == 1 %}
+                      <input class="form-check-input" type="checkbox" value="" id="apprenticeship" checked="checked"/>
+                  {% else %}
+                      <input class="form-check-input" type="checkbox" value="" id="apprenticeship"/>
+                  {% endif %}
+                  <label class="form-check-label text-shadow text-white" for="apprenticeship">
+                    Apprenticeship
+                  </label>
+                </div>
+              </div>
+              <div class="col-12 col-lg-3 mb-3 mb-lg-0">
+                <div class="form-check">
+                  {% if traineeship == 1 %}
+                      <input class="form-check-input" type="checkbox" value="" id="traineeship" checked="checked"/>
+                  {% else %}
+                      <input class="form-check-input" type="checkbox" value="" id="traineeship"/>
+                  {% endif %}
+                  <label class="form-check-label text-shadow text-white" for="traineeship">
+                    Traineeship
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center mb-3">
+              <div class="col-12 col-md-4 col-lg-3">
+                <a id="btn-search-courses" class="btn btn-success text-white">Search Courses</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab_sp_provider" class="tabcontent">
+        <div class="row justify-content-center" >
+          <div class="col-10">
+            <div class="section-title text-center mb-3">
+              <!-- <h1 class="h1-banner">SEARCH INSTITUTIONS</h1> -->
+              <h2 class="h2-banner">START EXPLORING INSTITUTIONS IN REGIONAL VICTORIA</h2>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+              <div class="col-8">
+                <!-- <input type="text" class="form-control" id="search-courses" name="search-courses" value="{{ course_filter }}" placeholder="Start typing for courses" /> -->
+                <select class="js-data-example-ajax form-control" id="search-institutes" name="search-institutes">
+                  {% if provider_filter %}
+                    <option value="{{provider_filter}}" selected>{{provider_filter}}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+              <div class="col-6">
+                <div class="form-check">
+                  {% if show_regional == 1 %}
+                      <input class="form-check-input" type="checkbox" value="" id="show-regional" checked="checked"/>
+                  {% else %}
+                      <input class="form-check-input" type="checkbox" value="" id="show-regional"/>
+                  {% endif %}
+                  <label class="form-check-label text-shadow text-white" for="show-regional">
+                    Only Show Regional Institutes
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center mb-3">
+              <div class="col-3">
+                <a id="btn-search-institutes" class="btn btn-success text-white">Search Institutes</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div id="tab_sp_occupation" class="tabcontent">
+        <div class="row justify-content-center" >
+          <div class="col-10">
+            <div class="section-title text-center mb-3">
+              <h1 class="h1-banner">SEARCH PROFESSIONS</h1>
+              <h2 class="h2-banner">GET TO KNOW ABOUT DIFFERENT PROFESSIONS AND RELATED COURSES</h2>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+              <div class="col-8">
+                <!-- <input type="text" class="form-control" id="search-courses" name="search-courses" value="{{ course_filter }}" placeholder="Start typing for courses" /> -->
+                <select class="js-data-example-ajax form-control" id="search-occupation" name="search-occupation">
+                  {% if occupation_filter %}
+                    <option value="{{occupation_filter}}" selected>{{occupation_filter}}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+              <div class="col-5">
+                <div class="form-check">
+                  {% if high_demand == 1 %}
+                      <input class="form-check-input" type="checkbox" value="" id="high_demand" checked="checked"/>
+                  {% else %}
+                      <input class="form-check-input" type="checkbox" value="" id="high_demand"/>
+                  {% endif %}
+                  <label class="form-check-label text-shadow text-white" for="high_demand">
+                    Show only High Demand Jobs
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center mb-3">
+              <div class="col-3">
+                <a id="btn-search-occupation" class="btn btn-success text-white">Search Professions</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="About" class="tabcontent">
+        <h3>About</h3>
+        <p>Who we are and what we do.</p>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+  </div>
+</section>
+{% endblock %}
+
+{% block footer_content %}
+<script>
+  var csrfmiddlewaretoken =  '{{ csrf_token }}';
+  function openPage(pageName,elmnt,color) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].style.backgroundColor = "";
+    }
+    document.getElementById(pageName).style.display = "block";
+  //  elmnt.style.backgroundColor = color;
+
+  }
+</script>
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(document).on('click', '.icon-bar .tablink', function() {
+      $(".icon-bar .tablink").removeClass("active");
+      $(this).addClass("active");
+    });
+
+    openPage('tab_sp_courses', $("#defaultOpen"), 'red');
+
+    $(".menu-search").addClass("menu-active");
+  });
+</script>
+<script src="{% static "js/course/main.js" %}?v=1.0"></script>
+<script src="{% static "js/provider/main.js" %}?=1.0"></script>
+<script src="{% static "js/occupation/main.js" %}?=1.0"></script>
+
+{% endblock %}

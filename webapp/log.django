@@ -1,0 +1,340 @@
+Watching for file changes with StatReloader
+Waiting for apps ready_event.
+Apps ready_event triggered. Sending autoreload_started signal.
+Watching dir /home/ec2-user/workspace/fit5120/webapp/v1/vicview/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/admin/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/auth/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/contenttypes/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/sessions/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/messages/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/staticfiles/locale with glob **/*.mo.
+Watching dir /home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/locale with glob **/*.mo.
+Watching dir /home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/locale with glob **/*.mo.
+Watching dir /home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/sslserver/locale with glob **/*.mo.
+Watching for file changes with StatReloader
+Waiting for apps ready_event.
+Apps ready_event triggered. Sending autoreload_started signal.
+Watching dir /home/ec2-user/workspace/fit5120/webapp/v1/vicview/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/admin/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/auth/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/contenttypes/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/sessions/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/messages/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/django/contrib/staticfiles/locale with glob **/*.mo.
+Watching dir /home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/locale with glob **/*.mo.
+Watching dir /home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/locale with glob **/*.mo.
+Watching dir /home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/locale with glob **/*.mo.
+Watching dir /usr/local/lib/python3.7/site-packages/sslserver/locale with glob **/*.mo.
+(0.009) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None
+(0.000) SHOW FULL TABLES; args=None
+(0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>], [<URLPattern '' [name='index']>], [<URLPattern 'about-us' [name='about']>], [<URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>], [<URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>], [<URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>], [<URLPattern '.well-known/acme-challenge/AZADY6r0unRjhV2NRazkgH8MdP2n9VQthyb8sQPGc6I' [name='code1']>], [<URLPattern '.well-known/acme-challenge/jZERTMXD3HgoMnKRfM74JowjSrugN6KsmW5N9nulB7U' [name='code2']>]], 'path': 'admin/'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 850, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>], [<URLPattern '' [name='index']>], [<URLPattern 'about-us' [name='about']>], [<URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>], [<URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>], [<URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>], [<URLPattern '.well-known/acme-challenge/AZADY6r0unRjhV2NRazkgH8MdP2n9VQthyb8sQPGc6I' [name='code1']>], [<URLPattern '.well-known/acme-challenge/jZERTMXD3HgoMnKRfM74JowjSrugN6KsmW5N9nulB7U' [name='code2']>]], 'path': 'admin/'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 850, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>], [<URLPattern '' [name='index']>], [<URLPattern 'about-us' [name='about']>], [<URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>], [<URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>], [<URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>], [<URLPattern '.well-known/acme-challenge/AZADY6r0unRjhV2NRazkgH8MdP2n9VQthyb8sQPGc6I' [name='code1']>], [<URLPattern '.well-known/acme-challenge/jZERTMXD3HgoMnKRfM74JowjSrugN6KsmW5N9nulB7U' [name='code2']>]], 'path': 'admin/'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 850, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>], [<URLPattern '' [name='index']>], [<URLPattern 'about-us' [name='about']>], [<URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>], [<URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>], [<URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>], [<URLPattern '.well-known/acme-challenge/AZADY6r0unRjhV2NRazkgH8MdP2n9VQthyb8sQPGc6I' [name='code1']>], [<URLPattern '.well-known/acme-challenge/jZERTMXD3HgoMnKRfM74JowjSrugN6KsmW5N9nulB7U' [name='code2']>]], 'path': 'admin/'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 850, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>
+Not Found: /admin/
+"GET /admin/ HTTP/1.1" 404 2891
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>], [<URLPattern '' [name='index']>], [<URLPattern 'about-us' [name='about']>], [<URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>], [<URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>], [<URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>], [<URLPattern '.well-known/acme-challenge/AZADY6r0unRjhV2NRazkgH8MdP2n9VQthyb8sQPGc6I' [name='code1']>], [<URLPattern '.well-known/acme-challenge/jZERTMXD3HgoMnKRfM74JowjSrugN6KsmW5N9nulB7U' [name='code2']>]], 'path': 'favicon.ico'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 850, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>], [<URLPattern '' [name='index']>], [<URLPattern 'about-us' [name='about']>], [<URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>], [<URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>], [<URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>], [<URLPattern '.well-known/acme-challenge/AZADY6r0unRjhV2NRazkgH8MdP2n9VQthyb8sQPGc6I' [name='code1']>], [<URLPattern '.well-known/acme-challenge/jZERTMXD3HgoMnKRfM74JowjSrugN6KsmW5N9nulB7U' [name='code2']>]], 'path': 'favicon.ico'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 850, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>], [<URLPattern '' [name='index']>], [<URLPattern 'about-us' [name='about']>], [<URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>], [<URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>], [<URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>], [<URLPattern '.well-known/acme-challenge/AZADY6r0unRjhV2NRazkgH8MdP2n9VQthyb8sQPGc6I' [name='code1']>], [<URLPattern '.well-known/acme-challenge/jZERTMXD3HgoMnKRfM74JowjSrugN6KsmW5N9nulB7U' [name='code2']>]], 'path': 'favicon.ico'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 850, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.7/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <module 'django.contrib.auth.urls' from '/usr/local/lib/python3.7/site-packages/django/contrib/auth/urls.py'> (None:None) 'accounts/'>], [<URLPattern '' [name='index']>], [<URLPattern 'about-us' [name='about']>], [<URLResolver <module 'course.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/course/urls.py'> (app_course:app_course) 'courses/'>], [<URLResolver <module 'provider.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/provider/urls.py'> (app_provider:app_provider) 'providers/'>], [<URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>], [<URLPattern '.well-known/acme-challenge/AZADY6r0unRjhV2NRazkgH8MdP2n9VQthyb8sQPGc6I' [name='code1']>], [<URLPattern '.well-known/acme-challenge/jZERTMXD3HgoMnKRfM74JowjSrugN6KsmW5N9nulB7U' [name='code2']>]], 'path': 'favicon.ico'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/template/base.py", line 850, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'occupation.urls' from '/home/ec2-user/workspace/fit5120/webapp/v1/vicview/occupation/urls.py'> (app_occupation:app_occupation) 'occupations/'>
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2906
+File /home/ec2-user/workspace/fit5120/webapp/v1/vicview/vicview/settings.py. is_changed: False, is_new: True
+File /home/ec2-user/workspace/fit5120/webapp/v1/vicview/vicview/settings.py previous mtime: None, current mtime: 1555581774.3981895
+/home/ec2-user/workspace/fit5120/webapp/v1/vicview/vicview/settings.py notified as changed. Signal results: [(<function translation_file_changed at 0x7fcc90c8c730>, None)].
+/home/ec2-user/workspace/fit5120/webapp/v1/vicview/vicview/settings.py changed, reloading.
+File /home/ec2-user/workspace/fit5120/webapp/v1/vicview/vicview/settings.py. is_changed: False, is_new: True
+File /home/ec2-user/workspace/fit5120/webapp/v1/vicview/vicview/settings.py previous mtime: None, current mtime: 1555581774.3981895
+/home/ec2-user/workspace/fit5120/webapp/v1/vicview/vicview/settings.py notified as changed. Signal results: [(<function translation_file_changed at 0x7f20bb0bc7b8>, None)].
+/home/ec2-user/workspace/fit5120/webapp/v1/vicview/vicview/settings.py changed, reloading.

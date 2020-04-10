@@ -1,0 +1,61 @@
+{% extends "vicview/templates/layout.html" %}
+
+{% load static %}
+
+{% block page_content %}
+
+<header id="header" class="header header-hide">
+  <div class="container text-center pt-5">
+
+    <div id="logo" >
+      <h1><a href="/" class="scrollto"><span class="clr-green">V</span>ic<span class="clr-green">V</span>iew</a></h1>
+    </div>
+  </div>
+</header><!-- #header -->
+
+<div class="container pt-5 ">
+
+  <form method="post">
+    <section id="hero" class="wow fadeIn" style="background: none;">
+      <div class="row justify-content-center">
+      <div class="col-12 col-md-6 col-lg-4 pt-4">
+        <div class="login-box">
+          <!-- /.login-logo -->
+          <div class="card">
+            <div class="card-body login-card-body">
+              <p class="login-box-msg">Sign in to start your session</p>
+
+              {% csrf_token %}
+              {{ form.as_p }}
+                <div class="row justify-content-center">
+                  <!-- /.col -->
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                  </div>
+                  <!-- /.col -->
+                </div>
+
+            </div>
+            <div class="card-footer">
+              <p class="text-center m-0"><small>Version 2.0</small></p>
+            </div>
+            <!-- /.login-card-body -->
+          </div>
+        </div>
+        <!-- /.login-box -->
+      </div>
+
+      </div>
+    </section><!-- #hero -->
+
+  </form>
+</div>
+{% endblock %}
+
+
+
+{% block footer_content %}
+
+
+
+{% endblock %}

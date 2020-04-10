@@ -1,0 +1,200 @@
+{% extends "occupation/templates/layout.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+<section id="features" class="bg-img6">
+  <div class="padd-section bg-tint has_data pb-3">
+    <div class="container">
+      <div class="p-3 bg-overlay search-shrinked">
+        <div class="row justify-content-center no-gutters">
+          <div class="col-12 px-3">
+            <div class="section-title text-center mb-3">
+              <h1 class="h1-banner animated zoomInDown">{{ occupation.title|title }}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="search-results" class="padd-section bg-gray pt-3">
+    <div class="container page-container">
+
+      {% if not occupation %}
+        <div class="sub-header-summary bg-white p-3 mb-3">
+          <div class="row">
+            <div class="col-12">
+              Unable to find requested occupation!
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if occupation.high_demand == 1 %}
+        <div class="sub-header-summary bg-white p-3 mb-3">
+          <div class="row">
+            <div class="col-12">
+              High Demand occupations are marked with &nbsp;&nbsp;
+              <a class="btn btn-circle btn-success text-white" title="High Demand" data-toggle="tooltip">
+                <i class="fa fa-star"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+        <div class="row no-gutters" id="records-grid">
+
+          {% for occupation in occupations %}
+          <div class="col-12 mb-3">
+
+              <div class="row profession_row no-gutters bg-white" data-occupation-id="{{ occupation.id }}" data-href='location.href="/occupations/courses/{{ occupation.id }}"'>
+                <div class="col-12 border-left-green">
+                  <div class="row no-gutters">
+                    <div class="col-12 border-bottom">
+                      <div class="row no-gutters">
+                        <div class="col-12 col-lg-10 ptitle">
+                          {{ occupation.title|title }} <small>({{ occupation.courses|length }} courses)</small>
+                        </div>
+
+                        <div class="col-12 col-lg-2 picons">
+                          {% if occupation.high_demand == 1 %}
+                          <a class="btn btn-circle btn-success text-white" title="High Demand" data-toggle="tooltip">
+                            <i class="fa fa-star"></i>
+                          </a>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 pitems">
+                  <div class="row no-gutters">
+                    <div class="col-6 col-lg-3 mb-lg-0 mb-sm-3">
+                      <h3 class="text-{{ occupation.future_growth_info.class }}">
+                        {{ occupation.future_growth_info.icon|safe }} {{ occupation.future_growth|title }}
+                      </h3>
+                      <small>Future Growth</small>
+                    </div>
+
+                    <div class="col-6 col-lg-3 mb-lg-0 mb-sm-3">
+                      <h3 class="text-{{ occupation.skill_level_info.class }}">
+                        {{ occupation.skill_level|title }}
+                      </h3>
+                      <small>Skill Level</small>
+                    </div>
+
+                    <div class="col-6 col-lg-3 mb-lg-0 mb-sm-3">
+                      <h3>
+                        {% if occupation.weekly_pay %}
+                        ${{ occupation.weekly_pay|intcomma }}
+                        {% else %}
+                          Unavailable
+                        {% endif %}
+                      </h3>
+                      <small>Weekly Pay</small>
+                    </div>
+
+                    <div class="col-6 col-lg-3 mb-lg-0 mb-sm-3">
+                      <h3>
+                        {{ occupation.hours|floatformat:0|intcomma }} hours
+                      </h3>
+                      <small>Weekly Workload</small>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-12 pdesc">
+                  <div class="row">
+                    <div class="col-12 col-lg-9">
+                      <b>Job Description</b> <br />
+                      {{ occupation.description }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 pcourses">
+                  <div class="view-course-wrapper">
+                    <div class="p-1 text-center bg-green text-white">Available Courses</div>
+                  </div>
+                  <div class="view-course-table p-3 pb-0" style="display: block;">
+                    {% for xcourse in occupation.courses %}
+                        <div class="pcourse border mb-3" data-course-id="{{ xcourse.id }}" onclick='location.href="/courses/providers/{{ xcourse.id }}"'>
+                          <div class="row no-gutters border-bottom p-1">
+                            <div class="col-12 col-md-9">
+                              <h4>{{ xcourse.course_title|upper }}</h4>
+                            </div>
+                            <div class="col-12 col-md-3 text-right">
+                              {% if xcourse.government_subsidised == 1 %}
+                                <!-- <a class="badge badge-success text-white"></a> -->
+                                <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-dollar"></i></button>
+                              {% endif %}
+                              {% if xcourse.apprenticeship == 1 %}
+                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" title="Apprenticeship"><i class="fa fa-user"></i></button>
+                                <!-- <a class="badge badge-primary text-white">Apprenticeship</a> -->
+                              {% endif %}
+                              {% if xcourse.traineeship == 1 %}
+                                <button type="button" class="btn btn-info btn-circle" data-toggle="tooltip" title="Traineeship"><i class="fa fa-play"></i></button>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div class="row no-gutters p-1">
+                            <div class="col-12 col-md-9">
+                              <div class="row no-gutters p-1">
+                                <div class="col">
+                                    <h4><a class="text-success" href="/courses/providers/{{ xcourse.id }}">Offered in {{ xcourse.provider_count }} locations.</a></h4>
+                                </div>
+                              </div>
+
+                              <div class="row no-gutters p-1">
+                                <div class="col-12 col-md-6">
+                                  <b>Course Code</b> <br />
+                                  {{ xcourse.course_code|upper }}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <b>Qualification Level</b> <br />
+                                  {{ xcourse.qualification_level }}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-3 text-right">
+                              <a href="/courses/providers/{{ xcourse.id }}" class="btn btn-danger btn-sm text-white text-capitalize" style="padding: 6px 12px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here to see Institutes on Map">Show Institutes</a>
+                            </div>
+                          </div>
+                          <div class="row no-gutters p-2">
+                            <div class="col-12">
+                              <b>Entry Requirements</b> <br />
+                              {{ xcourse.entry_requirements }}
+                            </div>
+                          </div>
+
+                        </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+  </div>
+</section>
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script>
+  var csrfmiddlewaretoken =  '{{ csrf_token }}';
+</script>
+<script src="{% static "js/course/course_finder.js" %}?v=1.1"></script>
+
+
+{% endblock %}

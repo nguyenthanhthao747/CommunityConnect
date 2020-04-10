@@ -1,0 +1,347 @@
+{% extends "occupation/templates/layout.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+<section id="features" class="bg-img6">
+  {% if has_data %}
+  <div class="padd-section bg-tint has_data pb-3">
+  {% else %}
+  <div class="padd-section bg-tint has_nodata">
+  {% endif %}
+    <div class="container">
+      <div class="p-3 bg-overlay search-shrinked">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-5 mb-lg-0 mb-sm-3">
+            <div class="form-group mb-0 jui-search-widget">
+                <input type="text" class="form-control" id="jui-autocomplete" aria-describedby="emailHelp"
+                placeholder="Search courses by profession" value="{{ occupation_filter }}" maxlength="100"/>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-5 mb-lg-0 mb-sm-3">
+            <div class="form-group mb-0">
+                <select class="force-center" id="category_filter">
+                  <option value="" selected>Select Category</option>
+                  <option value="4">Arts and Media Professionals</option>
+                  <option value="12">Automotive and Engineering Trades Workers</option>
+                  <option value="5">Business, Human Resource and Marketing Professionals</option>
+                  <option value="19">Carers and Aides</option>
+                  <option value="37">Cleaners and Laundry Workers</option>
+                  <option value="28">Clerical and Office Support Workers</option>
+                  <option value="38">Construction and Mining Labourers</option>
+                  <option value="13">Construction Trades Workers</option>
+                  <option value="6">Design, Engineering, Science and Transport Professionals</option>
+                  <option value="7">Education Professionals</option>
+                  <option value="14">Electrotechnology and Telecommunications Trades Workers</option>
+                  <option value="11">Engineering, ICT and Science Technicians</option>
+                  <option value="39">Factory Process Workers</option>
+                  <option value="40">Farm, Forestry and Garden Workers</option>
+                  <option value="1">Farmers and Farm Managers</option>
+                  <option value="41">Food Preparation Assistants</option>
+                  <option value="15">Food Trades Workers</option>
+                  <option value="25">General Clerical Workers</option>
+                  <option value="18">Health and Welfare Support Workers</option>
+                  <option value="8">Health Professionals</option>
+                  <option value="20">Hospitality Workers</option>
+                  <option value="3">Hospitality, Retail and Service Managers</option>
+                  <option value="9">ICT Professionals</option>
+                  <option value="26">Inquiry Clerks and Receptionists</option>
+                  <option value="10">Legal, Social and Welfare Professionals</option>
+                  <option value="33">Machine and Stationary Plant Operators</option>
+                  <option value="34">Mobile Plant Operators</option>
+                  <option value="27">Numerical Clerks</option>
+                  <option value="23">Office Managers and Program Administrators</option>
+                  <option value="29">Other Clerical and Administrative Workers</option>
+                  <option value="42">Other Labourers</option>
+                  <option value="17">Other Technicians and Trades Workers</option>
+                  <option value="24">Personal Assistants and Secretaries</option>
+                  <option value="21">Protective Service Workers</option>
+                  <option value="35">Road and Rail Drivers</option>
+                  <option value="31">Sales Assistants and Salespersons</option>
+                  <option value="30">Sales Representatives and Agents</option>
+                  <option value="32">Sales Support Workers</option>
+                  <option value="16">Skilled Animal and Horticultural Workers</option>
+                  <option value="2">Specialist Managers</option>
+                  <option value="22">Sports and Personal Service Workers</option>
+                  <option value="36">Storepersons</option>
+
+                </select>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-2 text-center mb-lg-0 mb-sm-3">
+              <a id="apply_filter" class="btn text-white btn-success btn-block">Search</a>
+          </div>
+
+          <div id="error-get-started" class="col-12 mt-3 mb-3 d-none">
+            <span style="max-width: 400px;" class="alert alert-danger" role="alert">
+              Please enter keyword to search or select category!
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if not start_point %}
+<section id="search-results" class="padd-section bg-gray pt-3">
+    <div class="container page-container">
+
+      <div class="sub-header-summary bg-white p-3 mb-3">
+        <div class="row">
+          <div class="col-12">
+            <p class="text-break mb-0">
+              {% if not occupations %}
+                No records found for your search "{{ occupation_filter }}"
+                {% if category_filter %}
+                  and category "{{ category_filter_name }}"
+                {% endif  %}
+              {% else %}
+                Search results for your search <span class="font-weight-bold">"{{ occupation_filter }}"</span>
+{% if category_filter %}
+                  and category <span class="font-weight-bold">"{{ category_filter_name }}"</span>
+{% endif  %}
+                {% ifequal totals.courses 1 %}
+                : <span class="font-weight-bold">{{ totals.courses }} course found</span>
+                {% else %}
+                : <span class="font-weight-bold">{{ totals.courses }} courses found</span>
+                {% endifequal %}
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {% if occupations %}
+      <div class="sub-header-summary bg-white p-3 mb-3">
+        <div class="row">
+          <div class="col-12">
+            High Demand occupations are marked with &nbsp;&nbsp;
+            <a class="btn btn-circle btn-success text-white" title="High Demand" data-toggle="tooltip">
+              <i class="fa fa-star"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+        <div class="row no-gutters" id="records-grid">
+
+          {% for occupation in occupations %}
+          <div class="col-12 mb-3">
+
+              <div class="row profession_row no-gutters bg-white" data-occupation-id="{{ occupation.id }}" data-href='location.href="/occupations/courses/{{ occupation.id }}"'>
+                <div class="col-12 border-left-green">
+                  <div class="row no-gutters">
+                    <div class="col-12 border-bottom">
+                      <div class="row no-gutters">
+                        <div class="col-12 col-lg-10 ptitle">
+                          {{ occupation.title|title }} <small>({{ occupation.courses|length }} courses)</small>
+                        </div>
+
+                        <div class="col-12 col-lg-2 picons">
+                          {% if occupation.high_demand == 1 %}
+                          <a class="btn btn-circle btn-success text-white" title="High Demand" data-toggle="tooltip">
+                            <i class="fa fa-star"></i>
+                          </a>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 pitems">
+                  <div class="row no-gutters">
+                    <div class="col-6 col-lg-3 mb-lg-0 mb-sm-3">
+                      <h3 class="text-{{ occupation.future_growth_info.class }}">
+                        {{ occupation.future_growth_info.icon|safe }} {{ occupation.future_growth|title }}
+                      </h3>
+                      <small>Future Growth</small>
+                    </div>
+
+                    <div class="col-6 col-lg-3 mb-lg-0 mb-sm-3">
+                      <h3 class="text-{{ occupation.skill_level_info.class }}">
+                        {{ occupation.skill_level|title }}
+                      </h3>
+                      <small>Skill Level</small>
+                    </div>
+
+                    <div class="col-6 col-lg-3 mb-lg-0 mb-sm-3">
+                      <h3>
+                        {% if occupation.weekly_pay %}
+                        ${{ occupation.weekly_pay|intcomma }}
+                        {% else %}
+                          Unavailable
+                        {% endif %}
+                      </h3>
+                      <small>Weekly Pay</small>
+                    </div>
+
+                    <div class="col-6 col-lg-3 mb-lg-0 mb-sm-3">
+                      <h3>
+                        {{ occupation.hours|floatformat:0|intcomma }} hours
+                      </h3>
+                      <small>Weekly Workload</small>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-12 pdesc">
+                  <div class="row">
+                    <div class="col-12 col-lg-9">
+                      <b>Job Description</b> <br />
+                      {{ occupation.description }}
+                    </div>
+                    <div class="col-12 col-lg-3 text-right align-self-end">
+                      <a href="/occupations/details/{{ occupation.id }}/" class="btn btn-info btn-sm text-white" style="padding: 5px 10px;font-size: 10px;">Read More</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 pcourses">
+                  <div class="view-course-wrapper">
+                    <div class="btn-toggle-courses">Click here to show Courses <i class='fa fa-angle-down'></i></div>
+                  </div>
+                  <div class="view-course-table p-3 pb-0">
+                    {% for xcourse in occupation.courses %}
+                        <div class="pcourse border mb-3" data-course-id="{{ xcourse.id }}" onclick='location.href="/courses/providers/{{ xcourse.id }}"'>
+                          <div class="row no-gutters border-bottom p-1">
+                            <div class="col-12 col-md-9">
+                              <h4>{{ xcourse.course_title|upper }}</h4>
+                            </div>
+                            <div class="col-12 col-md-3 text-right">
+                              {% if xcourse.government_subsidised == 1 %}
+                                <!-- <a class="badge badge-success text-white"></a> -->
+                                <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-dollar"></i></button>
+                              {% endif %}
+                              {% if xcourse.apprenticeship == 1 %}
+                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" title="Apprenticeship"><i class="fa fa-user"></i></button>
+                                <!-- <a class="badge badge-primary text-white">Apprenticeship</a> -->
+                              {% endif %}
+                              {% if xcourse.traineeship == 1 %}
+                                <button type="button" class="btn btn-info btn-circle" data-toggle="tooltip" title="Traineeship"><i class="fa fa-play"></i></button>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div class="row no-gutters p-1">
+                            <div class="col-12 col-md-9">
+                              <div class="row no-gutters p-1">
+                                <div class="col">
+                                    <h4><a class="text-success" href="/courses/providers/{{ xcourse.id }}">Offered in {{ xcourse.provider_count }} locations.</a></h4>
+                                </div>
+                              </div>
+
+                              <div class="row no-gutters p-1">
+                                <div class="col-12 col-md-6">
+                                  <b>Course Code</b> <br />
+                                  {{ xcourse.course_code|upper }}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <b>Qualification Level</b> <br />
+                                  {{ xcourse.qualification_level }}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-3 text-right">
+                              <a href="/courses/providers/{{ xcourse.id }}" class="btn btn-danger btn-sm text-white text-capitalize" style="padding: 6px 12px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here to see Institutes on Map">Show Institutes</a>
+                            </div>
+                          </div>
+                          <div class="row no-gutters p-2">
+                            <div class="col-12">
+                              <b>Entry Requirements</b> <br />
+                              {{ xcourse.entry_requirements }}
+                            </div>
+                          </div>
+
+                        </div>
+                    {% endfor %}
+                  </div>
+                </div>
+
+                {% comment %}
+                <!-- <div class="col-9">
+                  <h4 style="font-size: 20px;">{{ occupation.title|title }}</h4>
+                  <div class="cdescription">
+                    <b>ANZSCO Code</b> &nbsp;&nbsp;&nbsp;{{ occupation.anzsco_id|upper }} <br />
+                    <b>Job Description</b> <br />
+                    {{ occupation.description }} <br />
+                    <b>Education</b> &nbsp;&nbsp;&nbsp;{{ occupation.education }} <br />
+                  </div>
+
+                </div> -->
+                <!-- <div class="col-3 text-right align-items-end row justify-content-end pb-2">
+                  <a class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here for information about this course">Read More</a>
+                  <a href="/occupations/courses/{{ occupation.id }}" class="btn btn-success btn-sm text-white ml-3" style="padding: 7px 15px;font-size: 10px;" data-toggle="tooltip" data-placement="top" title="Click here to see Courses to become {{ occupation.title|title }}">Show Courses</a>
+                </div> -->
+                {% endcomment %}
+              </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+        <div class="sub-footer-summary bg-white p-3 my-3">
+          <div class="row">
+            <div class="col">
+              <nav aria-label="Page navigation">
+                <ul class="pagination mb-0">
+                {% if occupations.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="{{ current_filter }}page=1" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">begin</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% for n in occupations.paginator.page_range %}
+                  {% if occupations.number == n %}
+                    <li class="page-item active">
+                      <span class="page-link">{{ n }}<span class="sr-only">(current)</span></span>
+                    </li>
+                  {% elif n > occupations.number|add:'-6' and n < occupations.number|add:'6' %}
+                    <li class="page-item"><a class="page-link" href="{{ current_filter }}page={{ n }}">{{ n }}</a></li>
+                  {% endif %}
+                {% endfor %}
+
+                {% if courses.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="{{ current_filter }}page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                      <span class="sr-only">end</span>
+                    </a>
+                  </li>
+                  {% endif %}   </ul> </nav>
+            </div>
+
+            <div class="col text-right mt-2">
+              Page {{ occupations.number }} of {{ occupations.paginator.num_pages }}
+            </div>
+
+          </div>
+        </div>
+
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script>
+  var csrfmiddlewaretoken =  '{{ csrf_token }}';
+
+  $("#category_filter").val("{{ category_filter }}");
+
+</script>
+<script src="{% static "js/course/course_finder.js" %}?v=1.1"></script>
+
+
+{% endblock %}

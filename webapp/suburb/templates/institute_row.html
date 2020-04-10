@@ -1,0 +1,166 @@
+{% for provider in providers %}
+<tr id="{{ forloop.counter0 }}" data-latitude="{{ provider.latitude }}"
+data-longitude="{{ provider.longitude }}" data-name="{{ provider.name|title }}" class="point-me">
+  <td>
+    <h5 class="name" style="font-size: 14px;">{{ provider.name|title }}</h5>
+
+  </td>
+  <td>
+
+    <div style="font-size: 12px;">
+      <!-- {# <b>ASQA Code</b> &nbsp;&nbsp;&nbsp;{{ provider.asqa_code }} <br />
+      <b>Campus</b> &nbsp;&nbsp;&nbsp;{{ provider.site_name }} <br /> -->
+      <span class="address">
+        {{ provider.address_line_1 }},
+        {% if provider.address_line_2 != "0" %}
+          {{ provider.address_line_2 }},
+        {% endif %}
+        {{ provider.suburb|title }} {{ provider.postcode }}
+      </span>
+
+      <!-- InfoWindow for Google Map -->
+      <span class="address-hidden-popup d-none">
+        <div class="row no-gutters">
+          <div class="col-12">
+            <b>Address</b> <br />
+            {{ provider.address_line_1 }},<br />
+            {% if provider.address_line_2 != "0" %}
+              {{ provider.address_line_2 }},<br />
+            {% endif %}
+            {{ provider.suburb|title }} {{ provider.postcode }}
+          </div>
+          <div class="col-12 text-right">
+            {% if provider.url != "" %}
+            <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button> -->
+            <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle" data-toggle="tooltip" title="Visit Website">
+              <i class="fa fa-globe"></i>
+            </a>
+            {% endif %}
+            {% if provider.email != "" %}
+            <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+              Contact via E-mail
+            </a> -->
+            <a href="mailto:{{ provider.email }}" target="_blank" class="btn btn-danger btn-circle" data-toggle="tooltip" title="Contact via E-mail">
+              <i class="fa fa-envelope"></i>
+            </a>
+            {% endif %}
+
+            <a href='http://maps.google.com/maps?daddr="{{ provider.address_line_1 }}, {% if provider.address_line_2 != "0" %}{{ provider.address_line_2 }}, {% endif %} {{ provider.suburb|title }} {{ provider.postcode }}"'
+            target="_blank" class="btn btn-success btn-circle" data-toggle="tooltip" title="Get Directions">
+              <i class="fa fa-location-arrow"></i>
+            </a>
+          </div>
+        </div>
+      </span>
+
+      <!-- Card View to display under map -->
+      <span class="address-hidden-badge d-none">
+        <div class="card bg-light mb-3">
+          <div class="card-body p-4" >
+            <div class="row justify-content-center">
+              <div class="col-12 col-lg-5 px-3 mb-3 text-center">
+                <i class="fa fa-3x fa-university mb-3 clr-darkgray"></i>
+                <div class="mt-2">
+                  {% if provider.government_subsidised == 1 %}
+                    <!-- <a class="badge badge-success text-white">Government Subsidised</a> -->
+                  <button type="button" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-tags"></i></button>
+                  {% endif %}
+                  {% if provider.is_regional == 1 %}
+                  <button type="button" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button>
+                    <!-- <a class="badge badge-success text-white">Regional Institute</a> -->
+                  {% endif %}
+
+                  <!-- <a href='/providers/details/{{ provider.id }}' class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">Read More</a> -->
+                  {% if provider.url != "" %}
+                  <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button> -->
+                  <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle btn-md" data-toggle="tooltip" title="Visit Website">
+                    <i class="fa fa-globe"></i>
+                  </a>
+                  {% endif %}
+                  {% if provider.email != "" %}
+                  <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+                    Contact via E-mail
+                  </a> -->
+                  <a href="mailto:{{ provider.email }}" target="_blank" class="btn btn-danger btn-circle btn-md" data-toggle="tooltip" title="Contact via E-mail">
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                  {% endif %}
+
+                  <a href='http://maps.google.com/maps?daddr="{{ provider.address_line_1 }}, {% if provider.address_line_2 != "0" %}{{ provider.address_line_2 }}, {% endif %} {{ provider.suburb|title }} {{ provider.postcode }}"'
+                  target="_blank" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Get Directions">
+                    <i class="fa fa-location-arrow"></i>
+                  </a>
+                </div>
+                  <p>
+                    <b>ASQA Code</b> &nbsp;&nbsp;&nbsp; {{ provider.asqa_code }}
+                  <br />
+                  <b>Campus</b>  &nbsp;&nbsp;&nbsp;{{ provider.site_name }}
+                  </p>
+              </div>
+
+
+              <div class="col-12 col-lg-6 px-3 mb-3 mt-3">
+                <h3 class="name text-bold" style="font-size: 16px;">{{ provider.name|title }}</h3>
+                  <p style="line-height: initial;">
+                    <small>{{ provider.address_line_1 }},
+                    {% if provider.address_line_2 != "0" %}
+                      {{ provider.address_line_2 }},
+                    {% endif %}
+                    {{ provider.suburb|title }} {{ provider.postcode }} </small>
+                    <br />
+                    <small>
+                      <a href="mailto:{{ provider.email }}">
+                        {{ provider.email }}
+                      </a>
+                    </small>
+                    <br />
+                    <small>
+                      <a href="{{ provider.url }}" target="_blank" >
+                        {{ provider.url }}
+                      </a>
+                    </small>
+                  </p>
+
+                  <a href="/providers/suburbs/{{ provider.id }}/" class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">
+                    <i class="fa fa-map"></i> &nbsp; Explore Nearby Suburbs
+                  </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </span>
+
+    </div>
+        {% if provider.government_subsidised == 1 %}
+          <!-- <a class="badge badge-success text-white">Government Subsidised</a> -->
+        <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-tags"></i></button>
+        {% endif %}
+        {% if provider.is_regional == 1 %}
+        <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button>
+          <!-- <a class="badge badge-success text-white">Regional Institute</a> -->
+        {% endif %}
+
+        <!-- <a href='/providers/details/{{ provider.id }}' class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">Read More</a> -->
+        {% if provider.url != "" %}
+        <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button> -->
+        <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle" data-toggle="tooltip" title="Visit Website">
+          <i class="fa fa-globe"></i>
+        </a>
+        {% endif %}
+        {% if provider.email != "" %}
+        <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+          Contact via E-mail
+        </a> -->
+        <a href="mailto:{{ provider.email }}" target="_blank" class="btn btn-danger btn-circle" data-toggle="tooltip" title="Contact via E-mail">
+          <i class="fa fa-envelope"></i>
+        </a>
+        {% endif %}
+  </td>
+  <td>
+      <a href="/providers/suburbs/{{ provider.id }}/" class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 9px;">
+        <i class="fa fa-map"></i> Explore
+      </a>
+  </td>
+</tr>
+{% endfor %}

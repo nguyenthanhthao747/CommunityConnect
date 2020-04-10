@@ -1,0 +1,57 @@
+  <script>
+    var barChartData = {
+      labels: [
+        "1 Bed Room Flat",
+        "2 Bed Room Flat",
+        "3 Bed Room Flat",
+        "2 Bed Room House",
+        "3 Bed Room House",
+        "4 Bed Room House",
+      ],
+      datasets: [
+        {
+          label: "Regional",
+          backgroundColor: '#09670e',
+          borderColor: '#09670e',
+          borderWidth: 1,
+          data: [201.25	, 253.68, 323.04, 272.12,317.89, 388.72]
+        },
+        {
+          label: "Metropolitan",
+          backgroundColor: '#555',
+          borderColor: '#555',
+          borderWidth: 1,
+          data: [315.87, 407.61, 523.54, 438.75, 535.49,674.41]
+        }
+      ]
+    };
+
+    var chartOptions = {
+      responsive: true,
+      legend: {
+        position: "top"
+      },
+      title: {
+        display: false,
+        html: "<h4>Average accomodation prices</h4>"
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+
+    window.onload = function() {
+      var ctx = document.getElementById("canvas_df").getContext("2d");
+
+      window.myBar = new Chart(ctx, {
+        type: "bar",
+        data: barChartData,
+        options: chartOptions
+      });
+
+    };
+  </script>

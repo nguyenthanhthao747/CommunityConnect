@@ -1,0 +1,44 @@
+
+<script>
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var color = Chart.helpers.color;
+  var barChartData = {
+    labels: ['Civil', 'CSE', 'EEE', 'ME', 'IPE', 'June', 'July'],
+    datasets: [{
+      label: 'Dataset 1',
+      backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+      borderColor: window.chartColors.red,
+      borderWidth: 1,
+      data: [
+        5,
+        6,
+        10,
+        3,
+        6,
+        5,
+        6
+      ]
+    },]
+
+  };
+
+  window.onload = function() {
+    var ctx = document.getElementById('canvas').getContext('2d');
+    window.myBar = new Chart(ctx, {
+      type: 'bar',
+      data: barChartData,
+      options: {
+        responsive: true,
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Occupation Chart'
+        }
+      }
+    });
+
+  };
+
+</script>

@@ -1,0 +1,266 @@
+{% extends "vicview/templates/layout.html" %}
+{% load static %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+
+<section id="hero" class="wow fadeIn bg-img7">
+  <div class="hero-container">
+    <!-- <h1><span class="clr-green">V</span><span class="clr-darkgray">ic</span><span class="clr-green">V</span><span class="clr-darkgray">iew</span></h1> -->
+    <h1 class="animated zoomInDown">
+      YOUR BRIGHT FUTURE STARTS HERE
+    </h1>
+    <h2 class="text-white">START EXPLORING VOCATIONAL EDUCATION AND TRAINING COURSES IN VICTORIA</h2>
+    <div class="home-search-widget row justify-content-center p-sm-2 mb-4">
+      <div class="col-12 col-lg-9 col-xl-7 mb-1">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-success active btn_search_options left">
+                <input type="radio" class="search_options" name="search_options" id="option_profession" autocomplete="off" value="p" checked/>
+                <span class="radiobtn"></span>
+                <label for="option_profession">Professions</label>
+              </label>
+              <label class="btn btn-success btn_search_options right">
+                <input type="radio" class="search_options" name="search_options" id="option_institute" autocomplete="off" value="i"/>
+                <span class="radiobtn"></span>
+                <label for="option_institute">Institute</label>
+              </label>
+            </div>
+          </div>
+          {# <select id="select2-multi-source" class="form-control js-data-multisource"></select> #}
+          <input type="hidden" id="selected_item_id" />
+          <input class="form-control" type="text" name="search_query" value=""
+          id="jui-autocomplete" placeholder="Search for courses by professions" maxlength="100"/>
+        </div>
+      </div>
+      <div id="error-get-started" class="col-12 mt-3 mb-3 d-none">
+        <span style="max-width: 400px;" class="alert alert-danger" role="alert">
+          Please enter keyword to search!
+        </span>
+      </div>
+      <div class="col-12 mb-3">
+        <a id="help-get-started" class="text-white small">eg: Civil, Nursing, Electrical, etc.</a>
+      </div>
+      <div class="col-12">
+        <a id="btn-get-started" class="btn text-white btn-outline-success">Get Started</a>
+      </div>
+    </div>
+
+  </div>
+</section><!-- #hero -->
+
+<section class="padd-section text-center wow fadeIn pb-0">
+  <div class="container p-4">
+    <div class="section-title text-center mb-3">
+      <h2>Looking for a Vocational Course?</h2>
+    </div>
+    <p style="font-size: 24px;">
+      If you are looking for a Vocational course in Victoria, VicView will provide you with all the information you need to give you the confidence that you are making a good decision. Choose from a wide variety of institutions and courses that span across multiple disciplines. Also, find the best suburbs close to Institutes providing you the convenience and comfort you need while completing your course.
+    </p>
+  </div>
+</section>
+
+<section id="get-started" class="padd-section text-center wow fadeIn">
+  <div class="container">
+    <div class="section-title text-center">
+      <h2>Explore Endless Opportunities</h2>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 point-me" onclick="location.href='/providers/'">
+        <div class="feature-block">
+          <h1 data-toggle="counter-up">272</h1>
+          <h4>Institutions</h4>
+          <p>Explore Quality Educational Institutions in Regional Victoria.</p>
+          <a href="/providers/">Explore</a>
+        </div>
+      </div>
+
+      <div class="col-md-4 point-me" onclick="location.href='/courses/'">
+        <div class="feature-block">
+          <h1 data-toggle="counter-up">4087</h1>
+          <h4>Courses</h4>
+          <p>Find Courses that will help you prepare for your bright future.</p>
+          <a href="/courses/">Explore</a>
+        </div>
+      </div>
+
+      <div class="col-md-4 point-me" onclick="location.href='/occupations/'">
+        <div class="feature-block">
+          <h1 data-toggle="counter-up">244</h1>
+          <h4>Occupations</h4>
+          <p>Learn about unique Opportunities to jumpstart your career.</p>
+          <a href="/occupations/">Explore</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section id="features" class="padd-section text-center wow fadeInLeftBig">
+
+  <div class="container">
+    <div class="section-title text-center">
+      <h2>High Demand Occupations</h2>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-6 col-lg-3 point-me" onclick="location.href='/courses/finder/?q=Civil%20Engineering%20Draftspersons%20and%20Technicians'">
+        <div class="feature-block">
+          <img src="{% static "theme/img/svg/design-tool.svg" %}" alt="img" class="img-fluid">
+          <h4>Civil Engineering Technicians</h4>
+          <h2>$1,570</h2>
+          <small>Average Salary Per Week</small>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 point-me" onclick="location.href='/courses/finder/?q=Vehicle%20Painters&high_demand=1'">
+        <div class="feature-block">
+          <img src="{% static "theme/img/svg/icons8-fiat-500-100.png" %}" alt="img" class="img-fluid" style="width: 90px !important;height: 90px !important;margin-bottom: 12px !important;margin-top: -12px !important;"/>
+          <h4>Vehicle Painters</h4>
+          <h2>$1,125</h2>
+          <small>Average Salary Per Week</small>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 point-me" onclick="location.href='/courses/finder/?q=Sheetmetal%20Trades%20Workers'">
+        <div class="feature-block">
+          <img src="{% static "theme/img/svg/vector.svg" %}" alt="img" class="img-fluid">
+          <h4>Sheetmetal Trades Workers</h4>
+          <h2>$1,118</h2>
+          <small>Average Salary Per Week</small>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 point-me" onclick="location.href='/courses/finder/?q=Cabinetmakers'">
+        <div class="feature-block">
+          <img src="{% static "theme/img/svg/pixel.svg" %}" alt="img" class="img-fluid">
+          <h4>Cabinetmakers</h4>
+          <h2>$951</h2>
+          <small>Average Salary Per Week</small>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+{% include "vicview/templates/crime_pie_chart.html" %}
+
+<!-- This is the rents stats not crime stats really -->
+{% include "vicview/templates/crime_stats.html" %}
+
+
+<section id="testimonials" class="padd-section text-center wow fadeInRightBig d-none">
+  <div class="container">
+
+      <div class="section-title text-center">
+        <h2>What The Authority Says</h2>
+      </div>
+
+    <div class="row justify-content-center">
+
+      <div class="col-md-8">
+
+        <div class="testimonials-content">
+          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+            <div class="carousel-inner" role="listbox">
+
+              <div class="carousel-item  active">
+                <div class="top-top">
+                  <p>Regional areas have the capacity to provide international students to Victoria with a unique and enriching experience. Government can help better realise this potential.</p>
+                  <h4>Mary Aldred <span>CEO, Committee for Gippsland Inc</span></h4>
+
+                </div>
+              </div>
+
+              <div class="carousel-item ">
+                <div class="top-top">
+                  <p>We've got cheap housing, a tremendous community, our crime rate is almost zero, there are no parking meters and no traffic lights — but people just don't want to come.</p>
+                  <h4>Mayor <span>Yarriambiack Shire</span></h4>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="btm-btm">
+
+              <ul class="list-unstyled carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+              </ul>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<section id="about-us" class="about-us padd-section wow fadeInRightBig">
+  <div class="container">
+    <div class="section-title text-center">
+      <h2>Explore Regional Victoria using VicView</h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-6 col-lg-7">
+        <img src="{% static "images/banners/our-services-v2.png" %}" alt="VicView" class="img-fluid" /><br />
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-5">
+        <div class="about-content">
+          <h2>Features</h2>
+          <!-- <p>&nbsp;</p> -->
+          <ul class="list-unstyled">
+            <li><i class="fa fa-angle-right"></i>Search Courses</li>
+            <li><i class="fa fa-angle-right"></i>Search Regional Institutes</li>
+            <li><i class="fa fa-angle-right"></i>Explore & Compare Suburbs</li>
+            <li><i class="fa fa-angle-right"></i>Search Professions</li>
+            <li><i class="fa fa-angle-right"></i>Search Affordable place to live</li>
+            <li><i class="fa fa-angle-right"></i>Easy to Use</li>
+          </ul>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block footer_content %}
+
+<script>
+  var csrfmiddlewaretoken =  '{{ csrf_token }}';
+</script>
+<script src="{% static "js/home/main-jui.js" %}?v=1.2"></script>
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-home").addClass("menu-active");
+
+    $( window ).scroll(function() {
+      // $( "span" ).css( "display", "inline" ).fadeOut( "slow" );
+    });
+  });
+</script>
+
+{% include "vicview/templates/crime_stats_js.html" %}
+{% include "vicview/templates/crime_pie_chart_js.html" %}
+
+{% endblock %}
