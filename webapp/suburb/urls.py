@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('fetch_data/', views.fetch_data, name='fetch_data'),
     path('info/<str:suburb_id>/', views.suburb_info, name='suburb_info'),
+    path('fetch_suburbs/', views.fetch_suburbs, name='fetch_suburbs'),
 
     path('boundary_ajax/', views.boundary_ajax, name='boundary_ajax'),
     path('institutes/', views.institutes, name='institutes'),

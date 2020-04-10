@@ -3,8 +3,11 @@ var search_type_flag = "p";
 var redirect_urls = {}
 var request_urls = {};
 // request_urls["c"] = "/courses/fetch_data/";
-request_urls["p"] = "/occupations/fetch_data/";
-request_urls["i"] = "/providers/fetch_data/";
+request_urls["p"] = "/occupations/fetch_data/"; // volunteers
+request_urls["i"] = "/providers/fetch_data/"; // goods
+
+request_urls["s"] = "/suburbs/fetch_suburbs/"; // address search
+
 
 redirect_urls["p"] = "/courses/finder/";
 redirect_urls["i"] = "/providers/";
@@ -79,11 +82,11 @@ function isScrollbarBottom(container) {
      return false;
  };
 
-function adjust_width() {
-  $('.ui-autocomplete').css('width', $("#jui-autocomplete").width() - 20 + "px");
+function adjust_width(elem) {
+  $('.ui-autocomplete').css('width', $(elem).width() - 20 + "px");
 
   if($(window).width() < 769){
-    // $('.ui-autocomplete').css('width', $("#jui-autocomplete").width() + 20 + "px");
+    // $('.ui-autocomplete').css('width', $("#volunteer-query").width() + 20 + "px");
     $('.ui-autocomplete').css('left', 80 + "px");
   }
 }
@@ -98,12 +101,12 @@ $.widget( "custom.catcomplete", $.ui.autocomplete, {
 			currentCategory = "";
 		$.each( items, function( index, item ) {
 			var li;
-      if(item.category){
-  			if ( item.category != currentCategory && search_type_flag == "p") {
-  				ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-  				currentCategory = item.category;
-  			}
-      }
+      // if(item.category){
+  		// 	if ( item.category != currentCategory && search_type_flag == "p") {
+  		// 		ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+  		// 		currentCategory = item.category;
+  		// 	}
+      // }
       if(item.value ==''){
         $('<li class="ui-state-disabled px-2 text-danger" style="opacity: 1;">'+item.label+'</li>').appendTo(ul);
       } else{
@@ -119,11 +122,11 @@ $.widget( "custom.catcomplete", $.ui.autocomplete, {
 
 $(document).ready(function () {
   function log( message ) {
-    setTimeout(function() { submit_form(); }, 500);
+    //setTimeout(function() { submit_form(); }, 500);
     console.log( message );
   }
 
-  $("#jui-autocomplete").catcomplete({
+  $("#volunteer-query").catcomplete({
     // minLength: 0,
     source: function( request, response ) {
       $.ajax({
@@ -152,24 +155,63 @@ $(document).ready(function () {
       });
     },
     select: function( event, ui ) {
-      log(ui);
+      // log(ui);
     },
     open: function(){
-        adjust_width();
+        adjust_width($("#volunteer-query"));
     }
   });
-  // .data("uiAutocomplete")._renderItem = function( ul, item ) {
-  //   return $("<li></li>")
-  //       .data( "item.autocomplete", item )
-  //       .append( "<li "+ "class='" + item.value + "'>" + item.label + "</li>" )
-  //       .appendTo( ul );
-  // };
+
+
+  $("#product-query").catcomplete({
+    // minLength: 0,
+    source: function( request, response ) {
+      $.ajax({
+        url: request_urls[search_type_flag],
+        dataType: "json",
+        type: 'POST',
+        data: {
+          csrfmiddlewaretoken: csrfmiddlewaretoken,
+          search: request.term
+        },
+        success: function(data) {
+          console.log(data.results);
+          if(!data.results.length){
+
+            var result = [
+                {
+                    label: 'No matches found for "' + request.term + '"',
+                    value: ""
+                }
+            ];
+            response(result);
+          } else{
+            response(data.results);
+          }
+        }
+      });
+    },
+    select: function( event, ui ) {
+      // log(ui);
+    },
+    open: function(){
+        adjust_width($("#product-query"));
+    }
+  });
 
   // on focus load data
-  $("#jui-autocomplete").focus(function(){
+  $("#volunteer-query").focus(function(){
     //reset result list's pageindex when focus on
     window.pageIndex = 0;
     $(this).catcomplete("search");
+    search_type_flag = 'p';
+  });
+
+  $("#product-query").focus(function(){
+    //reset result list's pageindex when focus on
+    window.pageIndex = 0;
+    $(this).catcomplete("search");
+    search_type_flag = 'i';
   });
 
 });
@@ -177,19 +219,16 @@ $(document).ready(function () {
 
 function submit_form(){
   // console.log("submit_form");
-  var data = $("#jui-autocomplete").val();
   var search_query = "";
-  if(data.length > 0){
-    console.log(data);
-    search_query = data;
-  }
   var encoded = "/courses/?course_filter=" + encodeURIComponent(search_query);
 
   switch(search_type_flag) {
     case "p":
+      search_query = $("#volunteer-query").val();
       encoded = redirect_urls[search_type_flag] + "?q=" + encodeURIComponent(search_query);
       break;
     case "i":
+      search_query = $("#product-query").val();
       encoded = redirect_urls[search_type_flag] + "?q=" + encodeURIComponent(search_query);
       break;
     default:
@@ -197,7 +236,7 @@ function submit_form(){
   }
   console.log("perform search", search_type_flag, encoded);
   if(search_query == ""){
-    $('#jui-autocomplete').focus();
+    $('#volunteer-query').focus();
     // $("#error-get-started").html('<a class="text-danger small">Please enter keyword to search!</a>');
     $("#error-get-started").find(".alert").html('Please enter keyword to search!');
     $("#error-get-started").removeClass("d-none");
@@ -208,33 +247,107 @@ function submit_form(){
 
 $(document).ready(function () {
 
-  $('#jui-autocomplete').on('keyup', function(){
-    if($('#jui-autocomplete').val().length > 0){
-      $("#error-get-started").addClass("d-none");
-    }
+  // $('#volunteer-query').on('keyup', function(){
+  //   if($('#volunteer-query').val().length > 0){
+  //     $("#error-get-started").addClass("d-none");
+  //   }
+  // });
+  //
+  // $('#product-query').on('keyup', function(){
+  //   if($('#product-query').val().length > 0){
+  //     $("#error-get-started").addClass("d-none");
+  //   }
+  // });
 
-  });
-
-  $('.search_options').on('change', function(){
-      // console.log($(this).val());
-      search_type_flag = $(this).val();
-
-      $("#jui-autocomplete").attr("placeholder", request_placeholder[search_type_flag]);
-      $("#help-get-started").text(request_help[search_type_flag]);
-
-      setTimeout(function() { $('#jui-autocomplete').focus(); }, 500);
-
-      $("#error-get-started").addClass("d-none");
-  });
-
-  $( "#btn-get-started").click(function() {
+  $( "#btn-volunteer-search").click(function() {
+    search_type_flag = 'p';
     submit_form();
   });
 
-  $('#jui-autocomplete').keypress(function(event){
+  $( "#btn-product-search").click(function() {
+    search_type_flag = 'i';
+    submit_form();
+  });
+
+  $('#volunteer-query').keypress(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){
       submit_form();
     }
   });
+
+  $("#volunteer-location").catcomplete({
+    // minLength: 0,
+    source: function( request, response ) {
+      $.ajax({
+        url: request_urls["s"],
+        dataType: "json",
+        type: 'POST',
+        data: {
+          csrfmiddlewaretoken: csrfmiddlewaretoken,
+          search: request.term
+        },
+        success: function(data) {
+          console.log(data.results);
+          if(!data.results.length){
+
+            var result = [
+                {
+                    label: 'No matches found for "' + request.term + '"',
+                    value: ""
+                }
+            ];
+            response(result);
+          } else{
+            response(data.results);
+          }
+        }
+      });
+    },
+    select: function( event, ui ) {
+      // log(ui);
+    },
+    open: function(){
+        adjust_width($("#volunteer-location"));
+    }
+  });
+
+
+  $("#product-location").catcomplete({
+    // minLength: 0,
+    source: function( request, response ) {
+      $.ajax({
+        url: request_urls["s"],
+        dataType: "json",
+        type: 'POST',
+        data: {
+          csrfmiddlewaretoken: csrfmiddlewaretoken,
+          search: request.term
+        },
+        success: function(data) {
+          console.log(data.results);
+          if(!data.results.length){
+
+            var result = [
+                {
+                    label: 'No matches found for "' + request.term + '"',
+                    value: ""
+                }
+            ];
+            response(result);
+          } else{
+            response(data.results);
+          }
+        }
+      });
+    },
+    select: function( event, ui ) {
+      // log(ui);
+    },
+    open: function(){
+        adjust_width($("#product-location"));
+    }
+  });
+
+
 });

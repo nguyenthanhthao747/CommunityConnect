@@ -5,94 +5,42 @@
 
 {% include "vicview/templates/navbar.html" %}
 
-<section id="hero" class="wow fadeIn bg-img7">
+<section id="hero" class="wow fadeIn bg-img1">
   <div class="hero-container">
     <!-- <h1><span class="clr-green">V</span><span class="clr-darkgray">ic</span><span class="clr-green">V</span><span class="clr-darkgray">iew</span></h1> -->
     <h1 class="animated zoomInDown text-center">
-      YOUR BRIGHT FUTURE STARTS HERE
+      TOGETHER, LET'S MAKE A DIFFERENCE!
     </h1>
-    <h2 class="text-white text-center">START EXPLORING VOCATIONAL EDUCATION AND TRAINING COURSES IN VICTORIA</h2>
+    <h2 class="text-white text-center mb-5">
+      SEEK HELP IF YOU ARE AFFECTED BY COVID OR LET'S HELP OTHERS IN THIS DIFFICULT TIME.
+    </h2>
 
-    <div class="row justify-content-center hc-form-container">
-      <div class="col-12 col-md-8 col-lg-7">
-        <div class="card bg-none border-0">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-3 mb-3">
+        <div class="card point-me" onclick='location.href="/courses/?cf=certificates"'>
+          <img src="{% static "images/courses/casual-college-connection-1438081.jpg" %}" class="card-img-top mb-0" style="max-height: 210px; height: 210px;max-width: 100%;" />
           <div class="card-body">
-            <ul class="nav nav-pills" id="pills-tab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link bg-primary text-dark active rounded-0" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
-                  Search Volunteer
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link bg-success text-white rounded-0" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">
-                  Search Goods
-                </a>
-              </li>
-            </ul>
-            <div class="tab-content bg-none" id="pills-tabContent">
-              <div class="tab-pane bg-primary fade show active p-3" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                <div class="form-group">
-                    <label for="volunteer-category">Category</label>
-                    <select class="form-control" id="volunteer-category">
-                      <option value="Carer Support">Carer Support</option>
-                      <option value="Grocery Shopping">Grocery Shopping</option>
-                      <option value="Online Tutoring">Online Tutoring</option>
-                      <option value="Cooking">Cooking</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                      <label for="volunteer-location">Location</label>
-                      <input type="email" class="form-control" id="volunteer-location" aria-describedby="emailHelp" placeholder="Add suburb, landmark or address">
-                      <small id="emailHelp" class="form-text text-dark">Start typing for suggestions.</small>
-                  </div>
-                  <button type="submit" class="btn btn-primary border-primary">
-                    Search
-                  </button>
-              </div>
-              <div class="tab-pane fade bg-success" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-
-              </div>
-            </div>
+            <h2 class="text-center font-weight-bold mb-0">VOLUNTEER NOW</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-3 mb-3">
+        <div class="card point-me" onclick='location.href="/courses/?cf=diploma"'>
+          <img src="{% static "images/courses/beautiful-beauty-carefree-1458318.jpg" %}" class="card-img-top mb-0" style="max-height: 210px; height: 210px;max-width: 100%;">
+          <div class="card-body">
+            <h2 class="text-center font-weight-bold mb-0">DONATE NOW</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-3 mb-3">
+        <div class="card point-me" onclick='location.href="/seek-support/search"'>
+          <img src="{% static "images/courses/blur-books-close-up-159866.jpg" %}" class="card-img-top mb-0" style="max-height: 210px; height: 210px;max-width: 100%;">
+          <div class="card-body">
+            <h2 class="text-center font-weight-bold mb-0">SEEK SUPPORT</h2>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- <div class="home-search-widget row justify-content-center p-sm-2 mb-4">
-      <div class="col-12 col-lg-9 col-xl-7 mb-1">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-success active btn_search_options left">
-                <input type="radio" class="search_options" name="search_options" id="option_profession" autocomplete="off" value="p" checked/>
-                <span class="radiobtn"></span>
-                <label for="option_profession">Professions</label>
-              </label>
-              <label class="btn btn-success btn_search_options right">
-                <input type="radio" class="search_options" name="search_options" id="option_institute" autocomplete="off" value="i"/>
-                <span class="radiobtn"></span>
-                <label for="option_institute">Institute</label>
-              </label>
-            </div>
-          </div>
-          {# <select id="select2-multi-source" class="form-control js-data-multisource"></select> #}
-          <input type="hidden" id="selected_item_id" />
-          <input class="form-control" type="text" name="search_query" value=""
-          id="jui-autocomplete" placeholder="Search for courses by professions" maxlength="100"/>
-        </div>
-      </div>
-      <div id="error-get-started" class="col-12 mt-3 mb-3 d-none">
-        <span style="max-width: 400px;" class="alert alert-danger" role="alert">
-          Please enter keyword to search!
-        </span>
-      </div>
-      <div class="col-12 mb-3">
-        <a id="help-get-started" class="text-white small">eg: Civil, Nursing, Electrical, etc.</a>
-      </div>
-      <div class="col-12">
-        <a id="btn-get-started" class="btn text-white btn-outline-success">Get Started</a>
-      </div>
-    </div> -->
 
   </div>
 </section><!-- #hero -->

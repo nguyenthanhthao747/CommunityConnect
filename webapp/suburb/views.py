@@ -408,6 +408,37 @@ def fetch_details(request):
 
     return JsonResponse(dict_data)
 
+
+@csrf_exempt
+def fetch_suburbs(request):
+    dict_data = {}
+
+    search_query = request.POST.get('search', '')
+
+    requested_data = []
+    # querySet = VetProviders.objects.filter(name__icontains=search_institutes)
+
+    querySet = Suburb.objects.filter(
+        Q(postcode__icontains = search_query) |
+        Q(suburb__icontains = search_query)
+    ).values()[0:9]
+
+    # print(len(querySet))
+
+    for qset in querySet:
+        # print(qset)
+        requested_data.append({
+            "id": qset["id"],
+            "label": qset["suburb"].capitalize() + ", " + qset["postcode"]
+        });
+
+    dict_data = {
+        "results": requested_data,
+        # "search": search_query
+    }
+
+    return JsonResponse(dict_data)
+
 def fetch_data(request):
     dict_data = {}
     requested_data = []

@@ -29,12 +29,14 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('about-us', views.about, name='about'),
     path('seek-support/search', views.seek_support_search, name='seek_support_search'),
+    path('signup', views.signup, name='signup'),
+    path('login-page', views.login, name='login'),
 
     path('search', views.search_integrated, name='search'),
 
     path('get-geolocation', views.geolocation, name='geolocation'),
 
-    path('courses/', include('course.urls')),
+    path('volunteers/', include('course.urls')),
     path('providers/', include('provider.urls')),
     path('occupations/', include('occupation.urls')),
     path('suburbs/', include('suburb.urls')),

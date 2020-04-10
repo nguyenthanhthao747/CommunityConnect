@@ -37,6 +37,15 @@ def index(request):
         # 'stops': stops
     })
 
+def signup(request):
+    dict_data = {}
+
+    return render(request, 'vicview/templates/signup.html', {})
+
+def login(request):
+    dict_data = {}
+    return render(request, 'vicview/templates/login.html', {})
+
 def seek_support_search(request):
     dict_data = {}
 

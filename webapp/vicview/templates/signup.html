@@ -1,0 +1,73 @@
+{% extends "vicview/templates/layout.html" %}
+{% load static %}
+
+{% block page_content %}
+<section id="hero" class="wow fadeIn bg-img7">
+  <div class="hero-container">
+    <div class="row justify-content-center hc-signup-container">
+
+      <div class="col-12 col-md-8 col-lg-5 mt-0 mt-md-5">
+        <div class="card border-0 rounded-0 mt-0 mt-md-5">
+          <div class="card-body">
+            <h1 class="text-center mt-4"><span class="clr-green">C</span><span class="clr-darkgray">ommunity</span><span class="clr-green">C</span><span class="clr-darkgray">onnect</span></h1>
+            <h2 class="text-center">JOIN NOW TO SUPPORT YOUR LOCAL COMMUNITY!</h2>
+
+            <div class="row justify-content-center mb-3">
+              <div class="col-lg-12 py-2 px-4">
+                <h4 class="text-center">SIGNUP USING EMAIL</h4>
+                  <div class="form-row">
+                      <div class="col-md-6">
+                          <div class="form-group"><label class="small mb-1" for="inputFirstName">First Name</label><input class="form-control" id="inputFirstName" type="text" placeholder="Enter first name"></div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group"><label class="small mb-1" for="inputLastName">Last Name</label><input class="form-control" id="inputLastName" type="text" placeholder="Enter last name"></div>
+                      </div>
+                  </div>
+                  <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address"></div>
+
+                  <div class="form-group"><label class="small mb-1" for="userAddress">Address</label><input class="form-control" id="userAddress" type="text" aria-describedby="emailHelp" placeholder="Enter address"></div>
+
+                  <div class="form-row">
+                      <div class="col-md-6">
+                          <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control" id="inputPassword" type="password" placeholder="Enter password"></div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group"><label class="small mb-1" for="inputConfirmPassword">Confirm Password</label><input class="form-control" id="inputConfirmPassword" type="password" placeholder="Confirm password"></div>
+                      </div>
+                  </div>
+                  <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="/">Create Account</a></div>
+
+                  <h6 class="text-center small text-muted my-3"> OR  </h6>
+
+                  <h4 class="text-center mb-2">SIGNUP USING SOCIAL MEDIA</h4>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <a href="#" class="btn btn-primary btn-block"><i class="fa fa-facebook"></i> <b>Facebook</b></a>
+                    </div>
+                    <div class="col mb-3">
+                      <a href="#" class="btn btn-info btn-block"><i class="fa fa-twitter"></i> <b>Twitter</b></a>
+                    </div>
+                    <div class="col mb-3">
+                      <a href="#" class="btn btn-danger btn-block"><i class="fa fa-google"></i> <b>Google</b></a>
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- #hero -->
+{% endblock %}
+
+{% block footer_content %}
+
+<script>
+  var csrfmiddlewaretoken =  '{{ csrf_token }}';
+</script>
+<script src="{% static "js/home/main-jui.js" %}?v=1.2"></script>
+
+
+{% endblock %}
