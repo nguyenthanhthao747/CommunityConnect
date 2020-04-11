@@ -13,6 +13,8 @@ urlpatterns = [
     path('fetch_details/', views.fetch_details, name='fetch_details'),
     path('fetch_data/', views.fetch_data, name='fetch_data'),
 
+    path('finder/', views.finder, name='finder'),
+
 
     path('compare-suburbs/<str:provider_id>/<str:suburb_id1>/<str:suburb_id2>/', views.compare, name='compare'),
 

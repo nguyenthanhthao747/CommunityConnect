@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from provider.models import *
 from suburb.models import *
+from occupation.models import *
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -22,6 +23,19 @@ colors = list(green.range_to(Color("#FF0000"), 10))
 colors = [Color("#0D8000"), Color("#6FBF00"), Color("#FFFF00"), Color("#FFBB44"), Color("#FFAAAA")]
 colors_font = ["white", "black", "black", "black", "black"]
 
+from datetime import datetime
+from random import randrange
+from datetime import timedelta
+
+def random_date(start, end):
+    """
+    This function will return a random datetime between two datetime
+    objects.
+    """
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
 
 def index(request):
     dict_data = {}
@@ -833,4 +847,154 @@ def compare(request, provider_id, suburb_id1, suburb_id2):
         'start_point': start_point,
         'pages': pages,
         'nearest_suburbs': sorted_nearest_suburbs
+    })
+
+
+def finder(request):
+    dict_data = {}
+    dict_filter = {}
+    dict_filter_contains = {}
+    search_filter = {}
+    high_demand = ""
+    totals = {}
+    totals["courses"] = 0
+
+    try:
+        if request.GET.get('q'):
+            search_filter["occupation"] = request.GET.get('q')
+            dict_filter['title__istartswith'] = search_filter["occupation"];
+            dict_filter_contains['title__icontains'] = search_filter["occupation"];
+
+        if request.GET.get('high_demand'):
+            high_demand = int(request.GET.get('high_demand'))
+        else:
+            high_demand = 0
+
+    except:
+        print("")
+
+    search_filter["category"] = ""
+    try:
+        if request.GET.get('category'):
+            search_filter["category"] = request.GET.get('category')
+            # dict_filter['category_id'] = search_filter["category"]
+            # dict_filter_contains['category_id'] = search_filter["category"]
+    except:
+        print("")
+
+    try:
+        if request.GET.get('location'):
+            search_filter["location"] = request.GET.get('location')
+    except:
+        print("")
+
+    location_chunks = search_filter["location"].split(",")
+    dict_filter_2 = {}
+    dict_filter_2["postcode"] = int(location_chunks[1])
+    dict_filter_2["government_subsidised"] = 'Y'
+    provider_list = VetProviders.objects.filter(**dict_filter_2).values()
+    print("list of providers", len(provider_list))
+    print(provider_list)
+    totals["courses"] = len(provider_list)
+
+    d1 = datetime.strptime('1/04/2020 1:30 PM', '%m/%d/%Y %I:%M %p')
+    d2 = datetime.strptime('1/06/2020 4:50 AM', '%m/%d/%Y %I:%M %p')
+
+    providers_from_list = []
+    totals["pharmacy"] = 0
+    totals["individuals"] = 0
+
+    for xitem in provider_list:
+        i = 0
+        xitemtemp = xitem
+
+        xitemtemp["title"] = xitemtemp["address_line_2"]
+
+        if (xitemtemp["is_regional"] == 1):
+            totals["pharmacy"] += 1
+            qty_inHand = randrange(30, 100, 3)
+            xitemtemp["availability"] = qty_inHand
+            xitemtemp["desc"] = "Our store has " + str(qty_inHand) + " packs of mask, please check in store before pickup."
+        else:
+            totals["individuals"] += 1
+            qty_inHand = randrange(10, 30, 2)
+            xitemtemp["availability"] = qty_inHand
+            xitemtemp["desc"] = "Hi, I'm " + xitemtemp["address_line_2"] + ", I have some extra masks to share."
+        i = i+1
+
+        print("hello", xitemtemp["availability"], xitemtemp)
+        providers_from_list.append(xitemtemp)
+
+    has_data = True
+    start_point = True
+    pages = []
+    page_count = 0
+
+    if len(dict_filter) > 0:
+        start_point = False
+
+        # dict_filter['high_demand'] = high_demand;
+
+        occupation_list = VetProfessions.objects.filter(**dict_filter).values()
+
+        if len(occupation_list) <= 0:
+            occupation_list = VetProfessions.objects.filter(**dict_filter_contains).values()
+
+        for xitem in occupation_list:
+            # get offered courses for xitem
+            anzsco_filter = int(xitem["anzsco_id"])
+            print(anzsco_filter)
+
+            courses_from_occupation = VetCoursesToOccupation.objects.filter(anzsco=anzsco_filter).values().extra(
+              select={
+                'id': 'course_id'
+              }
+            ).values(
+              'id'
+            )
+            print(courses_from_occupation)
+
+            xitem["courses"] = VetCourses.objects.filter(id__in=courses_from_occupation).order_by("course_title")
+            # totals["courses"] += len(xitem["courses"])
+
+            if xitem["future_growth"] in future_growth_map:
+                xitem["future_growth_info"] = future_growth_map[xitem["future_growth"]]
+
+            if xitem["skill_level"] in skill_map:
+                xitem["skill_level_info"] = skill_map[xitem["skill_level"]]
+
+        totals["occupations"] = len(occupation_list)
+        paginator = Paginator(occupation_list, 20)
+
+        page = request.GET.get('page')
+        occupations = paginator.get_page(page)
+    else:
+        occupations = []
+        has_data = False
+
+    current_filter = "?"
+
+    if search_filter["occupation"]:
+        current_filter += "q=" + search_filter["occupation"] + "&"
+
+    category_filter_name = ""
+    # if search_filter["category"]:
+    #     course_category_info = VetProfessionsCategory.objects.filter(id=search_filter["category"]).values()[0]
+    #     print(course_category_info)
+    #     category_filter_name = course_category_info["name"]
+    #     current_filter += "cf=" + category_filter_name + "&"
+
+    return render(request, 'provider/templates/product_finder.html',  {
+        'occupations': occupations,
+        'filters': search_filter,
+        'occupation_filter': search_filter["occupation"],
+        'category_filter_name': category_filter_name,
+        'current_filter': current_filter,
+        'high_demand': high_demand,
+        'has_data': has_data,
+        'start_point': start_point,
+        'pages': pages,
+        'providers': providers_from_list,
+        'page_count': page_count,
+        'totals': totals
     })

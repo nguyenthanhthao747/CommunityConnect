@@ -4,7 +4,7 @@ var redirect_urls = {}
 var request_urls = {};
 // request_urls["c"] = "/courses/fetch_data/";
 request_urls["p"] = "/occupations/fetch_data/"; // volunteers
-request_urls["i"] = "/providers/fetch_data/"; // goods
+request_urls["i"] = "/occupations/fetch_products_data/"; // goods
 
 request_urls["s"] = "/suburbs/fetch_suburbs/"; // address search
 
@@ -166,13 +166,17 @@ $(document).ready(function () {
   $("#product-query").catcomplete({
     // minLength: 0,
     source: function( request, response ) {
+
+      var product_category = $("#product-category").val();
+
       $.ajax({
         url: request_urls[search_type_flag],
         dataType: "json",
         type: 'POST',
         data: {
           csrfmiddlewaretoken: csrfmiddlewaretoken,
-          search: request.term
+          search: request.term,
+          category: product_category
         },
         success: function(data) {
           console.log(data.results);
@@ -203,15 +207,15 @@ $(document).ready(function () {
   $("#volunteer-query").focus(function(){
     //reset result list's pageindex when focus on
     window.pageIndex = 0;
-    $(this).catcomplete("search");
     search_type_flag = 'p';
+    $(this).catcomplete("search");
   });
 
   $("#product-query").focus(function(){
     //reset result list's pageindex when focus on
     window.pageIndex = 0;
-    $(this).catcomplete("search");
     search_type_flag = 'i';
+    $(this).catcomplete("search");
   });
 
 });
@@ -243,7 +247,7 @@ function submit_form(){
 
   console.log("perform search", search_type_flag, encoded);
   if(search_query == ""){
-    $('#volunteer-query').focus();
+    // $('#volunteer-query').focus();
     // $("#error-get-started").html('<a class="text-danger small">Please enter keyword to search!</a>');
     $("#error-get-started").find(".alert").html('Please enter keyword to search!');
     $("#error-get-started").removeClass("d-none");

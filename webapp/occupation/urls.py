@@ -12,4 +12,5 @@ urlpatterns = [
     path('fetch/', views.fetch, name='fetch'),
     path('fetch_details/', views.fetch_details, name='fetch_details'),
     path('fetch_data/', views.fetch_data, name='fetch_data'),
+    path('fetch_products_data/', views.fetch_products_data, name='fetch_products_data'),
 ]

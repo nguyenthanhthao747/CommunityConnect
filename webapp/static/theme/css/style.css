@@ -499,6 +499,16 @@ button.gm-ui-hover-effect {
   background: url(../../images/countryside.jpg) center bottom no-repeat;
     background-size: cover;
 }
+
+.bg-img9{
+  background: url(../../images/bg/clint-unsplash.jpg) center bottom no-repeat;
+    background-size: cover;
+}
+
+.bg-img10{
+  background: url(../../images/bg/our-services-v2.jpg) center bottom no-repeat;
+    background-size: cover;
+}
 .bg-tint{
     background: rgba(120, 125, 94, 0.5);
 }

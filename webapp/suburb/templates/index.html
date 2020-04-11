@@ -41,18 +41,18 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
           <div class="row justify-content-center no-gutters">
             <div class="col-12">
               <div class="section-title text-center mb-3">
-                <h2 class="h2-banner animated zoomInDown text-dark" style="text-shadow: none;">START EXPLORING CURRENT STATUS OF VICTORIAN SUBURBS</h2>
+                <h2 class="h2-banner animated zoomInDown text-dark" style="text-shadow: none;">CURRENT STATUS OF VICTORIAN SUBURBS AFFECTED BY COIVID</h2>
               </div>
             </div>
 
             <div class="col-12 col-lg-10 px-3 jui-search-widget">
               <input class="form-control" type="text" name="search_query" value="{{suburb_filter}}"
-              id="jui-autocomplete" placeholder="Search institutes by Suburb"/>
+              id="jui-autocomplete" placeholder="Add address, landmark or suburb"/>
 
             </div>
 
             <div class="col-12 col-lg-2 text-center px-3 mt-sm-3 mt-lg-0">
-              <a id="btn-search-institutes" class="btn btn-success text-white">Search</a>
+              <a id="btn-search-institutes" class="btn btn-success text-white border-success">Search</a>
             </div>
           </div>
         </div>
@@ -93,6 +93,8 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
                 <tr>
                   <th>Suburb</th>
                   <th>Region</th>
+                  <th>Positive Cases</th>
+                  <th>Recovered Cases</th>
                   <th class="no-sort"></th>
                 </tr>
               </thead>
@@ -180,7 +182,7 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
 
 <script src="{% static "js/suburb/cluster.js" %}?v=1.2"></script>
 
-<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyB0oASnqZZG13qNQ5Dbb31rliGBkWxSmjQ"></script>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyBrmIKXNOxtxnOPNJZHKKvZr8oBGpYeSuk"></script>
 <script type="text/javascript">
   var latLng = new google.maps.LatLng(-37.4713,144.7852);
 
@@ -266,11 +268,39 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
 
     });
 
-    zoom_and_center_to_map();
+    // zoom_and_center_to_map();
 
     // Add a marker clusterer to manage the markers.
     markerCluster = new MarkerClusterer(map_object, markers,
            {imagePath: '//vicview.gq/static/images/cluster/m'});
+  }
+
+  function polygonCenter(poly) {
+      var latitudes = [];
+      var longitudes = [];
+      var vertices = poly.getPath();
+
+      // put all latitudes and longitudes in arrays
+      for (var i = 0; i < vertices.length; i++) {
+          longitudes.push(vertices.getAt(i).lng());
+          latitudes.push(vertices.getAt(i).lat());
+      }
+
+      // sort the arrays low to high
+      latitudes.sort();
+      longitudes.sort();
+
+      // get the min and max of each
+      var lowX = latitudes[0];
+      var highX = latitudes[latitudes.length - 1];
+      var lowy = longitudes[0];
+      var highy = longitudes[latitudes.length - 1];
+
+      // center of the polygon is the starting point plus the midpoint
+      var centerX = lowX + ((highX - lowX) / 2);
+      var centerY = lowy + ((highy - lowy) / 2);
+
+      return (new google.maps.LatLng(centerX, centerY));
   }
 
   $(document).ready(function () {
@@ -343,8 +373,11 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
 
     polygon.setOptions(temp_options);
 
-    // console.log(polygonCenter(polygon));
+    console.log(map_object.getZoom());
     map_object.setCenter(poly_center);
+    // zoom_and_center_to_map();
+    map_object.setZoom(10);
+    console.log(map_object.getZoom());
   }
 
   function load_suburbs(){
@@ -362,14 +395,16 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
 
     request.done(function( msg ) {
 
-      console.log(msg.sububs[0]);
 
-      for (var i = 0; i < msg.sububs.length; i++) {
-        var suburbx = msg.sububs[i]
-        result = parsePolygonPaths(suburbx.geo_boundary);
-        // Construct the polygon.
+      if(msg.sububs.length > 0){
+        console.log(msg.sububs[0]);
 
-        result.forEach(function(coords){
+        for (var i = 0; i < msg.sububs.length; i++) {
+          var suburbx = msg.sububs[i]
+          result = parsePolygonPaths(suburbx.geo_boundary);
+          // Construct the polygon.
+
+          result.forEach(function(coords){
               coords.forEach(function(loc){
                   bounds.extend(loc);
               });
@@ -381,7 +416,7 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
                   strokeWeight: 2,
                   fillColor: '#09670e',
                   fillOpacity: 0.30,
-                  title: suburbx.suburb
+                  title: suburbx.name
               };
 
               var poly = new google.maps.Polygon(suburb_options);
@@ -392,23 +427,28 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
                 polygon_clicked(this);
               });
               google.maps.event.addListener(poly, "mouseover",function(){
+                console.log("mouseover");
+
                 this.setOptions({fillOpacity: 0.6});
               });
 
               google.maps.event.addListener(poly, "mouseout",function(){
+                console.log("mouseout");
                 this.setOptions({fillOpacity: 0.45});
               });
               google.maps.event.addListenerOnce(map_object, 'bounds_changed', function() {
-                map_object.setZoom(map_object.getZoom() -1);
+                console.log("bounds_changed");
+                // map_object.setZoom(map_object.getZoom() -1);
               });
 
               // add rows to the table
               var name = suburbx.name;
               var region_name = suburbx.region_name;
-              var markup = "<tr><td>" + name + "</td><td>" + region_name + "</td><td>" + "1" + "</td><td><a href='/suburbs/institutes/?q=" + name + "' class='btn btn-danger btn-sm text-white text-capitalize' style='padding: 6px 12px;font-size: 10px;' data-toggle='tooltip' data-placement='top' title='Click here to see Institutes on Map' >Show Details</a> </td></tr>";
+              var markup = "<tr><td>" + name + "</td><td>" + region_name + "</td><td>" + "3" + "</td><td>" + "1" + "</td><td><a href='/suburbs/institutes/?q=" + name + "' class='btn btn-danger btn-sm text-white text-capitalize' style='padding: 6px 12px;font-size: 10px;' data-toggle='tooltip' data-placement='top' title='Click here to see Institutes on Map' >Show Details</a> </td></tr>";
               $("table tbody").append(markup);
+          });
 
-        });
+        }
       }
 
       if(msg.sububs.length > 0){
@@ -426,7 +466,8 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
       } else{
         // hide the loading bar
         $(".sub-header-summary").html("<b>Corona Virus update by VIC suburbs</b>");
-
+        $(".sub-header-summary").hide();
+        
         $("#suburbs-datatable").DataTable({
           "columnDefs": [ {
                  "targets": 'no-sort',

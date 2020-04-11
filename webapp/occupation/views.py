@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from occupation.models import *
 from course.models import *
+from provider.models import *
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -293,6 +294,48 @@ LIMIT 50
     dict_data = {
         "results": requested_data,
         "search": search_query
+    }
+
+    return JsonResponse(dict_data)
+
+@csrf_exempt
+def fetch_products_data(request):
+    dict_data = {}
+    requested_data = []
+
+    search_query = request.POST.get('search', '')
+
+    search_category = request.POST.get('category', '')
+
+    sql_str = f"""
+SELECT
+vp.title, vp.category
+FROM vet_products vp
+WHERE
+(title LIKE '{search_query}%')
+AND
+(category LIKE '%{search_category}%')
+LIMIT 50
+    """
+
+    print(sql_str)
+
+    cursor = connection.cursor();
+    cursor.execute(sql_str)
+    the_rs = cursor.fetchall()
+    print(the_rs)
+    if len(the_rs) > 0:
+        for xitem in the_rs:
+            # if no results found in case of starts with
+            requested_data.append({
+                'label': xitem[0],
+                'category': xitem[1]
+            })
+
+    dict_data = {
+        "results": requested_data,
+        "search": search_query,
+        "category": search_category
     }
 
     return JsonResponse(dict_data)
