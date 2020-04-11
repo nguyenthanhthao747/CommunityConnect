@@ -17,7 +17,7 @@
         <div class="p-3 bg-overlay search-shrinked">
           <div class="row justify-content-center">
             <div class="col-12 mb-3">
-              <h3 class="text-center">VOLUNTEER TO SERVE COMMUNITY!</h3>
+              <h3 class="text-center">DONATE TO COMMUNITY!</h3>
               <h5 class="text-center">Register your interest today, to help people in need during this difficult time.</h5>
             </div>
             <div class="col-12 mb-lg-0 mb-sm-3">
@@ -25,10 +25,11 @@
               <div class="form-group mb-0">
                   <select class="form-control">
                     <option value="" {% if filters.category == '' %} selected {% endif %}>Select Category</option>
-                    <option value="19" {% if filters.category == '19' %} selected {% endif %}>Carer Support</option>
-                    <option value="42" {% if filters.category == '42' %} selected {% endif %}>Grocery Shopping</option>
-                    <option value="7" {% if filters.category == '7' %} selected {% endif %}>Online Tutoring</option>
-                    <option value="41" {% if filters.category == '41' %} selected {% endif %}>Cooking</option>
+                    <option value="19" {% if filters.category == '19' %} selected {% endif %}>Clothing</option>
+                    <option value="42" {% if filters.category == '42' %} selected {% endif %}>Hand Sanitiser</option>
+                    <option value="7" {% if filters.category == '7' %} selected {% endif %}>Masks</option>
+                    <option value="41" {% if filters.category == '41' %} selected {% endif %}>Food</option>
+                    <option value="41" {% if filters.category == '41' %} selected {% endif %}>Books</option>
                   </select>
               </div>
             </div>
@@ -43,7 +44,7 @@
 
             <div class="col-12 mb-lg-0 mb-sm-3">
               <div class="form-group mb-0 jui-search-widget">
-                  <small class="d-inline-block mb-2 pl-1">Location you would like to serve</small>
+                  <small class="d-inline-block mb-2 pl-1">Location you would like to give away</small>
                   <input type="text" class="form-control"
                   placeholder="Add suburb, landmark or address" value="{{ filters.location }}" maxlength="100"/>
               </div>
@@ -51,7 +52,15 @@
 
             <div class="col-12 mb-lg-0 mb-sm-3">
               <div class="form-group mb-0 jui-search-widget">
-                  <small class="d-inline-block mb-2 pl-1">Your availability?</small>
+                  <small class="d-inline-block mb-2 pl-1">Available Quantity</small>
+                  <input type="text" class="form-control"
+                  placeholder="Add quantity" value="{{ filters.location }}" maxlength="100"/>
+              </div>
+            </div>
+
+            <div class="col-12 mb-lg-0 mb-sm-3">
+              <div class="form-group mb-0 jui-search-widget">
+                  <small class="d-inline-block mb-2 pl-1">Pick up Time</small>
 
                   <div class="input-group mb-3">
                     <div class="input-group-prepend w-50">
@@ -90,16 +99,18 @@
                 <tr>
                   <td>Category</td>
                   <td>Post Title</td>
-                  <td>Availability</td>
+                  <td>Pick up time</td>
+                  <td>Quantity left</td>
                   <td>Status</td>
                   <td>Action</td>
                 </tr>
               </thead>
               <tbody class="record-added-list">
                   <tr>
-                    <td>Carer Support</td>
-                    <td>Available for help during office hours</td>
+                    <td>Clothes</td>
+                    <td>I have some baby clothes</td>
                     <td>25th to 28th April</td>
+                    <td>5</td>
                     <td>
                       <a class="btn btn-success btn-sm text-white text-capitalize" style="padding: 6px 12px;font-size: 10px;">Active</a>
                     </td>
@@ -110,9 +121,10 @@
                   </tr>
 
                   <tr>
-                    <td>Online Tutoring</td>
-                    <td>Available for tutoring during late hours</td>
+                    <td>Food</td>
+                    <td>Guys, if anyone need rice, please reach me out!</td>
                     <td>25th to 28th April</td>
+                    <td>3 Packs</td>
                     <td>
                       <a class="btn btn-success btn-sm text-white text-capitalize" style="padding: 6px 12px;font-size: 10px;">Active</a>
                     </td>

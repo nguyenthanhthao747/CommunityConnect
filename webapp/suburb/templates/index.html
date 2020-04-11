@@ -41,14 +41,14 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
           <div class="row justify-content-center no-gutters">
             <div class="col-12">
               <div class="section-title text-center mb-3">
-                <h2 class="h2-banner animated zoomInDown text-dark" style="text-shadow: none;">START EXPLORING VICTORIAN SUBURBS</h2>
+                <h2 class="h2-banner animated zoomInDown text-dark" style="text-shadow: none;">START EXPLORING CURRENT STATUS OF VICTORIAN SUBURBS</h2>
               </div>
             </div>
 
             <div class="col-12 col-lg-10 px-3 jui-search-widget">
               <input class="form-control" type="text" name="search_query" value="{{suburb_filter}}"
               id="jui-autocomplete" placeholder="Search institutes by Suburb"/>
- 
+
             </div>
 
             <div class="col-12 col-lg-2 text-center px-3 mt-sm-3 mt-lg-0">
@@ -368,6 +368,7 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
         var suburbx = msg.sububs[i]
         result = parsePolygonPaths(suburbx.geo_boundary);
         // Construct the polygon.
+
         result.forEach(function(coords){
               coords.forEach(function(loc){
                   bounds.extend(loc);
@@ -404,8 +405,9 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
               // add rows to the table
               var name = suburbx.name;
               var region_name = suburbx.region_name;
-              var markup = "<tr><td>" + name + "</td><td>" + region_name + "</td><td><a href='/suburbs/institutes/?q=" + name + "' class='btn btn-danger btn-sm text-white text-capitalize' style='padding: 6px 12px;font-size: 10px;' data-toggle='tooltip' data-placement='top' title='Click here to see Institutes on Map' >Show Institutes</a> </td></tr>";
+              var markup = "<tr><td>" + name + "</td><td>" + region_name + "</td><td>" + "1" + "</td><td><a href='/suburbs/institutes/?q=" + name + "' class='btn btn-danger btn-sm text-white text-capitalize' style='padding: 6px 12px;font-size: 10px;' data-toggle='tooltip' data-placement='top' title='Click here to see Institutes on Map' >Show Details</a> </td></tr>";
               $("table tbody").append(markup);
+
         });
       }
 
@@ -423,7 +425,7 @@ div.dataTables_wrapper div.dataTables_length label, div.dataTables_wrapper div.d
         load_suburbs();
       } else{
         // hide the loading bar
-        $(".sub-header-summary").html("<b>Successfully loaded Regional Victorian Suburbs with Institutes!</b>");
+        $(".sub-header-summary").html("<b>Corona Virus update by VIC suburbs</b>");
 
         $("#suburbs-datatable").DataTable({
           "columnDefs": [ {
