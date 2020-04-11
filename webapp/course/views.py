@@ -13,6 +13,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db import connection
 
+from datetime import datetime
+from random import randrange
+from datetime import timedelta
+
 
 def index(request):
     dict_data = {}
@@ -265,21 +269,31 @@ skill_map["Medium skill"] = { "class": "warning", "icon": '<i class="fa fa-caret
 skill_map["High skill"] = { "class": "danger", "icon": '<i class="fa fa-caret-up"></i>' }
 skill_map["Very high skill"] = { "class": "danger", "icon": '<i class="fa fa-fighter-jet"></i>' }
 
+def random_date(start, end):
+    """
+    This function will return a random datetime between two datetime
+    objects.
+    """
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
+
 
 def finder(request):
     dict_data = {}
     dict_filter = {}
     dict_filter_contains = {}
-    occupation_filter = ""
+    search_filter = {}
     high_demand = ""
     totals = {}
     totals["courses"] = 0
 
     try:
         if request.GET.get('q'):
-            occupation_filter = request.GET.get('q')
-            dict_filter['title__istartswith'] = occupation_filter;
-            dict_filter_contains['title__icontains'] = occupation_filter;
+            search_filter["occupation"] = request.GET.get('q')
+            dict_filter['title__istartswith'] = search_filter["occupation"];
+            dict_filter_contains['title__icontains'] = search_filter["occupation"];
 
         if request.GET.get('high_demand'):
             high_demand = int(request.GET.get('high_demand'))
@@ -289,14 +303,46 @@ def finder(request):
     except:
         print("")
 
-    category_filter = ""
+    search_filter["category"] = ""
     try:
-        if request.GET.get('cf'):
-            category_filter = int(request.GET.get('cf'))
-            dict_filter['category_id'] = category_filter
-            dict_filter_contains['category_id'] = category_filter
+        if request.GET.get('category'):
+            search_filter["category"] = request.GET.get('category')
+            dict_filter['category_id'] = search_filter["category"]
+            dict_filter_contains['category_id'] = search_filter["category"]
     except:
         print("")
+
+    try:
+        if request.GET.get('location'):
+            search_filter["location"] = request.GET.get('location')
+    except:
+        print("")
+
+    location_chunks = search_filter["location"].split(",")
+    dict_filter_2 = {}
+    dict_filter_2["postcode"] = int(location_chunks[1])
+    dict_filter_2["government_subsidised"] = 'N'
+    provider_list = VetProviders.objects.filter(**dict_filter_2).values()
+    print("list of providers", len(provider_list))
+    print(provider_list)
+    totals["courses"] = len(provider_list)
+
+    d1 = datetime.strptime('1/04/2020 1:30 PM', '%m/%d/%Y %I:%M %p')
+    d2 = datetime.strptime('1/06/2020 4:50 AM', '%m/%d/%Y %I:%M %p')
+
+    providers_from_list = []
+    for xitem in provider_list:
+        i = 0
+        xitemtemp = xitem
+        xitemtemp["availability"] = random_date(d1, d2).strftime("%d-%m-%Y")
+        if (i/2==0):
+            xitemtemp["desc"] = "Hi, I'm " + xitemtemp["address_line_2"] + ", available for after hours age care support."
+        else:
+            xitemtemp["desc"] = "Hi, I'm " + xitemtemp["address_line_2"] + ", available on Fridays for help."
+        i = i+1
+
+        print("hello", xitemtemp["availability"], xitemtemp)
+        providers_from_list.append(xitemtemp)
 
     has_data = True
     start_point = True
@@ -328,7 +374,7 @@ def finder(request):
             print(courses_from_occupation)
 
             xitem["courses"] = VetCourses.objects.filter(id__in=courses_from_occupation).order_by("course_title")
-            totals["courses"] += len(xitem["courses"])
+            # totals["courses"] += len(xitem["courses"])
 
             if xitem["future_growth"] in future_growth_map:
                 xitem["future_growth_info"] = future_growth_map[xitem["future_growth"]]
@@ -347,26 +393,27 @@ def finder(request):
 
     current_filter = "?"
 
-    if occupation_filter:
-        current_filter += "q=" + occupation_filter + "&"
+    if search_filter["occupation"]:
+        current_filter += "q=" + search_filter["occupation"] + "&"
 
     category_filter_name = ""
-    if category_filter:
-        course_category_info = VetProfessionsCategory.objects.filter(id=category_filter).values()[0]
+    if search_filter["category"]:
+        course_category_info = VetProfessionsCategory.objects.filter(id=search_filter["category"]).values()[0]
         print(course_category_info)
         category_filter_name = course_category_info["name"]
         current_filter += "cf=" + category_filter_name + "&"
 
     return render(request, 'course/templates/course_finder.html',  {
         'occupations': occupations,
-        'occupation_filter': occupation_filter,
-        'category_filter': category_filter,
+        'filters': search_filter,
+        'occupation_filter': search_filter["occupation"],
         'category_filter_name': category_filter_name,
         'current_filter': current_filter,
         'high_demand': high_demand,
         'has_data': has_data,
         'start_point': start_point,
         'pages': pages,
+        'providers': providers_from_list,
         'page_count': page_count,
         'totals': totals
     })

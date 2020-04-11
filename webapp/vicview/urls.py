@@ -37,7 +37,7 @@ urlpatterns = [
     path('get-geolocation', views.geolocation, name='geolocation'),
 
     path('volunteers/', include('course.urls')),
-    path('providers/', include('provider.urls')),
+    path('essentials/', include('provider.urls')),
     path('occupations/', include('occupation.urls')),
     path('suburbs/', include('suburb.urls')),
 

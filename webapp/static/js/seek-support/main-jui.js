@@ -9,8 +9,8 @@ request_urls["i"] = "/providers/fetch_data/"; // goods
 request_urls["s"] = "/suburbs/fetch_suburbs/"; // address search
 
 
-redirect_urls["p"] = "/courses/finder/";
-redirect_urls["i"] = "/providers/";
+redirect_urls["p"] = "/volunteers/finder/";
+redirect_urls["i"] = "/essentials/finder/";
 
 var request_placeholder = {};
 request_placeholder["p"] = "Search for courses by professions";
@@ -219,21 +219,28 @@ $(document).ready(function () {
 
 function submit_form(){
   // console.log("submit_form");
+  var queryBuilder = "";
   var search_query = "";
-  var encoded = "/courses/?course_filter=" + encodeURIComponent(search_query);
+  var encoded = "";
 
   switch(search_type_flag) {
     case "p":
       search_query = $("#volunteer-query").val();
-      encoded = redirect_urls[search_type_flag] + "?q=" + encodeURIComponent(search_query);
+      queryBuilder += "?q=" + encodeURIComponent(search_query);
+      queryBuilder += "&category=" + encodeURIComponent($("#volunteer-category").val());
+      queryBuilder += "&location=" + encodeURIComponent($("#volunteer-location").val());
       break;
     case "i":
       search_query = $("#product-query").val();
-      encoded = redirect_urls[search_type_flag] + "?q=" + encodeURIComponent(search_query);
+      queryBuilder += "?q=" + encodeURIComponent(search_query);
+      queryBuilder += "&category=" + encodeURIComponent($("#product-category").val());
+      queryBuilder += "&location=" + encodeURIComponent($("#product-location").val());
       break;
     default:
       break;
   }
+  encoded = redirect_urls[search_type_flag] + queryBuilder;
+
   console.log("perform search", search_type_flag, encoded);
   if(search_query == ""){
     $('#volunteer-query').focus();
