@@ -1,0 +1,664 @@
+{% extends "vicview/templates/layout.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block page_content %}
+
+{% include "vicview/templates/navbar.html" %}
+<section id="features" class="bg-img2">
+  {% if has_data %}
+  <div class="padd-section bg-tint has_data pb-3">
+  {% else %}
+  <div class="padd-section bg-tint has_nodata">
+  {% endif %}
+    <div class="row">
+      <div class="col-4 p-5">
+        <div class="p-3 bg-overlay search-shrinked">
+          <div class="row justify-content-center">
+            <div class="col-12 mb-3">
+              <h3 class="text-center">VOLUNTEER TO SERVE COMMUNITY!</h3>
+              <h5 class="text-center">Register your interest today, to help people in need during this difficult time.</h5>
+            </div>
+            <div class="col-12 mb-lg-0 mb-sm-3">
+              <small class="d-inline-block mb-2 pl-1">Category</small>
+              <div class="form-group mb-0">
+                  <select class="form-control">
+                    <option value="" {% if filters.category == '' %} selected {% endif %}>Select Category</option>
+                    <option value="19" {% if filters.category == '19' %} selected {% endif %}>Carer Support</option>
+                    <option value="42" {% if filters.category == '42' %} selected {% endif %}>Grocery Shopping</option>
+                    <option value="7" {% if filters.category == '7' %} selected {% endif %}>Online Tutoring</option>
+                    <option value="41" {% if filters.category == '41' %} selected {% endif %}>Cooking</option>
+                  </select>
+              </div>
+            </div>
+
+            <div class="col-12 mb-lg-0 mb-sm-3">
+              <div class="form-group mb-0 jui-search-widget">
+                  <small class="d-inline-block mb-2 pl-1">Post Title</small>
+                  <input type="text" class="form-control" id="jui-autocomplete" aria-describedby="emailHelp"
+                  placeholder="Post Title" value="{{ filters.occupation }}" maxlength="100"/>
+              </div>
+            </div>
+
+            <div class="col-12 mb-lg-0 mb-sm-3">
+              <div class="form-group mb-0 jui-search-widget">
+                  <small class="d-inline-block mb-2 pl-1">Location you would like to serve</small>
+                  <input type="text" class="form-control"
+                  placeholder="Add suburb, landmark or address" value="{{ filters.location }}" maxlength="100"/>
+              </div>
+            </div>
+
+            <div class="col-12 mb-lg-0 mb-sm-3">
+              <div class="form-group mb-0 jui-search-widget">
+                  <small class="d-inline-block mb-2 pl-1">Your availability?</small>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend w-50">
+                      <input type="text" id="dateRangePickerA" class="form-control"
+                      placeholder="dd/mm/yyyy" value="" maxlength="100"/>
+                    </div>
+                    <input type="text" id="dateRangePickerB" class="form-control"
+                    placeholder="dd/mm/yyyy" value="" maxlength="100"/>
+                  </div>
+
+              </div>
+            </div>
+
+            <div class="col-12 text-center mb-lg-0 mb-sm-3">
+                <small class="d-inline-block mb-2 pl-1">&nbsp;</small>
+                <a id="apply_filter" class="btn text-white btn-success border-success btn-block">Submit</a>
+            </div>
+
+            <div id="error-get-started" class="col-12 mt-5 mb-3 d-none">
+              <span style="max-width: 400px;" class="alert alert-success" role="alert">
+                Please enter keyword to search or select category!
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-8 p-5">
+        <div class="card">
+          <div class="card-header">
+            <h3>Manage your volunteering posts</h3>
+          </div>
+          <div class="card-body suburbs_list" style="max-height: 1200px;overflow: auto;">
+            <table class="table table-bordered table-hover table-striped mb-0 dataTable no-footer" id="suburbs-datatable" width="100%" cellspacing="0" role="grid" aria-describedby="suburbs-datatable_info" style="width: 100%;">
+              <thead>
+                <tr>
+                  <td>Category</td>
+                  <td>Post Title</td>
+                  <td>Availability</td>
+                  <td>Status</td>
+                  <td>Action</td>
+                </tr>
+              </thead>
+              <tbody class="record-added-list">
+                  <tr>
+                    <td>Carer Support</td>
+                    <td>Available for help during office hours</td>
+                    <td>25th to 28th April</td>
+                    <td>
+                      <a class="btn btn-success btn-sm text-white text-capitalize" style="padding: 6px 12px;font-size: 10px;">Active</a>
+                    </td>
+                    <td>
+                      <i class="fa fa-edit"></i> &nbsp;
+                      <i class="fa fa-trash"></i>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Online Tutoring</td>
+                    <td>Available for tutoring during late hours</td>
+                    <td>25th to 28th April</td>
+                    <td>
+                      <a class="btn btn-success btn-sm text-white text-capitalize" style="padding: 6px 12px;font-size: 10px;">Active</a>
+                    </td>
+                    <td>
+                      <i class="fa fa-edit"></i> &nbsp;
+                      <i class="fa fa-trash"></i>
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if not start_point %}
+<section id="search-results" class="padd-section bg-gray pt-3">
+    <div class="container-fluid page-container">
+
+      <div class="sub-header-summary bg-white p-3 mb-3">
+        <div class="row">
+          <div class="col-12">
+            <p class="text-break mb-0">
+              {% if not providers %}
+                No records found for your search "{{ occupation_filter }}"
+                {% if category_filter %}
+                  and category "{{ category_filter_name }}"
+                {% endif  %}
+              {% else %}
+                Search results for your search <span class="font-weight-bold">"{{ occupation_filter }}"</span>
+{% if category_filter %}
+                  and category <span class="font-weight-bold">"{{ category_filter_name }}"</span>
+{% endif  %}
+                {% ifequal totals.courses 1 %}
+                : <span class="font-weight-bold">{{ totals.courses }} volunteer found</span>
+                {% else %}
+                : <span class="font-weight-bold">{{ totals.courses }} volunteers found</span>
+                {% endifequal %}
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {% if occupations %}
+      <!-- <div class="sub-header-summary bg-white p-3 mb-3">
+        <div class="row">
+          <div class="col-12">
+            High Demand occupations are marked with &nbsp;&nbsp;
+            <a class="btn btn-circle btn-success text-white" title="High Demand" data-toggle="tooltip">
+              <i class="fa fa-star"></i>
+            </a>
+          </div>
+        </div>
+      </div> -->
+      {% endif %}
+
+      <div class="row">
+        <div class="col-12 col-lg-6 p-3">
+          <div class="card mb-3" id="map-widget">
+            <div class="card-body p-0">
+              <div id="map_canvas" style="width: 100%; height: 580px;"></div>
+            </div>
+          </div>
+
+          <div id="institute-badge">
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6 py-3 pl-lg-0">
+          <div class="card bg-none border-0">
+              <div class="row providers_list" id="institutes-datatable" width="100%" cellspacing="0">
+                {% for provider in providers %}
+
+                <div class="col-lg-6 mb-3">
+                  <div class="card">
+                    <div class="card-body institutes-datatable-tr" id="{{ forloop.counter0 }}" data-latitude="{{ provider.latitude }}"
+                    data-longitude="{{ provider.longitude }}" data-name="{{ provider.address_line_2|title }}" class="point-me">
+                      <div class="row mb-3">
+                        <div class="col-4">
+                          <div class="rounded-circle border-light bg-light text-center pt-3" style="width: 64px;height: 64px">
+                            {% if provider.is_regional == 1 %}
+                            <i class="fa fa-mars fa-2x"></i>
+                            {% else %}
+                            <i class="fa fa-venus fa-2x"></i>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="col-8">
+                          <h4>{{ provider.address_line_2|title }}</h4>
+                          <h5>{{ provider.suburb|title }}, {{ provider.postcode }}</h5>
+                        </div>
+                      </div>
+                      <h5 class="card-title">
+                        <b>Availability:</b> {{ provider.availability }}
+                      </h5>
+                      <p class="card-text" style="font-size: 16px;">
+                        {{ provider.desc }}
+                      </p>
+
+                      <a href="javascript:void(0)" data-toggle="modal" data-target="#exampleModal{{ provider.id }}"
+                       class="btn btn-primary btn-sm">
+                        Book Appointment
+                      </a>
+
+                      <div class="modal" id="exampleModal{{ provider.id }}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Book Appointment with: {{ provider.address_line_2|title }}</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <p>
+                                Please provide details and {{ provider.address_line_2 | title }}, will be in touch with you.
+                              </p>
+                              <b>Details</b>
+                              <textarea name="name" rows="8" cols="80" class="form-control" rows="2"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-dismiss="modal">Book Appointment</button>
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <!-- InfoWindow for Google Map -->
+                      <span class="address-hidden-popup d-none">
+                        <div class="row no-gutters">
+                          <div class="col-12">
+                            <b>Address</b> <br />
+                            {{ provider.address_line_1 }},<br />
+                            {{ provider.suburb|title }} {{ provider.postcode }}
+                          </div>
+                          <div class="col-12 text-right">
+                            {% if provider.url != "" %}
+                            <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button> -->
+                            <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle" data-toggle="tooltip" title="Visit Website">
+                              <i class="fa fa-globe"></i>
+                            </a>
+                            {% endif %}
+                            {% if provider.email != "" %}
+                            <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+                              Contact via E-mail
+                            </a> -->
+                            <a href="mailto:{{ provider.email }}" target="_blank" class="btn btn-danger btn-circle" data-toggle="tooltip" title="Contact via E-mail">
+                              <i class="fa fa-envelope"></i>
+                            </a>
+                            {% endif %}
+
+                            <a href='http://maps.google.com/maps?daddr="{{ provider.address_line_1 }}, {% if provider.address_line_2 != "0" %}{{ provider.address_line_2 }}, {% endif %} {{ provider.suburb|title }} {{ provider.postcode }}"'
+                            target="_blank" class="btn btn-success btn-circle" data-toggle="tooltip" title="Get Directions">
+                              <i class="fa fa-location-arrow"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </span>
+
+                      <!-- Card View to display under map -->
+                      <span class="address-hidden-badge d-none">
+                        <div class="card bg-light mb-3">
+                          <div class="card-body p-4" >
+                            <div class="row justify-content-center">
+                              <div class="col-12 col-lg-5 px-3 mb-3 text-center">
+                                {% if provider.is_regional == 1 %}
+                                <i class="fa fa-3x fa-mars mb-3 clr-darkgray"></i>
+                                {% else %}
+                                <i class="fa fa-3x fa-mars mb-3 clr-darkgray"></i>
+                                {% endif %}
+                                <div class="mt-2">
+                                  {% if provider.government_subsidised == 1 %}
+                                    <!-- <a class="badge badge-success text-white">Government Subsidised</a> -->
+                                  <button type="button" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Government Subsidised"><i class="fa fa-tags"></i></button>
+                                  {% endif %}
+                                  {% if provider.is_regional == 1 %}
+                                  <button type="button" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button>
+                                    <!-- <a class="badge badge-success text-white">Regional Institute</a> -->
+                                  {% endif %}
+
+                                  <!-- <a href='/providers/details/{{ provider.id }}' class="btn btn-info btn-sm text-white" style="padding: 7px 15px;font-size: 10px;">Read More</a> -->
+                                  {% if provider.url != "" %}
+                                  <!-- <button type="button" class="btn btn-success btn-circle" data-toggle="tooltip" title="Regional Institute"><i class="fa fa-map-signs"></i></button> -->
+                                  <a href="{{ provider.url }}" target="_blank" class="btn btn-info btn-circle btn-md" data-toggle="tooltip" title="Visit Website">
+                                    <i class="fa fa-globe"></i>
+                                  </a>
+                                  {% endif %}
+                                  {% if provider.email != "" %}
+                                  <!-- <a href="mailto:{{ provider.email }}" class="btn btn-success btn-sm text-white ml-2" style="padding: 7px 15px;font-size: 10px;">
+                                    Contact via E-mail
+                                  </a> -->
+                                  <a href="mailto:{{ provider.email }}" target="_blank" class="btn btn-danger btn-circle btn-md" data-toggle="tooltip" title="Contact via E-mail">
+                                    <i class="fa fa-envelope"></i>
+                                  </a>
+                                  {% endif %}
+
+                                  <a href='http://maps.google.com/maps?daddr="{{ provider.address_line_1 }}, {% if provider.address_line_2 != "0" %}{{ provider.address_line_2 }}, {% endif %} {{ provider.suburb|title }} {{ provider.postcode }}"'
+                                  target="_blank" class="btn btn-success btn-circle btn-md" data-toggle="tooltip" title="Get Directions">
+                                    <i class="fa fa-location-arrow"></i>
+                                  </a>
+                                </div>
+                              </div>
+
+
+                              <div class="col-12 col-lg-6 px-3 mb-3 mt-3">
+                                <h3 class="name text-bold" style="font-size: 16px;">{{ provider.address_line_2|title }}</h3>
+                                  <p style="line-height: initial;">
+                                    <small>{{ provider.address_line_1 }},
+                                    {{ provider.suburb|title }} {{ provider.postcode }} </small>
+                                    <br />
+                                    <small>
+                                      <a href="mailto:{{ provider.email }}">
+                                        {{ provider.email }}
+                                      </a>
+                                    </small>
+                                    <br />
+                                    <small>
+                                      <a href="{{ provider.url }}" target="_blank" >
+                                        {{ provider.url }}
+                                      </a>
+                                    </small>
+                                  </p>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </span>
+
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+          </div>
+
+          <div class="sub-footer-summary bg-white p-3 my-3">
+            <div class="row">
+              <div class="col">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination mb-0">
+                  {% if occupations.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="{{ current_filter }}page=1" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                      <span class="sr-only">begin</span>
+                    </a>
+                  </li>
+                  {% endif %}
+
+                  {% for n in occupations.paginator.page_range %}
+                    {% if occupations.number == n %}
+                      <li class="page-item active">
+                        <span class="page-link">{{ n }}<span class="sr-only">(current)</span></span>
+                      </li>
+                    {% elif n > occupations.number|add:'-6' and n < occupations.number|add:'6' %}
+                      <li class="page-item"><a class="page-link" href="{{ current_filter }}page={{ n }}">{{ n }}</a></li>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if courses.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="{{ current_filter }}page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">end</span>
+                      </a>
+                    </li>
+                    {% endif %}   </ul> </nav>
+              </div>
+
+              <div class="col text-right mt-2">
+                Page {{ occupations.number }} of {{ occupations.paginator.num_pages }}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block footer_content %}
+<script>
+  var csrfmiddlewaretoken =  '{{ csrf_token }}';
+
+  $("#category_filter").val("{{ category_filter }}");
+
+
+$( "#dateRangePickerA" ).datepicker({
+    defaultDate: "+1w",
+    changeMonth: true,
+    numberOfMonths: 3,
+    dateFormat: "dd/mm/yy",
+    onClose: function( selectedDate ) {
+        $( "#dateRangePickerB" ).datepicker( "option", "minDate", selectedDate );
+    }
+});
+$( "#dateRangePickerB" ).datepicker({
+    defaultDate: "+1w",
+    changeMonth: true,
+    numberOfMonths: 3,
+    dateFormat: "dd/mm/yy",
+    onClose: function( selectedDate ) {
+        $( "#dateRangePickerA" ).datepicker( "option", "maxDate", selectedDate );
+    }
+});
+
+</script>
+<script type="text/javascript">
+
+  function adjust_select2_width(){
+    var existing_width = $(".select2-dropdown").css("width");
+    existing_width = existing_width.replace("px");
+
+    $(".select2-dropdown").css("left", "20px");
+    console.log(parseInt(existing_width) - 50 + "px");
+    window.setTimeout(function() {
+      $(".select2-dropdown").css("width", parseInt(existing_width) - 50);
+    }, 100);
+  }
+
+  var selected_value = "";
+  var search_type_flag = "p";
+  var redirect_urls = {}
+  var request_urls = {};
+  // request_urls["c"] = "/courses/fetch_data/";
+  request_urls["p"] = "/occupations/fetch_data/";
+  request_urls["i"] = "/providers/fetch_data/";
+
+  redirect_urls["p"] = "/courses/finder/";
+  redirect_urls["i"] = "/providers/";
+
+  var request_placeholder = {};
+  request_placeholder["p"] = "Search for courses by professions";
+  request_placeholder["i"] = "Search for course providers";
+
+  var request_help = {};
+  request_help["p"] = "eg: civil, nursing, electrical, etc.";
+  request_help["i"] = "eg: Skill Training Victoria, TAFE, ICP, etc.";
+
+  $.extend($.ui.autocomplete.prototype, {
+      _renderMenu: function (ul, items) {
+          //remove scroll event to prevent attaching multiple scroll events to one container element
+          $(ul).unbind("scroll");
+
+          var self = this;
+          self._scrollMenu(ul, items);
+      },
+
+      _scrollMenu: function (ul, items) {
+          var self = this;
+          var maxShow = 10;
+          var results = [];
+          var pages = Math.ceil(items.length / maxShow);
+          results = items.slice(0, maxShow);
+
+          if (pages > 1) {
+              $(ul).scroll(function () {
+                  if (isScrollbarBottom($(ul))) {
+                      ++window.pageIndex;
+                      if (window.pageIndex >= pages) return;
+
+                      results = items.slice(window.pageIndex * maxShow, window.pageIndex * maxShow + maxShow);
+
+                      //append item to ul
+                      $.each(results, function (index, item) {
+                          self._renderItem(ul, item);
+                      });
+                      //refresh menu
+                      // console.log(self.menu);
+                      // self.menu._destroy();
+                      self.menu.refresh();
+                      // size and position menu
+                      ul.show();
+                      // self._resizeMenu();
+                      adjust_width();
+                      // ul.position($.extend({
+                      //     of: self.element
+                      // }, self.options.position));
+                      if (self.options.autoFocus) {
+                          self.menu.next(new $.Event("mouseover"));
+                      }
+                  }
+              });
+          }
+
+          $.each(results, function (index, item) {
+              self._renderItemData(ul, item);
+          });
+      }
+  });
+
+  function isScrollbarBottom(container) {
+       var height = container.outerHeight();
+       var scrollHeight = container[0].scrollHeight;
+       var scrollTop = container.scrollTop();
+       if (scrollTop >= scrollHeight - height) {
+           return true;
+       }
+       return false;
+   };
+
+  function adjust_width() {
+    $('.ui-autocomplete').css('width', $("#jui-autocomplete").width() - 20 + "px");
+
+    if($(window).width() < 769){
+      // $('.ui-autocomplete').css('width', $("#jui-autocomplete").width() + 20 + "px");
+      $('.ui-autocomplete').css('left', 80 + "px");
+    } else {
+      var existing_left = $('.ui-autocomplete').css("left");
+      existing_left = existing_left.replace("px");
+      $('.ui-autocomplete').css('left', parseInt(existing_left) + 30 + "px");
+    }
+  }
+
+  $.widget( "custom.catcomplete", $.ui.autocomplete, {
+  	_create: function() {
+  		this._super();
+  		this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+  	},
+  	_renderMenu: function( ul, items ) {
+  		var that = this,
+  			currentCategory = "";
+  		$.each( items, function( index, item ) {
+  			var li;
+        if(item.category){
+    			if ( item.category != currentCategory && search_type_flag == "p") {
+    				ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+    				currentCategory = item.category;
+    			}
+        }
+        if(item.value ==''){
+          $('<li class="ui-state-disabled px-2 text-danger" style="opacity: 1;">'+item.label+'</li>').appendTo(ul);
+        } else{
+  			     li = that._renderItemData( ul, item );
+       }
+  			if ( item.category ) {
+  				li.attr( "aria-label", item.category + " : " + item.label );
+  			}
+  		});
+  	}
+  });
+
+
+  $(document).ready(function () {
+    function log( message ) {
+      // setTimeout(function() { submit_form(); }, 500);
+      console.log(message );
+    }
+
+    // .data("uiAutocomplete")._renderItem = function( ul, item ) {
+    //   return $("<li></li>")
+    //       .data( "item.autocomplete", item )
+    //       .append( "<li "+ "class='" + item.value + "'>" + item.label + "</li>" )
+    //       .appendTo( ul );
+    // };
+
+    // on focus load data
+    // $("#jui-autocomplete").focus(function(){
+    //   //reset result list's pageindex when focus on
+    //   window.pageIndex = 0;
+    //   $(this).catcomplete("search");
+    // });
+
+  });
+
+
+  function submit_form(){
+    // console.log("submit_form");
+    var data = $("#jui-autocomplete").val();
+    var category_filter = "";
+    var data_category = $('#category_filter').val();
+    if(data_category !== "" && data_category != null){
+      category_filter = "&cf=" + encodeURIComponent(data_category)
+    }
+
+    var search_query = "";
+    if(data.length > 0){
+      console.log(data);
+      search_query = data;
+    }
+    var encoded = "/courses/?course_filter=" + encodeURIComponent(search_query);
+
+    switch(search_type_flag) {
+      case "p":
+        encoded = redirect_urls[search_type_flag] + "?q=" + encodeURIComponent(search_query) + category_filter;
+        break;
+      default:
+        break;
+    }
+    // console.log("perform search", search_type_flag, encoded);
+    // if(search_query == ""){
+    //   $('#jui-autocomplete').focus();
+    // } else {
+    //   location.href = encoded;
+    // }
+
+
+    if(search_query == ""){
+        $("#error-get-started").find(".alert").html('Please enter title to submit!');
+        $("#error-get-started").removeClass("d-none");
+      } else {
+        $("#error-get-started").find(".alert").html('Request posted successfully!');
+        $("#error-get-started").removeClass("d-none");
+      }
+  }
+
+  $(document).ready(function () {
+
+    $('#category_filter').on('change', function(){
+      submit_form();
+    });
+
+    $( "#apply_filter").click(function() {
+      submit_form();
+    });
+
+    $('#jui-autocomplete').keypress(function(event){
+      var keycode = (event.keyCode ? event.keyCode : event.which);
+      if(keycode == '13'){
+        submit_form();
+      }
+    });
+  });
+
+
+</script>
+
+
+
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".menu-volunteer").addClass("menu-active");
+  });
+</script>
+{% endblock %}

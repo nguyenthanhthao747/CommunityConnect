@@ -5,8 +5,22 @@ from django.db import connection
 from django.db.models import Sum
 from django.shortcuts import redirect
 import pandas as pd
+from provider.models import *
 
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
+from random import randrange
+from datetime import timedelta
+
+def random_date(start, end):
+    """
+    This function will return a random datetime between two datetime
+    objects.
+    """
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
 
 def index(request):
     dict_data = {}
@@ -50,6 +64,267 @@ def seek_support_search(request):
     dict_data = {}
 
     return render(request, 'vicview/templates/seek-support-search.html', {})
+
+def volunteer_add(request):
+    dict_data = {}
+    dict_filter = {}
+    dict_filter_contains = {}
+    search_filter = {}
+    high_demand = ""
+    totals = {}
+    totals["courses"] = 0
+
+    try:
+        if request.GET.get('q'):
+            search_filter["occupation"] = request.GET.get('q')
+            dict_filter['title__istartswith'] = search_filter["occupation"];
+            dict_filter_contains['title__icontains'] = search_filter["occupation"];
+
+        if request.GET.get('high_demand'):
+            high_demand = int(request.GET.get('high_demand'))
+        else:
+            high_demand = 0
+
+    except:
+        print("")
+
+    search_filter["category"] = ""
+    try:
+        if request.GET.get('category'):
+            search_filter["category"] = request.GET.get('category')
+            dict_filter['category_id'] = search_filter["category"]
+            dict_filter_contains['category_id'] = search_filter["category"]
+    except:
+        print("")
+
+
+    dict_filter_2 = {}
+    dict_filter_2["postcode"] = int(3150)
+    dict_filter_2["government_subsidised"] = 'N'
+    provider_list = VetProviders.objects.filter(**dict_filter_2).values()
+    print("list of providers", len(provider_list))
+    print(provider_list)
+    totals["courses"] = len(provider_list)
+
+    d1 = datetime.strptime('1/04/2020 1:30 PM', '%m/%d/%Y %I:%M %p')
+    d2 = datetime.strptime('1/06/2020 4:50 AM', '%m/%d/%Y %I:%M %p')
+
+    providers_from_list = []
+    for xitem in provider_list:
+        i = 0
+        xitemtemp = xitem
+        xitemtemp["availability"] = random_date(d1, d2).strftime("%d-%m-%Y")
+        if (i/2==0):
+            xitemtemp["desc"] = "Hi, I'm " + xitemtemp["address_line_2"] + ", available for after hours age care support."
+        else:
+            xitemtemp["desc"] = "Hi, I'm " + xitemtemp["address_line_2"] + ", available on Fridays for help."
+        i = i+1
+
+        print("hello", xitemtemp["availability"], xitemtemp)
+        providers_from_list.append(xitemtemp)
+
+    has_data = True
+    start_point = True
+    pages = []
+    page_count = 0
+
+    if len(dict_filter) > 0:
+        start_point = False
+
+        # dict_filter['high_demand'] = high_demand;
+
+        occupation_list = VetProfessions.objects.filter(**dict_filter).values()
+
+        if len(occupation_list) <= 0:
+            occupation_list = VetProfessions.objects.filter(**dict_filter_contains).values()
+
+        for xitem in occupation_list:
+            # get offered courses for xitem
+            anzsco_filter = int(xitem["anzsco_id"])
+            print(anzsco_filter)
+
+            courses_from_occupation = VetCoursesToOccupation.objects.filter(anzsco=anzsco_filter).values().extra(
+              select={
+                'id': 'course_id'
+              }
+            ).values(
+              'id'
+            )
+            print(courses_from_occupation)
+
+            xitem["courses"] = VetCourses.objects.filter(id__in=courses_from_occupation).order_by("course_title")
+            # totals["courses"] += len(xitem["courses"])
+
+            if xitem["future_growth"] in future_growth_map:
+                xitem["future_growth_info"] = future_growth_map[xitem["future_growth"]]
+
+            if xitem["skill_level"] in skill_map:
+                xitem["skill_level_info"] = skill_map[xitem["skill_level"]]
+
+        totals["occupations"] = len(occupation_list)
+        paginator = Paginator(occupation_list, 20)
+
+        page = request.GET.get('page')
+        occupations = paginator.get_page(page)
+    else:
+        occupations = []
+        has_data = False
+
+    current_filter = "?"
+
+
+    category_filter_name = ""
+    if search_filter["category"]:
+        course_category_info = VetProfessionsCategory.objects.filter(id=search_filter["category"]).values()[0]
+        print(course_category_info)
+        category_filter_name = course_category_info["name"]
+        current_filter += "cf=" + category_filter_name + "&"
+
+    return render(request, 'vicview/templates/volunteer-landing.html',  {
+        'occupations': occupations,
+        'filters': search_filter,
+        #'occupation_filter': search_filter["occupation"],
+        'category_filter_name': category_filter_name,
+        'current_filter': current_filter,
+        'high_demand': high_demand,
+        'has_data': has_data,
+        'start_point': start_point,
+        'pages': pages,
+        'providers': providers_from_list,
+        'page_count': page_count,
+        'totals': totals
+    })
+
+def donate(request):
+    dict_data = {}
+    dict_filter = {}
+    dict_filter_contains = {}
+    search_filter = {}
+    high_demand = ""
+    totals = {}
+    totals["courses"] = 0
+
+    try:
+        if request.GET.get('q'):
+            search_filter["occupation"] = request.GET.get('q')
+            dict_filter['title__istartswith'] = search_filter["occupation"];
+            dict_filter_contains['title__icontains'] = search_filter["occupation"];
+
+        if request.GET.get('high_demand'):
+            high_demand = int(request.GET.get('high_demand'))
+        else:
+            high_demand = 0
+
+    except:
+        print("")
+
+    search_filter["category"] = ""
+    try:
+        if request.GET.get('category'):
+            search_filter["category"] = request.GET.get('category')
+            dict_filter['category_id'] = search_filter["category"]
+            dict_filter_contains['category_id'] = search_filter["category"]
+    except:
+        print("")
+
+
+    dict_filter_2 = {}
+    dict_filter_2["postcode"] = int(3150)
+    dict_filter_2["government_subsidised"] = 'N'
+    provider_list = VetProviders.objects.filter(**dict_filter_2).values()
+    print("list of providers", len(provider_list))
+    print(provider_list)
+    totals["courses"] = len(provider_list)
+
+    d1 = datetime.strptime('1/04/2020 1:30 PM', '%m/%d/%Y %I:%M %p')
+    d2 = datetime.strptime('1/06/2020 4:50 AM', '%m/%d/%Y %I:%M %p')
+
+    providers_from_list = []
+    for xitem in provider_list:
+        i = 0
+        xitemtemp = xitem
+        xitemtemp["availability"] = random_date(d1, d2).strftime("%d-%m-%Y")
+        if (i/2==0):
+            xitemtemp["desc"] = "Hi, I'm " + xitemtemp["address_line_2"] + ", available for after hours age care support."
+        else:
+            xitemtemp["desc"] = "Hi, I'm " + xitemtemp["address_line_2"] + ", available on Fridays for help."
+        i = i+1
+
+        print("hello", xitemtemp["availability"], xitemtemp)
+        providers_from_list.append(xitemtemp)
+
+    has_data = True
+    start_point = True
+    pages = []
+    page_count = 0
+
+    if len(dict_filter) > 0:
+        start_point = False
+
+        # dict_filter['high_demand'] = high_demand;
+
+        occupation_list = VetProfessions.objects.filter(**dict_filter).values()
+
+        if len(occupation_list) <= 0:
+            occupation_list = VetProfessions.objects.filter(**dict_filter_contains).values()
+
+        for xitem in occupation_list:
+            # get offered courses for xitem
+            anzsco_filter = int(xitem["anzsco_id"])
+            print(anzsco_filter)
+
+            courses_from_occupation = VetCoursesToOccupation.objects.filter(anzsco=anzsco_filter).values().extra(
+              select={
+                'id': 'course_id'
+              }
+            ).values(
+              'id'
+            )
+            print(courses_from_occupation)
+
+            xitem["courses"] = VetCourses.objects.filter(id__in=courses_from_occupation).order_by("course_title")
+            # totals["courses"] += len(xitem["courses"])
+
+            if xitem["future_growth"] in future_growth_map:
+                xitem["future_growth_info"] = future_growth_map[xitem["future_growth"]]
+
+            if xitem["skill_level"] in skill_map:
+                xitem["skill_level_info"] = skill_map[xitem["skill_level"]]
+
+        totals["occupations"] = len(occupation_list)
+        paginator = Paginator(occupation_list, 20)
+
+        page = request.GET.get('page')
+        occupations = paginator.get_page(page)
+    else:
+        occupations = []
+        has_data = False
+
+    current_filter = "?"
+
+
+    category_filter_name = ""
+    if search_filter["category"]:
+        course_category_info = VetProfessionsCategory.objects.filter(id=search_filter["category"]).values()[0]
+        print(course_category_info)
+        category_filter_name = course_category_info["name"]
+        current_filter += "cf=" + category_filter_name + "&"
+
+    return render(request, 'vicview/templates/donate.html',  {
+        'occupations': occupations,
+        'filters': search_filter,
+        #'occupation_filter': search_filter["occupation"],
+        'category_filter_name': category_filter_name,
+        'current_filter': current_filter,
+        'high_demand': high_demand,
+        'has_data': has_data,
+        'start_point': start_point,
+        'pages': pages,
+        'providers': providers_from_list,
+        'page_count': page_count,
+        'totals': totals
+    })
+
 
 def search_integrated(request):
     dict_data = {}

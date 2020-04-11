@@ -29,6 +29,10 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('about-us', views.about, name='about'),
     path('seek-support/search', views.seek_support_search, name='seek_support_search'),
+
+    path('volunteer-landing', views.volunteer_add, name='volunteer_add'),
+    path('donate', views.donate, name='donate'),
+
     path('signup', views.signup, name='signup'),
     path('login-page', views.login, name='login'),
 
